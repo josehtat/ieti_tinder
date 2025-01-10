@@ -1,3 +1,41 @@
+/*Estilos pagina message.php*/
+#bodyMessages {
+    display: flex;
+    flex-direction: column;
+}
+
+#headerMessages {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#matchBox {
+    text-align: center;
+    padding-top: 10%;
+    margin-bottom: 20%;
+}
+
+#messageBox {
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 22%;
+    margin-bottom: 70%;
+}
+
+#footerMessages {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#footerMessages h3 {
+    margin-top: auto;
+    text-align: center;
+    padding: 0;
+}
+
+/*Estilos pagina index.php*/
 /* General reset */
 * {
     margin: 0;
@@ -73,12 +111,14 @@ button:hover {
     background-color: #45a049;
 }
 
-a:link, a:visited {
+a:link,
+a:visited {
     color: #000;
     text-decoration: none;
 }
 
-a:hover, a:active {
+a:hover,
+a:active {
     text-decoration: underline;
 }
 
