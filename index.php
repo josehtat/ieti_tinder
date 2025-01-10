@@ -1,101 +1,82 @@
-<d?php
-    session_start();
+<!DOCTYPE html>
+<html lang="es">
 
-    ?>
-    <!DOCTYPE html>
-    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <title>Inicio - Affinity</title>
+</head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login Page</title>
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const logoutButton = document.getElementById('logout');
-                if (logoutButton) {
-                    logoutButton.addEventListener('click', () => {
-                        <?php unset($_SESSION['loggedUser']); ?>
-                        window.location.href = window.location.pathname;
-                    });
-                }
-            })
-        </script>
-    </head>
+<body>
+    <script>
+        <?php if (isset($_COOKIE['loggedUser'])) { ?>
+            window.location.href = "/discober.php";
+        <?php } ?>
+    </script>
 
-    <body>
-        <?php
+    <div class="login-container">
+        <form action="login.php" method="post" class="login-form" id="login">
+            <h2>Affinity</h2>
+            <h3>Un lugar para encontrar tu amor</h3>
+            <div class="input-group">
+                <label for="mail">Email</label>
+                <input type="email" id="mail" name="mail" placeholder="exemplo@ieti.site" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="pass1234" required>
+            </div>
+            <div class="submit-btn">
+                <button type="submit">Iniciar sesión</button>
+            </div>
 
+            <div class="forgot-password">
+                <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
+            </div>
 
-        if (isset($_POST['username']) && isset($_POST['password'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $hashedPassword = hash('sha256', $password);
+            <div class="register-link">
+                <p><a href="/register.php">Crear una cuenta nueva</a></p>
+            </div>
+        </form>
+    </div>
 
-            try {
-                $hostname = "localhost";
-                $dbname = "usersM7";
-                $dbUsername = "admin";
-                $pw = "SQL no me gusta!";
-                $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
-            } catch (PDOException $e) {
-                echo "Error al accedir a la base de dades" . $e->getMessage() . "\n";
-                exit;
-            }
+    <script>
+        <?php if (isset($_COOKIE['loggedUser'])) { ?>
+            window.location.href = "/discober.php";
+        <?php } ?>
 
+        function login(mail, password) {
+            var parametros = {
+                "mail": mail,
+                "password": password
+            };
 
-            //preparem i executem la consulta
-            $queryText = "SELECT * FROM users " .
-                "WHERE username = :username AND password = :password;";
+            $.ajax({
+                data: parametros,
+                url: 'login.php',
+                type: 'POST',
+                success: loginResult,
+                dataType: 'json'
+            });
+        }
 
-            try {
-                //preparem i executem la consulta
-                $query = $pdo->prepare($queryText);
-                $query->bindParam(':username', $username);
-                $query->bindParam(':password', $hashedPassword);
-                $query->execute();
-            } catch (PDOException $e) {
-                echo "Error de SQL<br>\n";
-                //comprovo errors:
-                $e = $query->errorInfo();
-                if ($e[0] != '00000') {
-                    echo "\nPDO::errorInfo():\n";
-                    die("Error accedint a dades: " . $e[2]);
-                }
-            }
-
-            if ($query->rowCount() <= 0 || $query->rowCount() >= 2) {
-                echo "<p>Wrong username or password</p>";
-            } else {
-                foreach ($query as $row) {
-                    $_SESSION['loggedUser'] = $row['username'];
-                }
+        function loginResult(logRes) {
+            console.log(logRes);
+            if (logRes.status == 0) {
+                window.location.href = "/discober.php";
             }
         }
 
-        if (isset($_SESSION['loggedUser'])) { ?>
-            <div class="welcome-container">
-                <p>Welcome, user <strong><?php echo $_SESSION['loggedUser'] ?></strong>. You are now logged in.</p>
-                <button id="logout">Logout</button>
-            </div>
-        <?php } else { ?>
-            <div class="login-container">
-                <form action="login.php" method="post" class="login-form">
-                    <h2>Login</h2>
-                    <div class="input-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Username: " required>
-                    </div>
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" placeholder="Password:" required>
-                    </div>
-                    <div class="submit-btn">
-                        <button type="submit">Login</button>
-                    </div>
-                </form>
-            </div>
-        <?php } ?>
-    </body>
+        $(document).ready(function() {
+            $("#login").submit(function(event) {
+                event.preventDefault();
+                login($("#mail").val(), $("#password").val());
+            });
 
-    </html>
+        });
+    </script>
+</body>
+
+</html>
