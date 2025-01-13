@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
-    <title>MISSATGES</title>
+    <title>Mensajes</title>
 </head>
 
 <body id="bodyMessages">
@@ -16,12 +16,12 @@
     </script>---->
     <header id="headerMessages">
         <h2>LOGO TEXT</h2>
-        <h3>Cercar</h3>
+        <h3>Buscar</h3>
     </header>
 
     <main id="mainMessages">
         <div id="matchMessages">
-            <h3>Els meus matches</h3>
+            <h3>Mis matches</h3>
             <div id="matchBox">
                 <?php
                 try {
@@ -126,7 +126,7 @@
             </div>
         </div>
         <div id="message">
-            <h3>Missatges</h3>
+            <h3>Mensajes</h3>
             <div id="messageBox">
                 <?php
                 try {
@@ -231,8 +231,8 @@
     </main>
 
     <footer id="footer">
-        <h3><a href="discober.php">Descobrir</a></h3>
-        <h3><a href="messages.php">Missatges</a></h3>
+        <h3><a href="discober.php">Descubrir</a></h3>
+        <h3><a href="messages.php">Mensajes</a></h3>
         <h3><a href="profile.php">Perfil</a></h3>
     </footer>
 </body>

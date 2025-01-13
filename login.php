@@ -9,7 +9,7 @@
     <title>Login - Affinity</title>
 </head>
 
-<body>
+<body id="loginIndex">
     <script>
         <?php
         $status = 0;
@@ -79,7 +79,7 @@
                     }
 
                     if ($queryUserAndPass->rowCount() <= 0 || $queryUserAndPass->rowCount() >= 2) {
-                        $status = 1;
+                        $status = 2;
                         $logMessage = "Contraseña incorrecta";
                     } else {
                         foreach ($queryUserAndPass as $row) {
@@ -103,15 +103,15 @@
             <h3>Un lugar para encontrar tu amor</h3>
             <div class="input-group">
                 <label for="mail">Email</label>
-                <input type="email" id="mail" name="mail" placeholder="exemplo@ieti.site" required>
+                <input type="email" id="mail" name="mail" placeholder="exemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"' ?> required>
             </div>
             <div class="input-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="pass1234" required>
+                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"' ?> required>
             </div>
-            <div class="error-message">
+            <div class="error-group">
                 <?php
-                if ($status == 1) { ?>
+                if ($status > 0) { ?>
                     <p id="error-message"><?php echo $logMessage; ?></p>
                 <?php } ?>
             </div>

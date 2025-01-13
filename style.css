@@ -1,6 +1,19 @@
 /*---------------------------*/
 /*Estilos pagina profile.php*/
+#bodyProfile {
+    display: flex;
+    flex-direction: column;
+}
 
+#headerProfile {
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 /*Estilos pagina discober.php*/
 #bodyDiscober {
@@ -79,10 +92,9 @@
 }
 
 /*---------------------------*/
-/*Estilos pagina index.php*/
-/* General reset */
+/*Estilos pagina login.php*/
 
-#bodyIndex {
+#loginIndex {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
     display: flex;
@@ -135,6 +147,16 @@
 .login-container input[type="email"]:focus {
     outline: none;
     border-color: #4caf50;
+}
+
+.login-container .inputError {
+    border: 2px solid red !important;
+}
+
+.login-container #error-message {
+    background-color: lightgray;
+    border: 1px solid red;
+    color: red;
 }
 
 .login-container button {

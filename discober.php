@@ -27,8 +27,8 @@
     </main>
 
     <footer id="footer">
-        <h3>Descobrir</h3>
-        <h3>Missatges</h3>
+        <h3><a href="discober.php">Descubrir</a></h3>
+        <h3><a href="messages.php">Mensajes</a></h3>
         <h3><a href="profile.php">Perfil</a></h3>
     </footer>
 </body>
