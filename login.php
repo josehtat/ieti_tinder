@@ -9,13 +9,13 @@ if (isset($_POST['mail']) && isset($_POST['password'])) {
 
     try {
         $hostname = "localhost";
-        $dbname = " ieti_tinder";
+        $dbname = "ieti_tinder";
         $dbUsername = "ietitinder";
         $pw = "tinder123";
         $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
     } catch (PDOException $e) {
         $resp["status"] = 1;
-        $resp["msg"] = "Error al accedir a la base de dades" . $e->getMessage() . "\n";
+        $resp["msg"] = "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
         echo json_encode($resp);
         exit;
     }
