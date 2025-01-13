@@ -9,12 +9,14 @@ if (isset($_POST['mail']) && isset($_POST['password'])) {
 
     try {
         $hostname = "localhost";
-        $dbname = "tempUsers";
-        $dbUsername = "admin";
-        $pw = "SQL no me gusta!";
+        $dbname = "ieti_tinder";
+        $dbUsername = "ietitinder";
+        $pw = "tinder123";
         $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
     } catch (PDOException $e) {
-        echo "Error al accedir a la base de dades" . $e->getMessage() . "\n";
+        $resp["status"] = 1;
+        $resp["msg"] = "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
+        echo json_encode($resp);
         exit;
     }
 
@@ -36,7 +38,7 @@ if (isset($_POST['mail']) && isset($_POST['password'])) {
             $resp["msg"] = "Error de SQL - PDO::errorInfo(): " +
                 "Error accedint a dades: " . $e[2];
             echo json_encode($resp);
-            die("Error accedint a dades: " . $e[2]);
+            die("Error 1 accedint a dades: " . $e[2]);
         } else {
             $resp["msg"] = "Error de SQL";
             echo json_encode($resp);
