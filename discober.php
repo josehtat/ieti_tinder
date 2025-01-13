@@ -6,15 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
     <script src="/js/jquery-3.7.1.min.js"></script>
-    <title>Affinity</title>
+    <title>Descubrir</title>
 </head>
 
-<body>
+<body id="bodyDiscober">
     <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
         <?php } ?>
     </script>
+    
+    <header id="headerDiscober">
+        <h2>LOGO TEXT</h2>
+    </header>
+
+    <main id="mainDiscober">
+        <div id="matchDiscober">
+            
+        </div>
+    </main>
+
+    <footer id="footer">
+        <h3>Descobrir</h3>
+        <h3>Missatges</h3>
+        <h3><a href="profile.php">Perfil</a></h3>
+    </footer>
 </body>
 
 </html>
