@@ -12,3 +12,4 @@ function sendRequest(logText) {
     // Enviar la solicitud al archivo PHP con el texto
     xhr.send("text=" + encodeURIComponent(formattedText));
 }
+
