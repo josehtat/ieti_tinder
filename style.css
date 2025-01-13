@@ -1,10 +1,14 @@
-/*Estilos pagina message.php*/
-#bodyMessages {
+/*---------------------------*/
+/*Estilos pagina profile.php*/
+
+
+/*Estilos pagina discober.php*/
+#bodyDiscober {
     display: flex;
     flex-direction: column;
 }
 
-#headerMessages {
+#headerDiscober {
     display: flex;
     position: fixed;
     top: 0;
@@ -14,8 +18,32 @@
     justify-content: space-between;
 }
 
+/*---------------------------*/
+/*Estilos pagina message.php*/
+
+#bodyMessages {
+    display: flex;
+    flex-direction: column;
+}
+
+#headerMessages {
+    background-color: white;
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    flex-direction: row;
+    justify-content: space-between;
+    z-index: 1;
+}
+
 #matchBox{
     text-align: center;
+    padding-top: 10%;
+    margin-bottom: 20%;
+}
+
+#matchMessages {
     padding-top: 10%;
     margin-bottom: 20%;
 }
@@ -27,31 +55,34 @@
     margin-bottom: 70%;
 }
 
-#footerMessages {
+#footer {
+    background-color: white;
     display: flex;
     position: fixed;
     bottom: 0;
     width: 95%;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 1;
 }
 
-#footerMessages h3 {
+#footer h3 {
     margin-top: auto;
     text-align: center;
     padding: 0;
 }
 
+#footer h3 a{
+    text-decoration: none;
+    color: black;
 
-/*Estilos pagina index.php*/
-/* General reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
-body {
+/*---------------------------*/
+/*Estilos pagina index.php*/
+/* General reset */
+
+#bodyIndex {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
     display: flex;
@@ -71,26 +102,27 @@ body {
     text-align: center;
 }
 
-h2 {
+.login-container h2 {
     font-size: 24px;
     color: #333;
 }
 
-h3 {
+.login-container h3 {
     margin-bottom: 20px;
     font-size: 18px;
     color: #333;
 }
 
-label {
+.login-container label {
     display: block;
     font-size: 14px;
     color: #555;
     margin-bottom: 5px;
 }
 
-input[type="email"],
-input[type="password"] {
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container input[type="text"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #000;
@@ -98,13 +130,14 @@ input[type="password"] {
     font-size: 16px;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus,
+.login-container input[type="email"]:focus {
     outline: none;
     border-color: #4caf50;
 }
 
-button {
+.login-container button {
     width: 100%;
     padding: 12px;
     background-color: #4caf50;
@@ -115,18 +148,18 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.login-container button:hover {
     background-color: #45a049;
 }
 
-a:link,
-a:visited {
+.login-container a:link,
+.login-container a:visited {
     color: #000;
     text-decoration: none;
 }
 
-a:hover,
-a:active {
+.login-container a:hover,
+.login-container a:active {
     text-decoration: underline;
 }
 
@@ -152,9 +185,4 @@ a:active {
     font-size: 14px;
     color: #555;
     text-align: left;
-
-#footerMessages h3 a{
-    text-decoration: none;
-    color: black;
-
 }
