@@ -1,10 +1,10 @@
 /*Estilos pagina message.php*/
-#bodyMessages{
+#bodyMessages {
     display: flex;
     flex-direction: column;
 }
 
-#headerMessages{
+#headerMessages {
     display: flex;
     position: fixed;
     top: 0;
@@ -14,25 +14,20 @@
     justify-content: space-between;
 }
 
-#matchMessages {
-    padding-top: 10%;
-    margin-bottom: 20%;
-}
-
 #matchBox{
     text-align: center;
     padding-top: 10%;
     margin-bottom: 20%;
 }
 
-#messageBox{
+#messageBox {
     text-align: center;
     margin: 0 auto;
     padding-top: 22%;
     margin-bottom: 70%;
 }
 
-#footerMessages{
+#footerMessages {
     display: flex;
     position: fixed;
     bottom: 0;
@@ -41,13 +36,125 @@
     justify-content: space-between;
 }
 
-#footerMessages h3{
+#footerMessages h3 {
     margin-top: auto;
     text-align: center;
     padding: 0;
 }
 
+
+/*Estilos pagina index.php*/
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #4caf50;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+a:link,
+a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    text-decoration: underline;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.submit-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+}
+
+.register-link {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+
 #footerMessages h3 a{
     text-decoration: none;
     color: black;
+
 }
