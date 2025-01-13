@@ -6,11 +6,15 @@
 
 #headerMessages {
     display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    
     flex-direction: row;
     justify-content: space-between;
 }
 
-#matchBox {
+#matchBox{
     text-align: center;
     padding-top: 10%;
     margin-bottom: 20%;
@@ -25,6 +29,9 @@
 
 #footerMessages {
     display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 95%;
     flex-direction: row;
     justify-content: space-between;
 }
@@ -34,6 +41,7 @@
     text-align: center;
     padding: 0;
 }
+
 
 /*Estilos pagina index.php*/
 /* General reset */
@@ -144,4 +152,9 @@ a:active {
     font-size: 14px;
     color: #555;
     text-align: left;
+
+#footerMessages h3 a{
+    text-decoration: none;
+    color: black;
+
 }
