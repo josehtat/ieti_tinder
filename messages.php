@@ -17,7 +17,7 @@
             <h3>Els meus matches</h3>
             <div id="matchBox">
                 <?php 
-                    echo "<p>Hi ha gent esperant per parlar amb tu.<br>Torna'ls el like per començar a xatejar.</p>"
+                        echo "<p>Hi ha gent esperant per parlar amb tu.<br>Torna'ls el like per començar a xatejar.</p>";
                 ?>
             </div>
         </div>
@@ -34,7 +34,7 @@
     <footer id="footerMessages">
         <h3>Descobrir</h3>
         <h3>Missatges</h3>
-        <h3>Perfil</h3>
+        <h3><a href="profile.php">Perfil</a></h3>
     </footer>
 </body>
 </html>

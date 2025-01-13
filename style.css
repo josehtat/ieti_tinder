@@ -6,8 +6,17 @@
 
 #headerMessages{
     display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    
     flex-direction: row;
     justify-content: space-between;
+}
+
+#matchMessages {
+    padding-top: 10%;
+    margin-bottom: 20%;
 }
 
 #matchBox{
@@ -25,6 +34,9 @@
 
 #footerMessages{
     display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 95%;
     flex-direction: row;
     justify-content: space-between;
 }
@@ -33,4 +45,9 @@
     margin-top: auto;
     text-align: center;
     padding: 0;
+}
+
+#footerMessages h3 a{
+    text-decoration: none;
+    color: black;
 }
