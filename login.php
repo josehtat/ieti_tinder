@@ -9,9 +9,9 @@ if (isset($_POST['mail']) && isset($_POST['password'])) {
 
     try {
         $hostname = "localhost";
-        $dbname = "tempUsers";
-        $dbUsername = "admin";
-        $pw = "SQL no me gusta!";
+        $dbname = " ieti_tinder";
+        $dbUsername = "ietitinder";
+        $pw = "tinder123";
         $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
     } catch (PDOException $e) {
         echo "Error al accedir a la base de dades" . $e->getMessage() . "\n";
