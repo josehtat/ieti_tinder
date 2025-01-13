@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear archivo con fecha</title>
+    <title>Gestión de Errores</title>
+    <link rel="stylesheet" href="style.css">
     <script src="js/script.js"></script>
 </head>
 <body>
-    <h1>Generar archivo con fecha</h1>
-    <button onclick="sendRequest('XXX entro a login')">entro a login</button>
-    <button onclick="sendRequest('XXX a dado like')">dio like</button>
-    <button onclick="sendRequest('XXX a dado dislike')">a dado dislike</button>
+
+    <div id="messages-container"></div>
+
+    <button onclick="showMessage('info', 'Información: Todo está correcto.')">Mostrar Info</button>
+    <button onclick="showMessage('error', 'Error: Algo salió mal.')">Mostrar Error</button>
+    <button onclick="showMessage('warning', 'Advertencia: Revisa los detalles.')">Mostrar Advertencia</button>
+
 </body>
 </html>
