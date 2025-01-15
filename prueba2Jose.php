@@ -10,11 +10,6 @@
 </head>
 
 <body id="bodyProfile">
-      <script>
-        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
-            window.location.href = "/";
-        <?php } ?>
-    </script>
     <header id="headerProfile">
         <div id="logo">LOGO TEXT</div>
         <div id="menuButtons">
@@ -31,47 +26,15 @@
         </div>
     </header>
     <main id="mainProfile">
-        <?php
-        try {
-            $hostname = "localhost";
-            $dbname = "ieti_tinder";
-            $dbUsername = "ietitinder";
-            $pw = "tinder123";
-            $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
-
-            $queryText = "SELECT users.name, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
-                          FROM users 
-                          LEFT JOIN pictures ON users.email_user = pictures.email_user 
-                          WHERE users.email_user = :mail";
-
-            $queryUser = $pdo->prepare($queryText);
-            $queryUser->bindParam(':mail', $_COOKIE['loggedUser']);
-            $queryUser->execute();
-
-            $userInfo = $queryUser->fetch(PDO::FETCH_ASSOC);
-            if ($userInfo) {
-                $name = $userInfo['name'];
-                $age = $userInfo['age'];
-                $image = $userInfo['image'];
-            } else {
-                $name = "Usuario Desconocido";
-                $age = "No disponible";
-                $image = "/path/to/default/profile/image.jpg";
-            }
-
-        } catch (PDOException $e) {
-            echo "Error al acceder a la base de datos - " . $e->getMessage();
-        }
-        ?>
         <div id="userProfile">
             <div id="carouselContainer">
                 <button id="prevImage" class="carouselArrow">&#10094;</button>
-                <img src="<?php echo $image; ?>" alt="Imagen de perfil" class="profileImage">
+                <img src="img/ronaldo.jpg" alt="Imagen de perfil" class="profileImage" id="carousel">
                 <button id="nextImage" class="carouselArrow">&#10095;</button>
             </div>
             <div id="userInfo">
-                <h2 id="userName"><?php echo $name; ?></h2>
-                <span id="userAge"><?php echo $age; ?> años</span>
+                <h2 id="userName">Cristiano</h2>
+                <span id="userAge">38 años</span>
             </div>
         </div>
         <div id="editProfileSection" style="display: none;">
@@ -89,43 +52,10 @@
 
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
-            <?php
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $newName = $_POST['nameProfile'] ?? '';
-                $newSurname = $_POST['surnameProfile'] ?? '';
-                $newAlias = $_POST['aliasProfile'] ?? '';
 
-                /*var_dump($newName);
-                var_dump($newSurame);
-                var_dump($newAlias);*/
-
-                $queryText = "UPDATE users SET";
-                $queryText .= "name = IF (:name != '', :name, name), ";
-                $queryText .= "surname = IF (:surname != '', :surname, surname) ";
-                $queryText .= "alias = IF (:alias != '', :alias, alias) ";
-                $queryText .= "WHERE email_user = :email;";
-
-                $stmt = $pdo->prepare($queryText);
-                $stmt->bindParam(':name', $newName);
-                $stmt->bindParam(':surname', $newSurname);
-                $stmt->bindParam(':alias', $newAlias);
-                $stmt->bindParam(':email', $_COOKIE['loggedUser']);
-                $stmt->execute();
-
-            }
-
-            ?>
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
-    
-    <header id="headerProfile">
-        <h2>LOGO TEXT</h2>
-    </header>
-
-    <main id="mainProfile">
-        
-
     </main>
 
     <footer id="footer">
