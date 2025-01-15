@@ -49,3 +49,18 @@ function showMessage(type, message) {
         }, 500); // Tiempo para la animación de desaparición
     }, 5000); // El mensaje desaparecerá después de 5 segundos
 }
+
+//Cambiar foton Matches
+function cambiarImagen(tipo) {
+    if (tipo === 'dislike') {
+        const dislikeImg = document.getElementById('dislikeImg');
+        dislikeImg.src = dislikeImg.src.includes('cruzV2.png') 
+            ? 'img/cruzV1.png'  // Nueva imagen para dislike
+            : 'img/cruzV2.png';     // Imagen original
+    } else if (tipo === 'like') {
+        const likeImg = document.getElementById('likeImg');
+        likeImg.src = likeImg.src.includes('corazonV2.png') 
+            ? 'img/corazonV1.png'  // Nueva imagen para like
+            : 'img/corazonV2.png';     // Imagen original
+    }
+}
