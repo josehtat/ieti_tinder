@@ -10,11 +10,6 @@
 </head>
 
 <body id="bodyProfile">
-    <script>
-        <?php if (isset($_COOKIE['loggedUser'])) { ?>
-            window.location.href = "/discober.php";
-        <?php } ?>
-    </script>
     <header id="headerProfile">
         <div id="logo">LOGO TEXT</div>
         <div id="menuButtons">
@@ -118,13 +113,29 @@
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
+    
+    <header id="headerProfile">
+        <h2>LOGO TEXT</h2>
+    </header>
+
+    <main id="mainProfile">
+        
+
     </main>
 
-    <footer id="footer">
-        <h3><a href="discober.php">Descubrir</a></h3>
-        <h3><a href="messages.php">Mensajes</a></h3>
-        <h3><a href="profile.php">Perfil</a></h3>
-    </footer>
+    <nav id="nav">
+        <ul>
+            <li>
+                <h3 id="markerPage"><a href="discober.php">Descubrir</a></h3>
+            </li>
+            <li>
+                <h3><a href="messages.php">Mensajes</a></h3>
+            </li>
+            <li>
+                <h3><a href="profile.php">Perfil</a></h3>
+            </li>
+        </ul>
+    </nav>
 
     <script>
         $(document).ready(function () {
