@@ -69,6 +69,7 @@
 #moreOptions:hover p {
     display: block;
     cursor: pointer;
+    z-index: 1;
 }
 
 

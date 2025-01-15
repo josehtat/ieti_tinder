@@ -59,8 +59,10 @@
         }
         ?>
         <div id="userProfile">
-            <div id="carousel">
+            <div id="carouselContainer">
+                <button id="prevImage" class="carouselArrow">&#10094;</button>
                 <img src="<?php echo $image; ?>" alt="Imagen de perfil" class="profileImage">
+                <button id="nextImage" class="carouselArrow">&#10095;</button>
             </div>
             <div id="userInfo">
                 <h2 id="userName"><?php echo $name; ?></h2>
@@ -69,16 +71,45 @@
         </div>
         <div id="editProfileSection" style="display: none;">
             <h3></h3>
-            <form id="editForm">
-                <label for="camp1">Camp 1:</label>
-                <input type="text" id="camp1" name="camp1" required>
+            <form id="editForm" method="post">
+                <label for="nameProfile">Nombre:</label>
+                <input type="text" id="nameProfile" name="nameProfile">
 
-                <label for="camp2">Camp 2:</label>
-                <input type="text" id="camp2" name="camp2" required>
+                <label for="surnameProfile">Apellido:</label>
+                <input type="text" id="surnameProfile" name="surnameProfile">
+
+                <label for="aliasProfile">Alias:</label>
+                <input type="text" id="aliasProfile" name="aliasProfile">
+
 
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
-            
+            <?php
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $newName = $_POST['nameProfile'] ?? '';
+                $newSurname = $_POST['surnameProfile'] ?? '';
+                $newAlias = $_POST['aliasProfile'] ?? '';
+
+                /*var_dump($newName);
+                var_dump($newSurame);
+                var_dump($newAlias);*/
+
+                $queryText = "UPDATE users SET";
+                $queryText .= "name = IF (:name != '', :name, name), ";
+                $queryText .= "surname = IF (:surname != '', :surname, surname) ";
+                $queryText .= "alias = IF (:alias != '', :alias, alias) ";
+                $queryText .= "WHERE email_user = :email;";
+
+                $stmt = $pdo->prepare($queryText);
+                $stmt->bindParam(':name', $newName);
+                $stmt->bindParam(':surname', $newSurname);
+                $stmt->bindParam(':alias', $newAlias);
+                $stmt->bindParam(':email', $_COOKIE['loggedUser']);
+                $stmt->execute();
+
+            }
+
+            ?>
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
@@ -101,12 +132,25 @@
                     $carousel.attr('src', images[cont]);
                     $carousel.fadeIn('fast');
                 });
-                cont = (cont + 1) % images.length;
             }
 
-            setInterval(changeImage, 3000);
+            $('#nextImage').click(function () {
+                cont = (cont + 1) % images.length;
+                changeImage();
+            });
+
+            $('#prevImage').click(function () {
+                cont = (cont - 1 + images.length) % images.length;
+                changeImage();
+            });
+
+            setInterval(function () {
+                cont = (cont + 1) % images.length;
+                changeImage();
+            }, 3000);
 
             $carousel.on('click', function () {
+                cont = (cont + 1) % images.length;
                 changeImage();
             });
 

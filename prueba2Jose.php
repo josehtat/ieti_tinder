@@ -27,11 +27,11 @@
     </header>
     <main id="mainProfile">
         <div id="userProfile">
-        <div id="carouselContainer">
-            <button id="prevImage" class="carouselArrow">&#10094;</button>
-            <img src="img/ronaldo.jpg" alt="Imagen de perfil" class="profileImage" id="carousel">
-            <button id="nextImage" class="carouselArrow">&#10095;</button>
-        </div>
+            <div id="carouselContainer">
+                <button id="prevImage" class="carouselArrow">&#10094;</button>
+                <img src="img/ronaldo.jpg" alt="Imagen de perfil" class="profileImage" id="carousel">
+                <button id="nextImage" class="carouselArrow">&#10095;</button>
+            </div>
             <div id="userInfo">
                 <h2 id="userName">Cristiano</h2>
                 <span id="userAge">38 años</span>
@@ -39,12 +39,16 @@
         </div>
         <div id="editProfileSection" style="display: none;">
             <h3></h3>
-            <form id="editForm">
-                <label for="camp1">Camp 1:</label>
-                <input type="text" id="camp1" name="camp1" required>
+            <form id="editForm" method="post">
+                <label for="nameProfile">Nombre:</label>
+                <input type="text" id="nameProfile" name="nameProfile">
 
-                <label for="camp2">Camp 2:</label>
-                <input type="text" id="camp2" name="camp2" required>
+                <label for="surnameProfile">Apellido:</label>
+                <input type="text" id="surnameProfile" name="surnameProfile">
+
+                <label for="aliasProfile">Alias:</label>
+                <input type="text" id="aliasProfile" name="aliasProfile">
+
 
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
