@@ -1,5 +1,151 @@
 /*---------------------------*/
 /*Estilos pagina profile.php*/
+#bodyProfile {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+#headerProfile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#logo {
+    font-size: 18px;
+    font-weight: bold;
+    top: 0;
+}
+
+#menuButtons button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    margin-top: 30px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#menuButtons button:hover {
+    background-color: #eaeaea;
+}
+
+#moreOptions {
+    position: relative;
+}
+
+#moreOptions p {
+    font-size: 20px;
+}
+
+#moreOptionsList {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+}
+
+#moreOptionsList li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#moreOptionsList li:last-child {
+    border-bottom: none;
+}
+
+#moreOptions p:hover {
+    content:"X";
+}
+
+#moreOptions:hover #moreOptionsList, #moreOptions:hover p {
+    display: block;
+    cursor: pointer;
+}
+
+
+#mainProfile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#userProfile {
+    display: block;
+}
+
+#editProfileSection {
+    display: none;
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#editProfileSection h3 {
+    color: red;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+form input {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    padding: 10px;
+    background-color: #444;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+#editPhotosButton {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #eeeeee;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editPhotosButton:hover {
+    background-color: #ddd;
+}
+
+
 
 
 /*Estilos pagina discober.php*/
