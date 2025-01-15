@@ -1,62 +1,259 @@
 /*
-MARK:Control de errores
+MARK: General
 */
-/* Contenedor para los mensajes */
-#messages-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
+html{
+    background: linear-gradient(135deg, #7B1FA2, #FFC300);
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+body{
+    max-width: 460px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #F4F4F4;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5); 
+    color: #1A1A1A;
+}
+ul{
+    margin: unset;
+    padding: unset;
+    list-style: none;
+}
+h2{
+    margin: unset;
+    padding: 10px;
 }
 
-/* Estilos comunes para todos los mensajes */
-.message {
+header , nav{
+    height: 9vh;
+}
+main{
+    height: 82vh; 
+    overflow: hidden;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+/*
+MARK:discober.php
+*/
+#headerDiscober{
+    background-color: #D8BFD8;
+    border-radius: 0px 0px 8px 8px;
+}
+
+#matchDiscober{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#perfilImgMatch{
+    padding: 25px;
+    height: 90%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#perfilImgMatch img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    border-radius: 8px;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.8); 
+}
+
+#optionsMatch{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+#optionsMatch ul{
+    margin-bottom: 35px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#optionsMatch ul li button{
+    height: 100%;
     padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
+    border-radius: 95px;
+    background-color: #e1e1e1;
+    border: none;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5); 
+}
+
+#optionsMatch ul li img{
+    width: 50px;
+    height: 100%;
+}
+
+#nav {
+    max-width: 460px;
+    background-color: #D8BFD8;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    border-radius: 8px 8px 0px 0px;
+}
+
+#nav ul{
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#nav ul li{
+    width: 33%;
+}
+
+#nav h3 {
+    margin: 0;
+    text-align: center;
+    padding: 10px;
+}
+
+#nav h3 a{
+    text-decoration: none;
+    color: #1A1A1A;
+}
+
+#nav h3 a:hover{
+    color: #FFC300;
+    border-bottom: 2px solid #FFC300;
+}
+
+#nav h3#markerPage a{
+    color: #7B1FA2;
+    border-bottom: 2px solid #7B1FA2 ;
+    cursor: default;
+}
+/*---------------------------*/
+/*
+MARK:login.php
+*/
+
+#loginIndex {
+    background-color: unset;
+    box-shadow: unset;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #F4F4F4;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-container h2 {
+    font-size: 24px;
+}
+
+.login-container h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.login-container label {
+    display: block;
     font-size: 14px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    animation: fadeIn 5s forwards;
+    margin-bottom: 5px;
 }
 
-/* Animación para mostrar los mensajes */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #e1e1e1;
 }
 
-/* Mensaje de tipo "información" */
-.message-info {
-    background-color: #4caf50;
-    color: #ffffff;
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus,
+.login-container input[type="email"]:focus {
+    outline: none;
 }
 
-/* Mensaje de tipo "error" */
-.message-error {
-    background-color: #dc3545;
-    color: #ffffff;
+.login-container .inputError {
+    border: 2px solid red !important;
 }
 
-/* Mensaje de tipo "advertencia" */
-.message-warning {
-    background-color: #ffc107;
-    color: #ffffff;
+.login-container #error-message {
+    background-color: lightgray;
+    border: 1px solid red;
+    color: red;
 }
+
+.login-container button {
+    width: 100%;
+    padding: 12px;
+    background: #7B1FA2;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #52146c;
+}
+
+.login-container a:link,
+.login-container a:visited {
+    color: #7B1FA2;
+    text-decoration: none;
+}
+
+.login-container a:hover,
+.login-container a:active {
+    text-decoration: underline;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.submit-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+}
+
+.register-link {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+}
+
+
 
 /*---------------------------*/
-/*Estilos pagina profile.php*/
+/*
+MARK: profile.php
+*/
 #bodyProfile {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -261,24 +458,10 @@ form button:hover {
     justify-content: space-between;
 }
 
-/*Estilos pagina discober.php*/
-#bodyDiscober {
-    display: flex;
-    flex-direction: column;
-}
-
-#headerDiscober {
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 95%;
-
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 /*---------------------------*/
-/*Estilos pagina message.php*/
+/*
+MARK:message.php
+*/
 
 #bodyMessages {
     display: flex;
@@ -411,33 +594,6 @@ form button:hover {
     margin-top: 5px;
 }
 
-#footer {
-    background-color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: fixed;
-    bottom: 0;
-    width: 95%;
-    border-top: 1px solid #ddd;
-    z-index: 1;
-    font-size: 16px;
-}
-
-#footer h3 {
-    margin: 0;
-    flex-grow: 1;
-    text-align: center;
-}
-
-#footer h3 a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    font-size: 16px;
-}
-
 @media (max-width: 460px) {
     #headerMessages {
         font-size: 16px;
@@ -478,121 +634,59 @@ form button:hover {
     }
 }
 
-
-/*---------------------------*/
-/*Estilos pagina login.php*/
-
-#loginIndex {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+/*-------------------------------
+MARK:Control de errores
+*/
+/* Contenedor para los mensajes */
+#messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
 }
 
-.login-container {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.login-container h2 {
-    font-size: 24px;
-    color: #333;
-}
-
-.login-container h3 {
-    margin-bottom: 20px;
-    font-size: 18px;
-    color: #333;
-}
-
-.login-container label {
-    display: block;
+/* Estilos comunes para todos los mensajes */
+.message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
     font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeIn 5s forwards;
 }
 
-.login-container input[type="email"],
-.login-container input[type="password"],
-.login-container input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #000;
-    border-radius: 4px;
-    font-size: 16px;
+/* Animación para mostrar los mensajes */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }
 
-.login-container input[type="text"]:focus,
-.login-container input[type="password"]:focus,
-.login-container input[type="email"]:focus {
-    outline: none;
-    border-color: #4caf50;
-}
-
-.login-container .inputError {
-    border: 2px solid red !important;
-}
-
-.login-container #error-message {
-    background-color: lightgray;
-    border: 1px solid red;
-    color: red;
-}
-
-.login-container button {
-    width: 100%;
-    padding: 12px;
+/* Mensaje de tipo "información" */
+.message-info {
     background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+    color: #ffffff;
 }
 
-.login-container button:hover {
-    background-color: #45a049;
+/* Mensaje de tipo "error" */
+.message-error {
+    background-color: #dc3545;
+    color: #ffffff;
 }
 
-.login-container a:link,
-.login-container a:visited {
-    color: #000;
-    text-decoration: none;
-}
-
-.login-container a:hover,
-.login-container a:active {
-    text-decoration: underline;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.submit-btn {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.forgot-password {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-    text-align: left;
-}
-
-.register-link {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #555;
-    text-align: left;
+/* Mensaje de tipo "advertencia" */
+.message-warning {
+    background-color: #ffc107;
+    color: #ffffff;
 }
