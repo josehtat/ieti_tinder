@@ -53,12 +53,12 @@ function showMessage(type, message) {
 // Cambiar imagen al hacer clic
 function toggleImage(type) {
     if (type === 'dislike') {
-        const dislikeImage = document.getElementById('dislikeImage');
+        const dislikeImage = document.getElementById('dislikeImg');
         dislikeImage.src = dislikeImage.src.includes('cruzV2.png') 
             ? 'img/cruzV1.png' 
             : 'img/cruzV2.png'; 
     } else if (type === 'like') {
-        const likeImage = document.getElementById('likeImage');
+        const likeImage = document.getElementById('likeImg');
         likeImage.src = likeImage.src.includes('corazonV2.png') 
             ? 'img/corazonV1.png' 
             : 'img/corazonV2.png';

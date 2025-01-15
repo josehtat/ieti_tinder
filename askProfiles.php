@@ -87,7 +87,6 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
             //preparem i executem la consulta
             $queryFinds = $pdo->prepare($queryText);
             $queryFinds->bindParam(':sex', $sex);
-            $queryFinds->bindParam(':sex_orientation', $sexualOrientation);
             $queryFinds->execute();
         } catch (PDOException $e) {
             echo "Error de SQL<br>\n";
@@ -130,7 +129,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
                 $findName = $find['name'];
                 $findEmail = $find['email_user'];
                 $findFullLocation = $find['location'];
-                $findLocation = explode(" ", $fullLocation);
+                $findLocation = explode(" ", $findFullLocation);
 
                 if ($queryInteraction->rowCount() <= 0) {
                     $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
@@ -153,11 +152,18 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
                 return $a['distance'] - $b['distance'];
             });
 
-            echo json_encode($foundUserList);
+            $status = 0;
+            echo json_encode([
+                'status' => $status,
+                'data' => $foundUserList
+            ]);
         }
     } else {
         $status = 1;
         $logMessage = "Datos incorrectos";
-        echo json_encode(array());
+        echo json_encode([
+            'status' => $status,
+            'data' => $logMessage
+        ]);
     }
 }
