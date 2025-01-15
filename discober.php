@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css?t=<?php echo time(); ?>">
-    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/script.js"></script>
     <title>Descubrir</title>
 </head>
 
@@ -28,12 +29,12 @@
             <div id="optionsMatch">
                 <ul>
                     <li>
-                        <button id="dislikeButton" onclick="cambiarImagen('dislike')">
+                        <button id="dislikeButton" onclick="toggleImage('dislike')">
                             <img id="dislikeImg" src="img/cruzV2.png" alt="Dislike">
                         </button>
                     </li>
                     <li>
-                        <button id="likeButton" onclick="cambiarImagen('like')">
+                        <button id="likeButton" onclick="toggleImage('like')">
                             <img id="likeImg" src="img/corazonV2.png" alt="Like">
                         </button>
                     </li>
@@ -41,9 +42,8 @@
             </div>
         </div>
         <!--<h1 id="dontProfile">NO HI HA PERFILS DISPONIBLES</h1>-->
-
     </main>
-
+    
     <nav id="nav">
         <ul>
             <li>
