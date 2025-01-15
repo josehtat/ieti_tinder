@@ -64,11 +64,9 @@
     border-bottom: none;
 }
 
-#moreOptions p:hover {
-    content:"X";
-}
 
-#moreOptions:hover #moreOptionsList, #moreOptions:hover p {
+#moreOptions:hover #moreOptionsList,
+#moreOptions:hover p {
     display: block;
     cursor: pointer;
 }
@@ -77,11 +75,61 @@
 #mainProfile {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+    text-align: center;
     margin-top: 20px;
 }
 
 #userProfile {
+    display: block;
+}
+
+.profileImage {
+    width: 100%;       
+    max-width: 450px;
+    height: 640px;      
+    border-radius: 5px;
+    object-fit: cover; 
+    display: block;    
+}
+
+#carouselContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.carouselArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#prevImage {
+    left: 10px;
+}
+
+#nextImage {
+    right: 10px;
+}
+
+#prevImage:hover,
+#nextImage:hover {
+    color: #ccc;
+}
+
+.profileImage {
+    width: 100%;
+    max-width: 450px;
+    height: 640px;
+    border-radius: 5px;
+    object-fit: cover;
     display: block;
 }
 
@@ -159,7 +207,7 @@ form button:hover {
     position: fixed;
     top: 0;
     width: 95%;
-    
+
     flex-direction: row;
     justify-content: space-between;
 }
@@ -170,59 +218,201 @@ form button:hover {
 #bodyMessages {
     display: flex;
     flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
 }
 
 #headerMessages {
     background-color: white;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
     position: fixed;
     top: 0;
     width: 95%;
-    flex-direction: row;
-    justify-content: space-between;
     z-index: 1;
-}
-
-#matchBox{
-    text-align: center;
-    padding-top: 10%;
-    margin-bottom: 20%;
+    font-size: 18px;
 }
 
 #matchMessages {
-    padding-top: 10%;
-    margin-bottom: 20%;
+    margin: 80px 20px 20px;
+}
+
+#matchMessages h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+#matchBox {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 15px 0;
+    align-items: center;
+    scrollbar-width: none;
+}
+
+#matchBox::-webkit-scrollbar {
+    display: none;
+}
+
+.match {
+    flex-shrink: 0;
+    width: 200px;
+    text-align: center;
+}
+
+.match img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.match p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+#message {
+    margin: 20px 20px 70px;
+}
+
+#message h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
 }
 
 #messageBox {
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 22%;
-    margin-bottom: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.messageUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.messageUser:hover {
+    background-color: #f5f5f5;
+}
+
+.messageUser img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.messageInfo {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.userName {
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.lastMessage {
+    margin: 2px 0 0;
+    font-size: 14px;
+    color: gray;
+}
+
+.messageDate {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 5px;
 }
 
 #footer {
     background-color: white;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
     position: fixed;
     bottom: 0;
     width: 95%;
-    flex-direction: row;
-    justify-content: space-between;
+    border-top: 1px solid #ddd;
     z-index: 1;
+    font-size: 16px;
 }
 
 #footer h3 {
-    margin-top: auto;
+    margin: 0;
+    flex-grow: 1;
     text-align: center;
-    padding: 0;
 }
 
-#footer h3 a{
+#footer h3 a {
     text-decoration: none;
     color: black;
-
+    font-weight: bold;
+    font-size: 16px;
 }
+
+@media (max-width: 460px) {
+    #headerMessages {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+
+    #matchBox {
+        gap: 10px;
+    }
+
+    .match {
+        width: 200px;
+    }
+
+    .match img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .messageUser {
+        padding: 8px;
+    }
+
+    .userName {
+        font-size: 14px;
+    }
+
+    .lastMessage {
+        font-size: 12px;
+    }
+
+    .messageDate {
+        font-size: 10px;
+    }
+
+    #footer {
+        font-size: 14px;
+    }
+}
+
 
 /*---------------------------*/
 /*Estilos pagina index.php*/
