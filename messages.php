@@ -9,11 +9,11 @@
 </head>
 
 <body id="bodyMessages">
-    <!---<script>
-        <?php // if (!isset($_COOKIE['loggedUser'])) { ?>
+    <script>
+        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
-        <?php //} ?>
-    </script>---->
+        <?php } ?>
+    </script>
     <header id="headerMessages">
         <h2>LOGO TEXT</h2>
         <h3>Buscar</h3>
@@ -166,11 +166,19 @@
         </div>
     </main>
 
-    <footer id="footer">
-        <h3><a href="discober.php">Descubrir</a></h3>
-        <h3><a href="messages.php">Mensajes</a></h3>
-        <h3><a href="profile.php">Perfil</a></h3>
-    </footer>
+    <nav id="nav">
+        <ul>
+            <li>
+                <h3 id="markerPage"><a href="discober.php">Descubrir</a></h3>
+            </li>
+            <li>
+                <h3><a href="messages.php">Mensajes</a></h3>
+            </li>
+            <li>
+                <h3><a href="profile.php">Perfil</a></h3>
+            </li>
+        </ul>
+    </nav>
 </body>
 
 </html>
