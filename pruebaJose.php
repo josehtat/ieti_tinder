@@ -9,11 +9,11 @@
 </head>
 
 <body id="bodyMessages">
-    <!---<script>
-        <?php // if (!isset($_COOKIE['loggedUser'])) { ?>
+    <script>
+        <?php  if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
-        <?php //} ?>
-    </script>---->
+        <?php } ?>
+    </script>
     <header id="headerMessages">
         <h2>LOGO TEXT</h2>
         <h3>Cercar</h3>

@@ -9,11 +9,11 @@
 </head>
 
 <body id="bodyMessages">
-    <!---<script>
-        <?php // if (!isset($_COOKIE['loggedUser'])) { ?>
+    <script>
+        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
-        <?php //} ?>
-    </script>---->
+        <?php } ?>
+    </script>
     <header id="headerMessages">
         <h2>LOGO TEXT</h2>
         <h3>Cercar</h3>
@@ -87,7 +87,7 @@
 
                             foreach ($queryUser as $rowUser) {
                                 echo "<div class='match'>
-                                        <img src='img/" . $rowUser['email_user'] . ".jpg'>
+                                        <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
                                         <p>" . $rowUser['name'] . "</p>
                                     </div>";
                             }
@@ -113,7 +113,7 @@
 
                         foreach ($queryUser as $rowUser) {
                             echo "<div class='match'>
-                                    <img src='img/" . $rowUser['email_user'] . ".jpg'>
+                                    <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
                                     <p>" . $rowUser['name'] . "</p>
                                 </div>";
                         }
@@ -150,7 +150,7 @@
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
                         echo "<div class='messageUser'>
-                            <img src='img/" . htmlspecialchars($row['id_user']) . ".jpg' alt='Foto de perfil'>
+                            <img src='profilePictures/" . htmlspecialchars($row['id_user']) . ".jpg' alt='Foto de perfil'>
                             <div class='messageInfo'>
                                 <p class='userName'>" . htmlspecialchars($row['name']) . "</p>
                                 <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>

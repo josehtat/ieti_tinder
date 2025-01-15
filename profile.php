@@ -10,6 +10,11 @@
 </head>
 
 <body id="bodyProfile">
+    <script>
+        <?php if (isset($_COOKIE['loggedUser'])) { ?>
+            window.location.href = "/discober.php";
+        <?php } ?>
+    </script>
     <header id="headerProfile">
         <div id="logo">LOGO TEXT</div>
         <div id="menuButtons">
@@ -125,7 +130,7 @@
         $(document).ready(function () {
             var images = <?php echo json_encode($images); ?>;
             var cont = 0;
-            var $carousel = $('#carousel');
+            var $carousel = $('#carouselContainer .profileImage');
 
             function changeImage() {
                 $carousel.fadeOut('fast', function () {
