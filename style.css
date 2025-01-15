@@ -34,25 +34,6 @@ main{
     justify-content: center; 
     align-items: center;
 }
-/*---------------------------*/
-/*
-MARK:profile.php
-*/
-#bodyProfile {
-    display: flex;
-    flex-direction: column;
-}
-
-#headerProfile {
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 95%;
-    
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 /*
 MARK:discober.php
 */
@@ -150,51 +131,6 @@ MARK:discober.php
     color: #7B1FA2;
     border-bottom: 2px solid #7B1FA2 ;
     cursor: default;
-}
-
-/*---------------------------*/
-/*
-MARK:message.php
-*/
-
-#bodyMessages {
-    display: flex;
-    flex-direction: column;
-}
-
-#headerMessages {
-    background-color: white;
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 95%;
-    flex-direction: row;
-    justify-content: space-between;
-    z-index: 1;
-}
-
-#matchBox{
-    text-align: center;
-    padding-top: 10%;
-    margin-bottom: 20%;
-}
-
-#matchMessages {
-    padding-top: 10%;
-    margin-bottom: 20%;
-}
-
-#messageBox {
-    text-align: center;
-    margin: 0 auto;
-    padding-top: 22%;
-    margin-bottom: 70%;
-}
-
-#dontProfile{
-    position: relative;
-    text-align: center;
-    margin-top: 30vh;
 }
 /*---------------------------*/
 /*
@@ -310,6 +246,392 @@ MARK:login.php
     font-size: 14px;
     color: #555;
     text-align: left;
+}
+
+
+
+/*---------------------------*/
+/*
+MARK: profile.php
+*/
+#bodyProfile {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+#headerProfile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#logo {
+    font-size: 18px;
+    font-weight: bold;
+    top: 0;
+}
+
+#menuButtons button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    margin-top: 30px;
+    background-color: #ffffff;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#menuButtons button:hover {
+    background-color: #eaeaea;
+}
+
+#moreOptions {
+    position: relative;
+}
+
+#moreOptions p {
+    font-size: 20px;
+}
+
+#moreOptionsList {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 0;
+    list-style-type: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 200px;
+}
+
+#moreOptionsList li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#moreOptionsList li:last-child {
+    border-bottom: none;
+}
+
+
+#moreOptions:hover #moreOptionsList,
+#moreOptions:hover p {
+    display: block;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
+#mainProfile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#userProfile {
+    display: block;
+}
+
+.profileImage {
+    width: 100%;       
+    max-width: 450px;
+    height: 640px;      
+    border-radius: 5px;
+    object-fit: cover; 
+    display: block;    
+}
+
+#carouselContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.carouselArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#prevImage {
+    left: 10px;
+}
+
+#nextImage {
+    right: 10px;
+}
+
+#prevImage:hover,
+#nextImage:hover {
+    color: #ccc;
+}
+
+.profileImage {
+    width: 100%;
+    max-width: 450px;
+    height: 640px;
+    border-radius: 5px;
+    object-fit: cover;
+    display: block;
+}
+
+#editProfileSection {
+    display: none;
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#editProfileSection h3 {
+    color: red;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+form input {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    padding: 10px;
+    background-color: #444;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+#editPhotosButton {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #eeeeee;
+    border: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editPhotosButton:hover {
+    background-color: #ddd;
+}
+
+#headerProfile {
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/*---------------------------*/
+/*
+MARK:message.php
+*/
+
+#bodyMessages {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+#headerMessages {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    z-index: 1;
+    font-size: 18px;
+}
+
+#matchMessages {
+    margin: 80px 20px 20px;
+}
+
+#matchMessages h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+#matchBox {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 15px 0;
+    align-items: center;
+    scrollbar-width: none;
+}
+
+#matchBox::-webkit-scrollbar {
+    display: none;
+}
+
+.match {
+    flex-shrink: 0;
+    width: 200px;
+    text-align: center;
+}
+
+.match img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.match p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+#message {
+    margin: 20px 20px 70px;
+}
+
+#message h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+#messageBox {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.messageUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.messageUser:hover {
+    background-color: #f5f5f5;
+}
+
+.messageUser img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.messageInfo {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.userName {
+    font-weight: bold;
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.lastMessage {
+    margin: 2px 0 0;
+    font-size: 14px;
+    color: gray;
+}
+
+.messageDate {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 5px;
+}
+
+@media (max-width: 460px) {
+    #headerMessages {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+
+    #matchBox {
+        gap: 10px;
+    }
+
+    .match {
+        width: 200px;
+    }
+
+    .match img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .messageUser {
+        padding: 8px;
+    }
+
+    .userName {
+        font-size: 14px;
+    }
+
+    .lastMessage {
+        font-size: 12px;
+    }
+
+    .messageDate {
+        font-size: 10px;
+    }
+
+    #footer {
+        font-size: 14px;
+    }
 }
 
 /*-------------------------------

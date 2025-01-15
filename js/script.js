@@ -46,15 +46,15 @@ function showMessage(type, message) {
         messageContainer.style.opacity = 0;
         setTimeout(function() {
             container.removeChild(messageContainer);
-        }, 500); // Tiempo para la animación de desaparición
-    }, 5000); // El mensaje desaparecerá después de 5 segundos
+        }, 500);
+    }, 5000);
 }
 
 // Cambiar imagen al hacer clic
 function toggleImage(type) {
     if (type === 'dislike') {
         const dislikeImage = document.getElementById('dislikeImage');
-        dislikeImage.src = dislikeImage.src.includes('crossV2.png') 
+        dislikeImage.src = dislikeImage.src.includes('cruzV2.png') 
             ? 'img/cruzV1.png' 
             : 'img/cruzV2.png'; 
     } else if (type === 'like') {
@@ -64,4 +64,3 @@ function toggleImage(type) {
             : 'img/corazonV2.png';
     }
 }
-
