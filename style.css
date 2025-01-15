@@ -1,3 +1,60 @@
+/*
+MARK:Control de errores
+*/
+/* Contenedor para los mensajes */
+#messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* Estilos comunes para todos los mensajes */
+.message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeIn 5s forwards;
+}
+
+/* Animación para mostrar los mensajes */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Mensaje de tipo "información" */
+.message-info {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+/* Mensaje de tipo "error" */
+.message-error {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* Mensaje de tipo "advertencia" */
+.message-warning {
+    background-color: #ffc107;
+    color: #ffffff;
+}
+
 /*---------------------------*/
 /*Estilos pagina profile.php*/
 #bodyProfile {
@@ -194,8 +251,15 @@ form button:hover {
     background-color: #ddd;
 }
 
-
-
+#headerProfile {
+    display: flex;
+    position: fixed;
+    top: 0;
+    width: 95%;
+    
+    flex-direction: row;
+    justify-content: space-between;
+}
 
 /*Estilos pagina discober.php*/
 #bodyDiscober {
@@ -416,10 +480,9 @@ form button:hover {
 
 
 /*---------------------------*/
-/*Estilos pagina index.php*/
-/* General reset */
+/*Estilos pagina login.php*/
 
-#bodyIndex {
+#loginIndex {
     font-family: Arial, sans-serif;
     background-color: #f2f2f2;
     display: flex;
@@ -472,6 +535,16 @@ form button:hover {
 .login-container input[type="email"]:focus {
     outline: none;
     border-color: #4caf50;
+}
+
+.login-container .inputError {
+    border: 2px solid red !important;
+}
+
+.login-container #error-message {
+    background-color: lightgray;
+    border: 1px solid red;
+    color: red;
 }
 
 .login-container button {

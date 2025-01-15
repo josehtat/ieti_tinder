@@ -10,6 +10,11 @@
 </head>
 
 <body id="bodyProfile">
+      <script>
+        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
+            window.location.href = "/";
+        <?php } ?>
+    </script>
     <header id="headerProfile">
         <div id="logo">LOGO TEXT</div>
         <div id="menuButtons">
@@ -113,6 +118,14 @@
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
+    
+    <header id="headerProfile">
+        <h2>LOGO TEXT</h2>
+    </header>
+
+    <main id="mainProfile">
+        
+
     </main>
 
     <footer id="footer">
