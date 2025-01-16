@@ -114,6 +114,10 @@
         function reactionResult(logRes) {
             console.log(logRes);
             if (logRes.status == 0) {
+                var storedUserProfiles = localStorage.getItem('userProfiles');
+                var userProfiles = JSON.parse(storedUserProfiles);
+                userProfiles.shift();
+                localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
                 findUser();
             }
         }
@@ -133,7 +137,6 @@
                     $("#ageProfileMacth").text(foundUser.age);
                     $("#imgProfileMacth").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                     // Remove the first element from the logRes.data array
-                    logRes.data.shift();
                     localStorage.setItem('userProfiles', JSON.stringify(logRes.data));
                 }
             }
