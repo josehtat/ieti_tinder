@@ -10,6 +10,7 @@
     <title>Login - Affinity</title>
 </head>
 
+
 <body id="loginIndex">
     <script>
         <?php

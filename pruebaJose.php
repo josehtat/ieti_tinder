@@ -19,6 +19,7 @@
         <h3>Cercar</h3>
     </header>
 
+    
     <main id="mainMessages">
         <div id="matchMessages">
             <h3>Els meus matches</h3>
