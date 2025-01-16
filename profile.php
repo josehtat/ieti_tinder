@@ -10,8 +10,13 @@
 </head>
 
 <body id="bodyProfile">
+    <script>
+        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
+            window.location.href = "/";
+        <?php } ?>
+    </script>
     <header id="headerProfile">
-        <div id="logo">LOGO TEXT</div>
+        <div id="logo">Affinity</div>
         <div id="menuButtons">
             <button id="viewButton">Mirar</button>
             <button id="editButton">Editar</button>
@@ -19,7 +24,7 @@
         <div id="moreOptions">
             <p>...</p>
             <ul id="moreOptionsList">
-                <li id="logoutProfile">Cerrar sesión</li>
+                <li id="logoutProfile"><button id="logout">Cerrar sesión</p></button></li>
                 <li id="editPwdProfile">Modificar la contraseña</li>
                 <li id="deleteProfile">Eliminar la cuenta</li>
             </ul>
@@ -35,9 +40,9 @@
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
 
             $queryText = "SELECT users.name, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
-                          FROM users 
-                          LEFT JOIN pictures ON users.email_user = pictures.email_user 
-                          WHERE users.email_user = :mail";
+                  FROM users 
+                  LEFT JOIN pictures ON users.email_user = pictures.email_user 
+                  WHERE users.email_user = :mail";
 
             $queryUser = $pdo->prepare($queryText);
             $queryUser->bindParam(':mail', $_COOKIE['loggedUser']);
@@ -47,23 +52,30 @@
             if ($userInfo) {
                 $name = $userInfo['name'];
                 $age = $userInfo['age'];
-                $image = $userInfo['image'];
+
+                $queryImages = "SELECT path FROM pictures WHERE email_user = :mail";
+                $queryImgs = $pdo->prepare($queryImages);
+                $queryImgs->bindParam(':mail', $_COOKIE['loggedUser']);
+                $queryImgs->execute();
+                $images = $queryImgs->fetchAll(PDO::FETCH_COLUMN);
             } else {
                 $name = "Usuario Desconocido";
                 $age = "No disponible";
-                $image = "/path/to/default/profile/image.jpg";
+                $images = ["/path/to/default/profile/image.jpg"];
             }
 
         } catch (PDOException $e) {
             echo "Error al acceder a la base de datos - " . $e->getMessage();
         }
         ?>
+
         <div id="userProfile">
             <div id="carouselContainer">
                 <button id="prevImage" class="carouselArrow">&#10094;</button>
-                <img src="<?php echo $image; ?>" alt="Imagen de perfil" class="profileImage">
+                <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
                 <button id="nextImage" class="carouselArrow">&#10095;</button>
             </div>
+
             <div id="userInfo">
                 <h2 id="userName"><?php echo $name; ?></h2>
                 <span id="userAge"><?php echo $age; ?> años</span>
@@ -113,13 +125,6 @@
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
-    
-    <header id="headerProfile">
-        <h2>LOGO TEXT</h2>
-    </header>
-
-    <main id="mainProfile">
-        
 
     </main>
 
@@ -163,7 +168,7 @@
             setInterval(function () {
                 cont = (cont + 1) % images.length;
                 changeImage();
-            }, 3000);
+            }, 10000);
 
             $carousel.on('click', function () {
                 cont = (cont + 1) % images.length;
@@ -180,7 +185,32 @@
                 $('#editProfileSection').hide();
             });
 
+            function logout() {
+                var parameters = {};
+
+                $.ajax({
+                    data: parameters,
+                    url: 'logout.php',
+                    type: 'POST',
+                    success: logoutResult,
+                    dataType: 'json'
+                });
+            }
+
+            function logoutResult(logRes) {
+                console.log(logRes);
+                if (logRes.status == 0) {
+                    window.location.href = "/";
+                }
+            }
+
+            $(document).ready(function () {
+                $("#logout").click(function (event) {
+                    logout();
+                });
+            });
         });
+
     </script>
 </body>
 

@@ -15,7 +15,7 @@
         <?php } ?>
     </script>
     <header id="headerMessages">
-        <h2>LOGO TEXT</h2>
+        <h2>Affinity</h2>
         <h3>Buscar</h3>
     </header>
 
