@@ -36,7 +36,7 @@
                     exit;
                 }
 
-                $queryText1 = "SELECT * FROM interactions WHERE id_user = :mail AND like_user = true AND like_receptor = true;";
+                $queryText1 = "SELECT * FROM interactions WHERE id_user = :mail AND like_user = 1 AND like_receptor = 1;";
 
                 try {
                     $queryText1 = $pdo->prepare($queryText1);
@@ -52,7 +52,7 @@
                 }
 
                 if ($queryText1->rowCount() <= 0) {
-                    $queryText2 = "SELECT * FROM interactions WHERE id_receptor = :mail AND like_user = true AND like_receptor = true;";
+                    $queryText2 = "SELECT * FROM interactions WHERE id_receptor = :mail AND like_user = 1 AND like_receptor = 1;";
 
                     try {
                         $queryText2 = $pdo->prepare($queryText2);
@@ -71,10 +71,10 @@
                         echo "<p>Hay gente esperando para hablar contigo.<br> Devuelveles el like para comenzar a xatejar.</p>";
                     } else {
                         foreach ($queryText2 as $row) {
-                            $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
+                            $queryUserText = "SELECT * FROM users WHERE email_user = :mail;";
 
                             try {
-                                $queryUser = $pdo->prepare($queryUser);
+                                $queryUser = $pdo->prepare($queryUserText);
                                 $queryUser->bindParam(':mail', $row['id_user']);
                                 $queryUser->execute();
                             } catch (PDOException $e) {
@@ -88,7 +88,7 @@
 
                             foreach ($queryUser as $rowUser) {
                                 echo "<div class='match'>
-                                        <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
+                                        <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
                                         <p>" . $rowUser['name'] . "</p>
                                     </div>";
                             }
@@ -114,7 +114,7 @@
 
                         foreach ($queryUser as $rowUser) {
                             echo "<div class='match'>
-                                    <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
+                                    <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
                                     <p>" . $rowUser['name'] . "</p>
                                 </div>";
                         }

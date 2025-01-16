@@ -43,7 +43,7 @@ try {
     $queryUser->bindParam(':mail', $_COOKIE['loggedUser']);
     $queryUser->execute();
 } catch (PDOException $e) {
-    echo "Error de SQL<br>\n";
+    echo "Error de SQL 1<br>\n";
     //comprovo errors:
     $e = $queryUser->errorInfo();
     if ($e[0] != '00000') {
@@ -89,7 +89,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
             $queryFinds->bindParam(':sex', $sex);
             $queryFinds->execute();
         } catch (PDOException $e) {
-            echo "Error de SQL<br>\n";
+            echo "Error de SQL 2<br>\n";
             //comprovo errors:
             $e = $queryUser->errorInfo();
             if ($e[0] != '00000') {
@@ -115,7 +115,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
                     $queryInteraction->bindParam(':findUser', $find['email_user']);
                     $queryInteraction->execute();
                 } catch (PDOException $e) {
-                    echo "Error de SQL<br>\n";
+                    echo "Error de SQL 3<br>\n";
                     $e = $queryInteraction->errorInfo();
                     if ($e[0] != '00000') {
                         echo "\nPDO::errorInfo():\n";
@@ -154,7 +154,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
                     $queryPictures->bindParam(':findUser', $foundUser['email']);
                     $queryPictures->execute();
                 } catch (PDOException $e) {
-                    echo "Error de SQL<br>\n";
+                    echo "Error de SQL 4<br>\n";
                     $e = $queryPictures->errorInfo();
                     if ($e[0] != '00000') {
                         echo "\nPDO::errorInfo():\n";

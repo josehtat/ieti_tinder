@@ -234,7 +234,8 @@
             });
 
             $('#editForm').on('submit', function (e) {
-                e.preventDefault(); var form = $(this); $.ajax({
+                e.preventDefault(); var form = $(this); 
+                $.ajax({
                     type: 'POST',
                     url: '',
                     data: form.serialize(),
@@ -242,6 +243,7 @@
                         console.log('Formulario enviado correctamente');
                         $('#userProfile').show(); $('#editProfileSection').hide();
                         setupEventListeners();
+                        window.location.href = "/profile.php";
                     },
                     error: function (err) {
                         console.log('Error en el envío del formulario: ', err);
