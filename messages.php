@@ -130,17 +130,16 @@
             <h3>Mensajes</h3>
             <div id="messageBox">
                 <?php
-                $query = "
-                SELECT u.name, m.id_user, m.id_receptor, m.message_user, m.date
-                FROM users u
-                INNER JOIN messages m ON u.email_user = m.id_user
-                WHERE m.id_receptor = :currentUser
-                ORDER BY m.date DESC
-                LIMIT 10";
+                $query = "SELECT * FROM messages
+                WHERE (id_user = :mail OR id_receptor = :mail)
+                /*AND (id_user = :findUser OR id_receptor = :findUser)*/
+                ORDER BY date DESC
+                LIMIT 1";
 
                 try {
                     $stmt = $pdo->prepare($query);
-                    $stmt->bindParam(':currentUser', $_COOKIE['loggedUser']);
+                    $stmt->bindParam(':mail', $_COOKIE['loggedUser']);
+                    /*$stmt->bindParam(':findUser', $foundUser);*/
                     $stmt->execute();
                 } catch (PDOException $e) {
                     echo "Error en la consulta SQL: " . $e->getMessage();
@@ -151,9 +150,9 @@
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
                         echo "<div class='messageUser'>
-                            <img src='profilePictures/" . htmlspecialchars($row['id_user']) . ".jpg' alt='Foto de perfil'>
+                            <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
                             <div class='messageInfo'>
-                                <p class='userName'>" . htmlspecialchars($row['name']) . "</p>
+                                <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
                                 <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
                                 <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
                             </div>
@@ -173,7 +172,7 @@
                 <h3><a href="discober.php">Descubrir</a></h3>
             </li>
             <li>
-                <h3  id="markerPage"><a href="messages.php">Mensajes</a></h3>
+                <h3 id="markerPage"><a href="messages.php">Mensajes</a></h3>
             </li>
             <li>
                 <h3><a href="profile.php">Perfil</a></h3>
