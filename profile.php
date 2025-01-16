@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
-    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <title>Perfil</title>
 </head>
 
@@ -97,29 +97,53 @@
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
             <?php
+
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $newName = $_POST['nameProfile'] ?? '';
-                $newSurname = $_POST['surnameProfile'] ?? '';
-                $newAlias = $_POST['aliasProfile'] ?? '';
+                try {
+                    $newName = $_POST['nameProfile'] ?? '';
+                    $newSurname = $_POST['surnameProfile'] ?? '';
+                    $newAlias = $_POST['aliasProfile'] ?? '';
 
-                /*var_dump($newName);
-                var_dump($newSurame);
-                var_dump($newAlias);*/
+                    $queryText = "UPDATE users SET ";
+                    $params = [];
 
-                $queryText = "UPDATE users SET";
-                $queryText .= "name = IF (:name != '', :name, name), ";
-                $queryText .= "surname = IF (:surname != '', :surname, surname) ";
-                $queryText .= "alias = IF (:alias != '', :alias, alias) ";
-                $queryText .= "WHERE email_user = :email;";
+                    if ($newName !== '') {
+                        $queryText .= "name = :name, ";
+                        $params[':name'] = $newName;
+                    }
 
-                $stmt = $pdo->prepare($queryText);
-                $stmt->bindParam(':name', $newName);
-                $stmt->bindParam(':surname', $newSurname);
-                $stmt->bindParam(':alias', $newAlias);
-                $stmt->bindParam(':email', $_COOKIE['loggedUser']);
-                $stmt->execute();
+                    if ($newSurname !== '') {
+                        $queryText .= "surname = :surname, ";
+                        $params[':surname'] = $newSurname;
+                    }
 
+                    if ($newAlias !== '') {
+                        $queryText .= "alias = :alias, ";
+                        $params[':alias'] = $newAlias;
+                    }
+
+                    $queryText = rtrim($queryText, ', ');
+
+                    $queryText .= " WHERE email_user = :email";
+                    $params[':email'] = $_COOKIE['loggedUser'];
+
+                    $stmt = $pdo->prepare($queryText);
+                    foreach ($params as $key => &$value) {
+                        $stmt->bindParam($key, $value);
+                    }
+                    $stmt->execute();
+
+                    if ($stmt->rowCount() > 0) {
+                        echo "Datos actualizados correctamente.";
+                    } else {
+                        echo "No se ha podido actualizar los datos o no se realizaron cambios.";
+                    }
+
+                } catch (PDOException $e) {
+                    echo "Error al actualizar los datos: " . $e->getMessage();
+                }
             }
+
 
             ?>
 
@@ -155,35 +179,33 @@
                 });
             }
 
-            $('#nextImage').click(function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
-            });
+            function setupEventListeners() {
+                $('#nextImage').off('click').on('click', function () {
+                    cont = (cont + 1) % images.length;
+                    changeImage();
+                });
+                $('#prevImage').off('click').on('click', function () {
+                    cont = (cont - 1 + images.length) % images.length;
+                    changeImage();
+                });
+                $carousel.off('click').on('click', function () {
+                    cont = (cont + 1) % images.length;
+                    changeImage();
+                });
+                $('#editButton').off('click').on('click', function () {
+                    $('#userProfile').hide();
+                    $('#editProfileSection').show();
+                });
+                $('#viewButton').off('click').on('click', function () {
+                    $('#userProfile').show();
+                    $('#editProfileSection').hide();
+                });
+                $('#logout').off('click').on('click', function () {
+                    logout();
+                });
+            }
 
-            $('#prevImage').click(function () {
-                cont = (cont - 1 + images.length) % images.length;
-                changeImage();
-            });
-
-            setInterval(function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
-            }, 10000);
-
-            $carousel.on('click', function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
-            });
-
-            $('#editButton').click(function () {
-                $('#userProfile').hide();
-                $('#editProfileSection').show();
-            });
-
-            $('#viewButton').click(function () {
-                $('#userProfile').show();
-                $('#editProfileSection').hide();
-            });
+            setupEventListeners();
 
             function logout() {
                 var parameters = {};
@@ -207,6 +229,22 @@
             $(document).ready(function () {
                 $("#logout").click(function (event) {
                     logout();
+                });
+            });
+
+            $('#editForm').on('submit', function (e) {
+                e.preventDefault(); var form = $(this); $.ajax({
+                    type: 'POST',
+                    url: '',
+                    data: form.serialize(),
+                    success: function (response) {
+                        console.log('Formulario enviado correctamente');
+                        $('#userProfile').show(); $('#editProfileSection').hide();
+                        setupEventListeners();
+                    },
+                    error: function (err) {
+                        console.log('Error en el envío del formulario: ', err);
+                    }
                 });
             });
         });

@@ -27,13 +27,7 @@ h2{
 header , nav{
     height: 9vh;
 }
-main{
-    height: 82vh; 
-    overflow: hidden;
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-}
+
 /*
 MARK:discober.php
 */
