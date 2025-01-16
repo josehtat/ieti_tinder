@@ -11,19 +11,23 @@
 </head>
 
 <body id="bodyDiscober">
-    
+
     <!--<script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
         <?php } ?>
     </script>-->
-    
+
     <header id="headerDiscober">
         <h2>Affinity</h2>
     </header>
 
     <main id="mainDiscober">
         <div id="matchDiscober">
+            <div id="dataProfileMacth">
+                <p id="nameProfileMacth">Raul</p>
+                <p id="ayeProfileMacth">34</p>
+            </div>
             <div id="perfilImgMatch">
                 <img src="profilePictures/rvidal2.jpg" alt="perfil">
             </div>
@@ -44,7 +48,7 @@
         </div>
         <!--<h1 id="dontProfile">NO HI HA PERFILS DISPONIBLES</h1>-->
     </main>
-    
+
     <nav id="nav">
         <ul>
             <li>
