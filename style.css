@@ -486,6 +486,14 @@ form button:hover {
     cursor: pointer;
 }
 
+#genderProfile {
+    margin-bottom: 30px;
+}
+
+#orientationProfile {
+    margin-bottom: 30px;
+}
+
 #editPhotosButton:hover {
     background-color: #ddd;
 }

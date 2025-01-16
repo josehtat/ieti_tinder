@@ -40,8 +40,9 @@
             $pw = "tinder123";
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
 
-            $queryText = "SELECT users.name, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
+            $queryText = "SELECT users.name, users.surnames, users.alias, users.sex, users.sex_orientation, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
                   FROM users 
+
                   LEFT JOIN pictures ON users.email_user = pictures.email_user 
                   WHERE users.email_user = :mail";
 
@@ -52,6 +53,10 @@
             $userInfo = $queryUser->fetch(PDO::FETCH_ASSOC);
             if ($userInfo) {
                 $name = $userInfo['name'];
+                $surname = $userInfo['surnames'];
+                $alias = $userInfo['alias'];
+                $gender = $userInfo['sex'];
+                $orientation = $userInfo['sex_orientation'];
                 $age = $userInfo['age'];
 
                 $queryImages = "SELECT path FROM pictures WHERE email_user = :mail";
@@ -86,13 +91,28 @@
             <h3></h3>
             <form id="editForm" method="post">
                 <label for="nameProfile">Nombre:</label>
-                <input type="text" id="nameProfile" name="nameProfile">
+                <input type="text" id="nameProfile" name="nameProfile" value="<?php echo $name; ?>">
 
                 <label for="surnameProfile">Apellido:</label>
-                <input type="text" id="surnameProfile" name="surnameProfile">
+                <input type="text" id="surnameProfile" name="surnameProfile" value="<?php echo $surname; ?>">
 
                 <label for="aliasProfile">Alias:</label>
-                <input type="text" id="aliasProfile" name="aliasProfile">
+                <input type="text" id="aliasProfile" name="aliasProfile" value="<?php echo $alias; ?>">
+
+                <label for="genderProfile">Genero:</label>
+                <select id="genderProfile" name="genderProfile">
+                    <option value="M" <?php if ($gender == 'M') echo 'selected'; ?>>Masculino</option>
+                    <option value="F" <?php if ($gender == 'F') echo 'selected'; ?>>Femenino</option>
+                    <option value="NB" <?php if ($gender == 'NB') echo 'selected'; ?>>No Binario</option>
+                </select>
+
+                <label for="orientationProfile">Orientación sexual</label>
+                <select id="orientationProfile" name="orientationProfile">
+                    <option value="heterosexual" <?php if ($orientation == 'heterosexual') echo 'selected'; ?>>Heterosexual</option>
+                    <option value="homosexual" <?php if ($orientation == 'homosexual') echo 'selected'; ?>>Homosexual</option>
+                    <option value="bisexual" <?php if ($orientation == 'bisexual')echo 'selected'; ?>>Bisexual</option>
+                </select>
+                </select>
 
 
                 <button type="submit" id="saveButton">Guardar</button>
@@ -104,6 +124,8 @@
                     $newName = $_POST['nameProfile'] ?? '';
                     $newSurname = $_POST['surnameProfile'] ?? '';
                     $newAlias = $_POST['aliasProfile'] ?? '';
+                    $newGender = $_POST['genderProfile'] ?? '';
+                    $newOrientation = $_POST['orientationProfile'] ?? '';
 
                     $queryText = "UPDATE users SET ";
                     $params = [];
@@ -121,6 +143,16 @@
                     if ($newAlias !== '') {
                         $queryText .= "alias = :alias, ";
                         $params[':alias'] = $newAlias;
+                    }
+
+                    if ($newGender !== '') {
+                        $queryText .= "sex = :gender, ";
+                        $params[':gender'] = $newGender;
+                    }
+
+                    if ($newOrientation !== '') {
+                        $queryText .= "sex_orientation = :orientation, ";
+                        $params[':orientation'] = $newOrientation;
                     }
 
                     $queryText = rtrim($queryText, ', ');
@@ -234,14 +266,15 @@
             });
 
             $('#editForm').on('submit', function (e) {
-                e.preventDefault(); var form = $(this); 
+                e.preventDefault(); var form = $(this);
                 $.ajax({
                     type: 'POST',
                     url: '',
                     data: form.serialize(),
                     success: function (response) {
                         console.log('Formulario enviado correctamente');
-                        $('#userProfile').show(); $('#editProfileSection').hide();
+                        $('#userProfile').show(); 
+                        $('#editProfileSection').hide();
                         setupEventListeners();
                         window.location.href = "/profile.php";
                     },
