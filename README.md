@@ -1,6 +1,6 @@
 # AFFINITY
 
-## 🐟 ACERCA DEL PROYECTO 
+## ACERCA DEL PROYECTO 
 
 Affinity es una aplicación de citas diseñada para conectar personas a través de intereses comunes. Este proyecto es un clon de la famosa aplicación Tinder, pero con funcionalidades mejoradas y una interfaz optimizada para una experiencia de usuario más fluida.
 
@@ -13,7 +13,7 @@ Este proyecto fue desarrollado utilizando:
 * **JavaScript**: Para la interacción en el frontend
 * **HTML5/CSS3**: Para la estructura visual y el estilo de la aplicación.
 
-## 🚀 INSTRUCCIONES PARA EMPEZAR
+## INSTRUCCIONES PARA EMPEZAR
 
 ### Prerrequisitos
 
