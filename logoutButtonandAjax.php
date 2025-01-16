@@ -4,6 +4,7 @@
  Y la función logout() hará la petición AJAX al logout.php para cerrar la sesión
 -->
 
+
 <div class="submit-btn">
     <button id="logout">Cerrar sesión, <?php echo $_COOKIE['loggedUser']; ?></p></button>
 </div>

@@ -9,22 +9,23 @@
 </head>
 
 <body id="bodyMessages">
-    <!---<script>
-        <?php // if (!isset($_COOKIE['loggedUser'])) { ?>
+    <script>
+        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
-        <?php //} ?>
-    </script>---->
+        <?php } ?>
+    </script>
     <header id="headerMessages">
-        <h2>LOGO TEXT</h2>
+        <h2>Affinity</h2>
         <h3>Cercar</h3>
     </header>
 
+    
     <main id="mainMessages">
         <div id="matchMessages">
             <h3>Els meus matches</h3>
             <div id="matchBox">
                 <div class='match'>
-                    <img src='img/aitanaBonmati.jpg' alt='Foto de perfil'>
+                    <img src='profilePictures/asanchez1.jpg' alt='Foto de perfil'>
                     <p>Aitana</p>
                 </div>
             </div>
@@ -33,7 +34,7 @@
             <h3>Missatges</h3>
             <div id="messageBox">
                 <div class='messageUser'>
-                    <img src='img/aitanaBonmati.jpg' alt='Foto de perfil'>
+                    <img src='profilePictures/asanchez1.jpg' alt='Foto de perfil'>
                     <div class='messageInfo'>
                         <p class='userName'>Aitana Bonmati</p>
                         <p class='lastMessage'>Haber si te vienes pa barcelona 😘</p>
@@ -43,11 +44,19 @@
             </div>
     </main>
 
-    <footer id="footer">
-        <h3><a href="discober.php">Descubrir</a></h3>
-        <h3><a href="messages.php">Mensajes</a></h3>
-        <h3><a href="profile.php">Perfil</a></h3>
-    </footer>
+    <nav id="nav">
+        <ul>
+            <li>
+                <h3 id="markerPage"><a href="discober.php">Descubrir</a></h3>
+            </li>
+            <li>
+                <h3><a href="messages.php">Mensajes</a></h3>
+            </li>
+            <li>
+                <h3><a href="profile.php">Perfil</a></h3>
+            </li>
+        </ul>
+    </nav>
 </body>
 
 </html>
