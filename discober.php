@@ -79,7 +79,11 @@
 
     <main id="mainDiscober">
         <div id="matchDiscober">
-            <div id="perfilImgMatch">
+            <div id="dataProfileMacth">
+                <p id="nameProfileMacth">Raul</p>
+                <p id="ayeProfileMacth">34</p>
+            </div>
+            <div id="imgProfileMacth">
                 <img src="profilePictures/rvidal2.jpg" alt="perfil">
             </div>
             <div id="optionsMatch">
