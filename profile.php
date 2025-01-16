@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
-    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
     <title>Perfil</title>
 </head>
 
 <body id="bodyProfile">
-      <script>
+    <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
         <?php } ?>
     </script>
     <header id="headerProfile">
-        <div id="logo">LOGO TEXT</div>
+        <div id="logo">Affinity</div>
         <div id="menuButtons">
             <button id="viewButton">Mirar</button>
             <button id="editButton">Editar</button>
@@ -24,7 +24,7 @@
         <div id="moreOptions">
             <p>...</p>
             <ul id="moreOptionsList">
-                <li id="logoutProfile">Cerrar sesión</li>
+                <li id="logoutProfile"><button id="logout">Cerrar sesión</p></button></li>
                 <li id="editPwdProfile">Modificar la contraseña</li>
                 <li id="deleteProfile">Eliminar la cuenta</li>
             </ul>
@@ -40,9 +40,9 @@
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
 
             $queryText = "SELECT users.name, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
-                          FROM users 
-                          LEFT JOIN pictures ON users.email_user = pictures.email_user 
-                          WHERE users.email_user = :mail";
+                  FROM users 
+                  LEFT JOIN pictures ON users.email_user = pictures.email_user 
+                  WHERE users.email_user = :mail";
 
             $queryUser = $pdo->prepare($queryText);
             $queryUser->bindParam(':mail', $_COOKIE['loggedUser']);
@@ -52,23 +52,30 @@
             if ($userInfo) {
                 $name = $userInfo['name'];
                 $age = $userInfo['age'];
-                $image = $userInfo['image'];
+
+                $queryImages = "SELECT path FROM pictures WHERE email_user = :mail";
+                $queryImgs = $pdo->prepare($queryImages);
+                $queryImgs->bindParam(':mail', $_COOKIE['loggedUser']);
+                $queryImgs->execute();
+                $images = $queryImgs->fetchAll(PDO::FETCH_COLUMN);
             } else {
                 $name = "Usuario Desconocido";
                 $age = "No disponible";
-                $image = "/path/to/default/profile/image.jpg";
+                $images = ["/path/to/default/profile/image.jpg"];
             }
 
         } catch (PDOException $e) {
             echo "Error al acceder a la base de datos - " . $e->getMessage();
         }
         ?>
+
         <div id="userProfile">
             <div id="carouselContainer">
                 <button id="prevImage" class="carouselArrow">&#10094;</button>
-                <img src="<?php echo $image; ?>" alt="Imagen de perfil" class="profileImage">
+                <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
                 <button id="nextImage" class="carouselArrow">&#10095;</button>
             </div>
+
             <div id="userInfo">
                 <h2 id="userName"><?php echo $name; ?></h2>
                 <span id="userAge"><?php echo $age; ?> años</span>
@@ -90,41 +97,58 @@
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
             <?php
+
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $newName = $_POST['nameProfile'] ?? '';
-                $newSurname = $_POST['surnameProfile'] ?? '';
-                $newAlias = $_POST['aliasProfile'] ?? '';
+                try {
+                    $newName = $_POST['nameProfile'] ?? '';
+                    $newSurname = $_POST['surnameProfile'] ?? '';
+                    $newAlias = $_POST['aliasProfile'] ?? '';
 
-                /*var_dump($newName);
-                var_dump($newSurame);
-                var_dump($newAlias);*/
+                    $queryText = "UPDATE users SET ";
+                    $params = [];
 
-                $queryText = "UPDATE users SET";
-                $queryText .= "name = IF (:name != '', :name, name), ";
-                $queryText .= "surname = IF (:surname != '', :surname, surname) ";
-                $queryText .= "alias = IF (:alias != '', :alias, alias) ";
-                $queryText .= "WHERE email_user = :email;";
+                    if ($newName !== '') {
+                        $queryText .= "name = :name, ";
+                        $params[':name'] = $newName;
+                    }
 
-                $stmt = $pdo->prepare($queryText);
-                $stmt->bindParam(':name', $newName);
-                $stmt->bindParam(':surname', $newSurname);
-                $stmt->bindParam(':alias', $newAlias);
-                $stmt->bindParam(':email', $_COOKIE['loggedUser']);
-                $stmt->execute();
+                    if ($newSurname !== '') {
+                        $queryText .= "surname = :surname, ";
+                        $params[':surname'] = $newSurname;
+                    }
 
+                    if ($newAlias !== '') {
+                        $queryText .= "alias = :alias, ";
+                        $params[':alias'] = $newAlias;
+                    }
+
+                    $queryText = rtrim($queryText, ', ');
+
+                    $queryText .= " WHERE email_user = :email";
+                    $params[':email'] = $_COOKIE['loggedUser'];
+
+                    $stmt = $pdo->prepare($queryText);
+                    foreach ($params as $key => &$value) {
+                        $stmt->bindParam($key, $value);
+                    }
+                    $stmt->execute();
+
+                    if ($stmt->rowCount() > 0) {
+                        echo "Datos actualizados correctamente.";
+                    } else {
+                        echo "No se ha podido actualizar los datos o no se realizaron cambios.";
+                    }
+
+                } catch (PDOException $e) {
+                    echo "Error al actualizar los datos: " . $e->getMessage();
+                }
             }
+
 
             ?>
 
             <button id="editPhotosButton">Modificar les meves fotos</button>
         </div>
-    
-    <header id="headerProfile">
-        <h2>LOGO TEXT</h2>
-    </header>
-
-    <main id="mainProfile">
-        
 
     </main>
 
@@ -146,7 +170,7 @@
         $(document).ready(function () {
             var images = <?php echo json_encode($images); ?>;
             var cont = 0;
-            var $carousel = $('#carousel');
+            var $carousel = $('#carouselContainer .profileImage');
 
             function changeImage() {
                 $carousel.fadeOut('fast', function () {
@@ -155,37 +179,76 @@
                 });
             }
 
-            $('#nextImage').click(function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
+            function setupEventListeners() {
+                $('#nextImage').off('click').on('click', function () {
+                    cont = (cont + 1) % images.length;
+                    changeImage();
+                });
+                $('#prevImage').off('click').on('click', function () {
+                    cont = (cont - 1 + images.length) % images.length;
+                    changeImage();
+                });
+                $carousel.off('click').on('click', function () {
+                    cont = (cont + 1) % images.length;
+                    changeImage();
+                });
+                $('#editButton').off('click').on('click', function () {
+                    $('#userProfile').hide();
+                    $('#editProfileSection').show();
+                });
+                $('#viewButton').off('click').on('click', function () {
+                    $('#userProfile').show();
+                    $('#editProfileSection').hide();
+                });
+                $('#logout').off('click').on('click', function () {
+                    logout();
+                });
+            }
+
+            setupEventListeners();
+
+            function logout() {
+                var parameters = {};
+
+                $.ajax({
+                    data: parameters,
+                    url: 'logout.php',
+                    type: 'POST',
+                    success: logoutResult,
+                    dataType: 'json'
+                });
+            }
+
+            function logoutResult(logRes) {
+                console.log(logRes);
+                if (logRes.status == 0) {
+                    window.location.href = "/";
+                }
+            }
+
+            $(document).ready(function () {
+                $("#logout").click(function (event) {
+                    logout();
+                });
             });
 
-            $('#prevImage').click(function () {
-                cont = (cont - 1 + images.length) % images.length;
-                changeImage();
+            $('#editForm').on('submit', function (e) {
+                e.preventDefault(); var form = $(this); $.ajax({
+                    type: 'POST',
+                    url: '',
+                    data: form.serialize(),
+                    success: function (response) {
+                        console.log('Formulario enviado correctamente');
+                        $('#userProfile').show(); $('#editProfileSection').hide();
+                        setupEventListeners();
+                    },
+                    error: function (err) {
+                        console.log('Error en el envío del formulario: ', err);
+                    }
+                });
             });
-
-            setInterval(function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
-            }, 3000);
-
-            $carousel.on('click', function () {
-                cont = (cont + 1) % images.length;
-                changeImage();
-            });
-
-            $('#editButton').click(function () {
-                $('#userProfile').hide();
-                $('#editProfileSection').show();
-            });
-
-            $('#viewButton').click(function () {
-                $('#userProfile').show();
-                $('#editProfileSection').hide();
-            });
-
         });
+
     </script>
 </body>
 
