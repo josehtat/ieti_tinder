@@ -21,4 +21,4 @@ Asegúrate de tener instalados los siguientes componentes:
 
 - Un navegador moderno con soporte para JavaScript
 
-### Paso 1: Abre tu navegadoor y accede a https://tinder1.ieti.site/ para acceder a la aplicacion de citas.
+### Paso 1: Abre tu navegador y accede a https://tinder1.ieti.site/ para acceder a la aplicacion de citas.
