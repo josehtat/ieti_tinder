@@ -86,7 +86,9 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
         try {
             //preparem i executem la consulta
             $queryFinds = $pdo->prepare($queryText);
-            $queryFinds->bindParam(':sex', $sex);
+            if ($sexualOrientation != "bisexual") {
+                $queryFinds->bindParam(':sex', $sex);
+            }
             $queryFinds->execute();
         } catch (PDOException $e) {
             echo "Error de SQL 2<br>\n";
@@ -147,7 +149,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
                 $foundUser['pictures'] = array();
 
                 $queryText = "SELECT * FROM pictures " .
-                "WHERE email_user = :findUser;";
+                    "WHERE email_user = :findUser;";
 
                 try {
                     $queryPictures = $pdo->prepare($queryText);
