@@ -1,11 +1,12 @@
 <?php
 
 //Comprueba se ha recibido reaction como parametro
-if (isset($_POST['reaction']) && isset($_POST['findUser'])) {
+if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
+    $reactionText = $_POST["reaction"];
     $reaction = null;
-    if($_POST['reaction'] = "like") {
+    if ($reactionText = "like") {
         $reaction = 1;
-    } else if($_POST['reaction'] = "dislike") {
+    } else if ($reactionText = "dislike") {
         $reaction = 0;
     }
     $mail = $_COOKIE['loggedUser'];
@@ -64,10 +65,11 @@ if (isset($_POST['reaction']) && isset($_POST['findUser'])) {
         $queryInsertReaction->execute();
 
         $status = 0;
-        $logMessage = "Reacción guardada";
+        $logMessage = "Reacción guardada de " . $reactionText;
         echo json_encode([
             'status' => $status,
-            'data' => $logMessage
+            'data' => $logMessage,
+            'react' => $reactionText
         ]);
     } catch (PDOException $e) {
         echo "Error de SQL<br>\n";

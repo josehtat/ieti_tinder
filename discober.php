@@ -12,7 +12,9 @@
 
 <body id="bodyDiscober">
     <script>
-        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
+        <?php 
+        unset($_SESSION['userProfiles']);
+        if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
         <?php } ?>
     </script>
@@ -26,11 +28,11 @@
             <h1 id="dontProfile">No hay perfiles disponibles</h1>
         </div>
         <div id="matchDiscober">
-            <div id="dataProfileMacth">
-                <p id="nameProfileMacth">Raul</p>
-                <p id="ageProfileMacth">34</p>
+            <div id="dataProfileMatch">
+                <p id="nameProfileMatch">Raul</p>
+                <p id="ageProfileMatch">34</p>
             </div>
-            <div id="imgProfileMacth">
+            <div id="imgProfileMatch">
                 <img src="profilePictures/rvidal2.jpg" alt="perfil">
             </div>
             <div id="optionsMatch">
@@ -66,29 +68,37 @@
     </nav>
 
     <script>
-        $foundUser = [];
+        var foundUser = [];
 
-        function findUser() {
-            var storedUserProfiles = localStorage.getItem('userProfiles');
-            if (storedUserProfiles) {
-                var userProfiles = JSON.parse(storedUserProfiles);
-                var logRes = { status: 0, data: userProfiles };
-                // Update the UI with the stored data
-                // You can loop through the userProfiles array and display the data as needed
-                findUserResult(logRes);
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
             }
+            return "";
+        }
 
-            if (!storedUserProfiles) {
-                var parameters = {};
+        function findUser(reaction) {
+            var parameters = {
+                reaction: reaction
+            };
+            console.log(parameters);
 
-                $.ajax({
-                    data: parameters,
-                    url: 'askProfiles.php',
-                    type: 'POST',
-                    success: findUserResult,
-                    dataType: 'json'
-                });
-            }
+            $.ajax({
+                data: parameters,
+                url: 'askProfiles.php',
+                type: 'POST',
+                success: findUserResult,
+                dataType: 'json'
+            });
         }
 
         function likeFunction(reaction) {
@@ -96,7 +106,7 @@
             //Parametros tienen que ser la reaction y la id del perfil
             var parameters = {
                 reaction: reaction,
-                findUser: $("#nameProfileMacth").data('id')
+                findUser: $("#nameProfileMatch").data('id')
             };
 
             console.log(parameters);
@@ -106,19 +116,15 @@
                 url: 'reaction.php',
                 type: 'POST',
                 success: reactionResult,
-                error: reactionResult,
                 dataType: 'json'
             });
         }
 
         function reactionResult(logRes) {
+            console.log("ReactionResult: ");
             console.log(logRes);
             if (logRes.status == 0) {
-                var storedUserProfiles = localStorage.getItem('userProfiles');
-                var userProfiles = JSON.parse(storedUserProfiles);
-                userProfiles.shift();
-                localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
-                findUser();
+                findUser(logRes.react);
             }
         }
 
@@ -129,32 +135,29 @@
                     $("#dontProfile").text('No hay perfiles disponibles');
                     $("#matchDiscoberNotFound").toggle();
                     $("#matchDiscober").toggle();
-                    localStorage.removeItem("userProfiles");
                 } else {
-                    var foundUser = logRes.data[0];
+                    foundUser = logRes.data[0];
                     console.log(foundUser);
-                    $("#nameProfileMacth").text(foundUser.name).data('id', foundUser.email);
-                    $("#ageProfileMacth").text(foundUser.age);
-                    $("#imgProfileMacth").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
-                    // Remove the first element from the logRes.data array
-                    localStorage.setItem('userProfiles', JSON.stringify(logRes.data));
+                    $("#nameProfileMatch").text(foundUser.name).data('id', foundUser.email);
+                    $("#ageProfileMatch").text(foundUser.age);
+                    $("#imgProfileMatch").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                 }
             }
         }
 
-        findUser();
+        findUser("");
 
-        $("#dislikeButton").click(function () {
+        $("#dislikeButton").click(function() {
             likeFunction('dislike');
-            setTimeout(function () {
+            setTimeout(function() {
                 toggleImage('dislike');
             }, 250);
 
         });
 
-        $("#likeButton").click(function () {
+        $("#likeButton").click(function() {
             likeFunction('like');
-            setTimeout(function () {
+            setTimeout(function() {
                 toggleImage('like');
             }, 250);
         });

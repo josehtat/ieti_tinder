@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Función para calcular la distancia entre dos puntos usando la fórmula de Haversine
 function haversine($lat1, $lon1, $lat2, $lon2)
 {
@@ -20,6 +22,28 @@ function haversine($lat1, $lon1, $lat2, $lon2)
 
     return $distance; // Retorna la distancia en kilómetros
 }
+
+//Recoge cookie de userProfiles
+if (isset($_SESSION['userProfiles'])) {
+    $status = 0;
+    $foundUserList = $_SESSION['userProfiles'];
+
+    if (count($foundUserList) > 0) {
+        // Borrar el primero de la lista
+        if (isset($_POST['reaction']) && ($_POST['reaction'] == "like" || $_POST['reaction'] == "dislike")) {
+            array_shift($foundUserList);
+            $_SESSION['userProfiles'] = $foundUserList;
+            $status = 22;
+        }
+
+        echo json_encode([
+            'status' => $status,
+            'data' => $foundUserList
+        ]);
+    }
+}
+
+$foundUserList = array();
 
 try {
     $hostname = "localhost";
@@ -180,6 +204,8 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
             $status = 0;
 
             // Devolver la lista de usuarios
+            $_SESSION['userProfiles'] = $foundUserList;
+
             echo json_encode([
                 'status' => $status,
                 'data' => $foundUserList
