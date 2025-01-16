@@ -1,4 +1,5 @@
 <?php
+
 // Función que comprueba si el archivo existe y lo crea o actualiza si es necesario
 function createFileWithDate($text) {
     // Obtener la fecha actual en formato YYYY-MM-DD

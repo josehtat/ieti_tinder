@@ -8,6 +8,7 @@
     <title>Mensajes</title>
 </head>
 
+
 <body id="bodyMessages">
     <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>

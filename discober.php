@@ -11,6 +11,7 @@
 </head>
 
 <body id="bodyDiscober">
+    
     <!--<script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";

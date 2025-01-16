@@ -9,6 +9,7 @@
     <title>Perfil</title>
 </head>
 
+
 <body id="bodyProfile">
     <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
