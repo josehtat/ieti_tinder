@@ -71,17 +71,11 @@
         function findUser() {
             var storedUserProfiles = localStorage.getItem('userProfiles');
             if (storedUserProfiles) {
-                if (storedUserProfiles.length == 0) {
-                    $("#dontProfile").text('No hay perfiles disponibles');
-                    localStorage.removeItem("userProfiles");
-                } else {
-
-                    var userProfiles = JSON.parse(storedUserProfiles);
-                    var logRes = { status: 0, data: userProfiles };
-                    // Update the UI with the stored data
-                    // You can loop through the userProfiles array and display the data as needed
-                    findUserResult(logRes);
-                }
+                var userProfiles = JSON.parse(storedUserProfiles);
+                var logRes = { status: 0, data: userProfiles };
+                // Update the UI with the stored data
+                // You can loop through the userProfiles array and display the data as needed
+                findUserResult(logRes);
             }
 
             if (!storedUserProfiles) {
@@ -97,18 +91,47 @@
             }
         }
 
+        function likeFunction(reaction) {
+
+            //Parametros tienen que ser la reaction y la id del perfil
+            var parameters = {
+                reaction: reaction,
+                findUser: $("#nameProfileMacth").data('id')
+            };
+
+            console.log(parameters);
+
+            $.ajax({
+                data: parameters,
+                url: 'reaction.php',
+                type: 'POST',
+                success: reactionResult,
+                error: reactionResult,
+                dataType: 'json'
+            });
+        }
+
+        function reactionResult(logRes) {
+            console.log(logRes);
+            if (logRes.status == 0) {
+                findUser();
+            }
+        }
+
         function findUserResult(logRes) {
             console.log(logRes);
             if (logRes.status == 0) {
                 if (logRes.data.length == 0) {
                     $("#dontProfile").text('No hay perfiles disponibles');
+                    $("#matchDiscoberNotFound").toggle();
+                    $("#matchDiscober").toggle();
                     localStorage.removeItem("userProfiles");
                 } else {
-                    $foundUser = logRes.data[0];
-                    console.log($foundUser);
-                    $("#nameProfileMacth").text($foundUser.name);
-                    $("#ageProfileMacth").text($foundUser.age);
-                    $("#imgProfileMacth").html('<img src="' + $foundUser.pictures[0] + '" alt="perfil">');
+                    var foundUser = logRes.data[0];
+                    console.log(foundUser);
+                    $("#nameProfileMacth").text(foundUser.name).data('id', foundUser.email);
+                    $("#ageProfileMacth").text(foundUser.age);
+                    $("#imgProfileMacth").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                     // Remove the first element from the logRes.data array
                     logRes.data.shift();
                     localStorage.setItem('userProfiles', JSON.stringify(logRes.data));
@@ -117,6 +140,21 @@
         }
 
         findUser();
+
+        $("#dislikeButton").click(function () {
+            likeFunction('dislike');
+            setTimeout(function () {
+                toggleImage('dislike');
+            }, 250);
+
+        });
+
+        $("#likeButton").click(function () {
+            likeFunction('like');
+            setTimeout(function () {
+                toggleImage('like');
+            }, 250);
+        });
     </script>
 </body>
 
