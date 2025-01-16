@@ -125,7 +125,7 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
 
                 $currentDate = new DateTime();
                 $findBirthday = new DateTime($find['birthday']);
-                $findAge = ($birthday->diff($currentDate))->y;
+                $findAge = ($findBirthday->diff($currentDate))->y;
                 $findName = $find['name'];
                 $findEmail = $find['email_user'];
                 $findFullLocation = $find['location'];
@@ -144,6 +144,29 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
             // Agregar la distancia a cada ubicación
             foreach ($foundUserList as &$foundUser) {
                 $foundUser['distance'] = haversine($location[0], $location[1], $foundUser['latitude'], $foundUser['longitude']);
+                $foundUser['pictures'] = array();
+
+                $queryText = "SELECT * FROM pictures " .
+                "WHERE email_user = :findUser;";
+
+                try {
+                    $queryPictures = $pdo->prepare($queryText);
+                    $queryPictures->bindParam(':findUser', $foundUser['email']);
+                    $queryPictures->execute();
+                } catch (PDOException $e) {
+                    echo "Error de SQL<br>\n";
+                    $e = $queryPictures->errorInfo();
+                    if ($e[0] != '00000') {
+                        echo "\nPDO::errorInfo():\n";
+                        die("Error accedint a dades: " . $e[2]);
+                    }
+                }
+
+                if ($queryPictures->rowCount() > 0) {
+                    foreach ($queryPictures as $picture) {
+                        $foundUser['pictures'][] = $picture['path'];
+                    }
+                }
             }
             unset($foundUser); // Limpiar referencia
 
@@ -153,6 +176,8 @@ if ($queryUser->rowCount() <= 0 || $queryUser->rowCount() >= 2) {
             });
 
             $status = 0;
+
+            // Devolver la lista de usuarios
             echo json_encode([
                 'status' => $status,
                 'data' => $foundUserList

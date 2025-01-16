@@ -21,67 +21,14 @@
         <h2>Affinity</h2>
     </header>
 
-    <script>
-        $foundUser = [];
-
-        function findUser() {
-            var parameters = {};
-
-            $.ajax({
-                data: parameters,
-                url: 'askProfiles.php',
-                type: 'POST',
-                success: findUserResult,
-                dataType: 'json'
-            });
-        }
-
-        function findUserResult(logRes) {
-            console.log(logRes);
-            if (logRes.status == 0) {
-                $foundUser = logRes.data[0];
-                console.log($foundUser);
-                if ($foundUser.length == 0) {
-                    $("#mainDiscober").html('<h1 id="dontProfile">NO HI HA PERFILS DISPONIBLES</h1>');
-                } else {
-                    $("#mainDiscober").html(`<div id="matchDiscober">
-                            <div id="perfilImgMatch">
-                                <img src="${$foundUser.profilePicture}" alt="perfil">
-                            </div>
-                            <div id="perfilInfoMatch">
-                                <h2>${$foundUser.name}, ${$foundUser.age}</h2>
-                            </div>
-                            <div id="optionsMatch">
-                                <ul>
-                                    <li>
-                                        <button id="dislikeButton" onclick="toggleImage('dislike')">
-                                            <img id="dislikeImg" src="img/cruzV2.png" alt="Dislike">
-                                        </button>
-                                    </li>
-                                    <li>
-                                        <button id="likeButton" onclick="toggleImage('like')">
-                                            <img id="likeImg" src="img/corazonV2.png" alt="Like">
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    `);
-                }
-            }
-        }
-
-        findUser();
-    </script>
-    <?php
-
-    ?>
-
     <main id="mainDiscober">
+        <div id="matchDiscoberNotFound">
+            <h1 id="dontProfile">No hay perfiles disponibles</h1>
+        </div>
         <div id="matchDiscober">
             <div id="dataProfileMacth">
                 <p id="nameProfileMacth">Raul</p>
-                <p id="ayeProfileMacth">34</p>
+                <p id="ageProfileMacth">34</p>
             </div>
             <div id="imgProfileMacth">
                 <img src="profilePictures/rvidal2.jpg" alt="perfil">
@@ -117,6 +64,60 @@
             </li>
         </ul>
     </nav>
+
+    <script>
+        $foundUser = [];
+
+        function findUser() {
+            var storedUserProfiles = localStorage.getItem('userProfiles');
+            if (storedUserProfiles) {
+                if (storedUserProfiles.length == 0) {
+                    $("#dontProfile").text('No hay perfiles disponibles');
+                    localStorage.removeItem("userProfiles");
+                } else {
+
+                    var userProfiles = JSON.parse(storedUserProfiles);
+                    var logRes = { status: 0, data: userProfiles };
+                    // Update the UI with the stored data
+                    // You can loop through the userProfiles array and display the data as needed
+                    findUserResult(logRes);
+                }
+            }
+
+            if (!storedUserProfiles) {
+                var parameters = {};
+
+                $.ajax({
+                    data: parameters,
+                    url: 'askProfiles.php',
+                    type: 'POST',
+                    success: findUserResult,
+                    dataType: 'json'
+                });
+            }
+        }
+
+        function findUserResult(logRes) {
+            console.log(logRes);
+            if (logRes.status == 0) {
+                if (logRes.data.length == 0) {
+                    $("#dontProfile").text('No hay perfiles disponibles');
+                    localStorage.removeItem("userProfiles");
+                } else {
+                    $foundUser = logRes.data[0];
+                    console.log($foundUser);
+                    $("#nameProfileMacth").text($foundUser.name);
+                    $("#ageProfileMacth").text($foundUser.age);
+                    $("#imgProfileMacth").html('<img src="' + $foundUser.pictures[0] + '" alt="perfil">');
+                    // Remove the first element from the logRes.data array
+                    logRes.data.shift();
+                    localStorage.setItem('userProfiles', JSON.stringify(logRes.data));
+                }
+            }
+        }
+
+        findUser();
+    </script>
 </body>
 
 </html>
