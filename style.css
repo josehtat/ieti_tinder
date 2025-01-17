@@ -1,55 +1,59 @@
 /*
 MARK: General
 */
-html{
+html {
     background: linear-gradient(135deg, #7B1FA2, #FFC300);
     height: 100%;
     font-family: Arial, sans-serif;
 }
-body{
+
+body {
     max-width: 460px;
     height: 100%;
     margin: 0 auto;
     background-color: #F4F4F4;
-    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5);
     color: #1A1A1A;
 }
-ul{
+
+ul {
     margin: unset;
     padding: unset;
     list-style: none;
 }
-h2{
+
+h2 {
     margin: unset;
     padding: 10px;
 }
 
-header , nav{
+header,
+nav {
     height: 9vh;
 }
 
 /*
 MARK:discober.php
 */
-#headerDiscober{
+#headerDiscober {
     background-color: #D8BFD8;
     border-radius: 0px 0px 8px 8px;
 }
 
-#matchDiscoberNotFound{
+#matchDiscoberNotFound {
     position: relative;
     width: 100%;
     height: 100%;
     display: none;
 }
 
-#matchDiscober{
+#matchDiscober {
     position: relative;
     width: 100%;
     height: 100%;
 }
 
-#dataProfileMatch{
+#dataProfileMatch {
     position: absolute;
     bottom: 150px;
     width: 100%;
@@ -57,7 +61,7 @@ MARK:discober.php
     justify-content: center;
 }
 
-#dataProfileMatch p{
+#dataProfileMatch p {
     margin: unset;
     padding: unset;
     color: #e1e1e1;
@@ -66,12 +70,12 @@ MARK:discober.php
     padding: 10px;
 }
 
-#imgProfileMatch{
+#imgProfileMatch {
     font-size: 32px;
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9), 2px 2px 30px rgba(0, 0, 0, 0.7);
 }
 
-#perfilImgMatch{
+#perfilImgMatch {
     padding: 25px;
     height: 90%;
     overflow: hidden;
@@ -80,36 +84,36 @@ MARK:discober.php
     align-items: center;
 }
 
-#imgProfileMatch img{
+#imgProfileMatch img {
     width: 100%;
     height: 730px;
-    object-fit: cover; 
+    object-fit: cover;
     border-radius: 8px;
-    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.8); 
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.8);
 }
 
-#optionsMatch{
+#optionsMatch {
     position: absolute;
     bottom: 0;
     width: 100%;
 }
 
-#optionsMatch ul{
+#optionsMatch ul {
     margin-bottom: 35px;
     display: flex;
     justify-content: space-evenly;
 }
 
-#optionsMatch ul li button{
+#optionsMatch ul li button {
     height: 100%;
     padding: 15px;
     border-radius: 95px;
     background-color: #e1e1e1;
     border: none;
-    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5); 
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5);
 }
 
-#optionsMatch ul li img{
+#optionsMatch ul li img {
     width: 50px;
     height: 100%;
 }
@@ -124,14 +128,14 @@ MARK:discober.php
     border-radius: 8px 8px 0px 0px;
 }
 
-#nav ul{
+#nav ul {
     height: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-#nav ul li{
+#nav ul li {
     width: 33%;
 }
 
@@ -141,21 +145,22 @@ MARK:discober.php
     padding: 10px;
 }
 
-#nav h3 a{
+#nav h3 a {
     text-decoration: none;
     color: #1A1A1A;
 }
 
-#nav h3 a:hover{
+#nav h3 a:hover {
     color: #FFC300;
     border-bottom: 2px solid #FFC300;
 }
 
-#nav h3#markerPage a{
+#nav h3#markerPage a {
     color: #7B1FA2;
-    border-bottom: 2px solid #7B1FA2 ;
+    border-bottom: 2px solid #7B1FA2;
     cursor: default;
 }
+
 /*---------------------------*/
 /*
 MARK:login.php
@@ -337,7 +342,8 @@ MARK: profile.php
 #moreOptionsList {
     display: none;
     position: absolute;
-    top: 20px; /* Ajuste para que el menú se despliegue debajo de los puntos */
+    top: 20px;
+    /* Ajuste para que el menú se despliegue debajo de los puntos */
     right: 0;
     list-style-type: none;
     background-color: #fff;
@@ -420,6 +426,29 @@ MARK: profile.php
 #prevImage:hover,
 #nextImage:hover {
     color: #ccc;
+}
+
+#carouselDots {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.carouselDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    text-shadow: 2px 2px 3px black;
+    margin: 0 5px;
+}
+
+.carouselDot.active {
+    background-color: #333;
 }
 
 .profileImage {
@@ -665,12 +694,15 @@ MARK:Control de errores
     0% {
         opacity: 0;
     }
+
     10% {
         opacity: 1;
     }
+
     90% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }

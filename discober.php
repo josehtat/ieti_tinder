@@ -13,6 +13,7 @@
 <body id="bodyDiscober">
     <script>
         <?php 
+        session_start();
         unset($_SESSION['userProfiles']);
         if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
@@ -29,11 +30,11 @@
         </div>
         <div id="matchDiscober">
             <div id="dataProfileMatch">
-                <p id="nameProfileMatch">Raul</p>
-                <p id="ageProfileMatch">34</p>
+                <p id="nameProfileMatch"></p>
+                <p id="ageProfileMatch"></p>
             </div>
             <div id="imgProfileMatch">
-                <img src="profilePictures/rvidal2.jpg" alt="perfil">
+                <img src="" alt="perfil">
             </div>
             <div id="optionsMatch">
                 <ul>
@@ -97,6 +98,7 @@
                 url: 'askProfiles.php',
                 type: 'POST',
                 success: findUserResult,
+                error: findUserResult,
                 dataType: 'json'
             });
         }
@@ -104,15 +106,15 @@
         function likeFunction(reaction) {
 
             //Parametros tienen que ser la reaction y la id del perfil
-            var parameters = {
+            var reactParameters = {
                 reaction: reaction,
                 findUser: $("#nameProfileMatch").data('id')
             };
 
-            console.log(parameters);
+            console.log(reactParameters);
 
             $.ajax({
-                data: parameters,
+                data: reactParameters,
                 url: 'reaction.php',
                 type: 'POST',
                 success: reactionResult,
@@ -120,11 +122,11 @@
             });
         }
 
-        function reactionResult(logRes) {
+        function reactionResult(reactRes) {
             console.log("ReactionResult: ");
-            console.log(logRes);
-            if (logRes.status == 0) {
-                findUser(logRes.react);
+            console.log(reactRes);
+            if (reactRes.status == 0) {
+                findUser(true);
             }
         }
 
@@ -142,10 +144,10 @@
                     $("#ageProfileMatch").text(foundUser.age);
                     $("#imgProfileMatch").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                 }
-            }
+            }   
         }
 
-        findUser("");
+        findUser(false);
 
         $("#dislikeButton").click(function() {
             likeFunction('dislike');
