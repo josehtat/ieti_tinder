@@ -71,9 +71,9 @@
 
         <div id="userProfile">
             <div id="carouselContainer">
-                <button id="prevImage" class="carouselArrow">&#10094;</button>
+                <!-- <button id="prevImage" class="carouselArrow">&#10094;</button> -->
                 <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
-                <button id="nextImage" class="carouselArrow">&#10095;</button>
+                <!-- <button id="nextImage" class="carouselArrow">&#10095;</button> -->
                 <div id="carouselDots">
                     <?php for ($i = 0; $i < count($images); $i++) { ?>
                         <span class="carouselDot <?php if ($i == 0) {
