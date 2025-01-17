@@ -168,7 +168,18 @@ if (!isset($_SESSION['userProfiles'])) {
                         $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
                     } else {
                         foreach ($queryInteraction as $inter) {
-                            if (($inter['id_user'] == $mail && $inter['like_user'] == null) || ($inter['id_receptor'] == $mail && $inter['like_receptor'] == null)) {
+                            if ($inter['like_user'] == null) {
+                                echo " Algo";
+                            } else {
+                                echo "No algo";
+                            }
+
+                            if ($inter['like_receptor'] != 0 || $inter['like_receptor'] != 1) {
+                                echo $inter['like_receptor'] . " - ";
+                            }
+
+
+                            if (($inter['id_user'] == $mail && $inter['like_user'] == null) || ($inter['id_receptor'] == $mail && is_null($inter['like_receptor']))) {
                                 $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
                             }
                         }

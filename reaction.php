@@ -1,11 +1,12 @@
 <?php
-
+$match = false;
 //Comprueba se ha recibido reaction como parametro
 if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
     $reaction = null;
-    if ($_POST["reaction"] = "like") {
+    if ($_POST["reaction"] == "like") {
         $reaction = 1;
-    } else if ($_POST["reaction"] = "dislike") {
+    }
+    if ($_POST["reaction"] == "dislike") {
         $reaction = 0;
     }
     $mail = $_COOKIE['loggedUser'];
@@ -62,13 +63,6 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
         $queryInsertReaction->bindParam(':findUser', $findUser);
         $queryInsertReaction->bindParam(':reaction', $reaction);
         $queryInsertReaction->execute();
-
-        $status = 0;
-        $logMessage = "Reacción guardada de " . $reactionText;
-        echo json_encode([
-            'status' => $status,
-            'data' => $logMessage
-        ]);
     } catch (PDOException $e) {
         echo "Error de SQL<br>\n";
         //comprovo errors:
@@ -77,5 +71,40 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
             echo "\nPDO::errorInfo():\n";
             die("Error accedint a dades: " . $e[2]);
         }
+    }
+
+    if ($queryInsertReaction->rowCount() > 0) {
+
+        //Comprobar si el usuario ha recibido una reacción antes
+        $queryText = "SELECT * FROM interactions " .
+            "WHERE (id_user = :mail OR id_receptor = :mail) " .
+            "AND (id_user = :findUser OR id_receptor = :findUser);";
+
+        try {
+            //preparem i executem la consulta
+            $queryMatches = $pdo->prepare($queryText);
+            $queryMatches->bindParam(':findUser', $findUser);
+            $queryMatches->bindParam(':mail', $mail);
+            $queryMatches->execute();
+        } catch (PDOException $e) {
+            echo "Error de SQL<br>\n";
+            //comprovo errors:
+            $e = $queryReaction->errorInfo();
+            if ($e[0] != '00000') {
+                echo "\nPDO::errorInfo():\n";
+                die("Error accedint a dades: " . $e[2]);
+            }
+        }
+
+        if ($queryMatches->rowCount() > 0) {
+            $match = true;
+            $logMessage = $mail . " y " . $findUser . " han hecho match";
+        }
+
+        echo json_encode([
+            'status' => $status,
+            'data' => $logMessage,
+            'match' => $match
+        ]);
     }
 }
