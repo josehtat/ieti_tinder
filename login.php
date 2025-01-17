@@ -100,9 +100,9 @@
     </script>
 
     <div class="login-container">
+        <h2>Affinity</h2>
+        <h3>Un lugar para encontrar tu amor</h3>
         <form action="login.php" method="post" class="login-form" id="login">
-            <h2>Affinity</h2>
-            <h3>Un lugar para encontrar tu amor</h3>
             <div class="input-group">
                 <label for="mail">Email</label>
                 <input type="email" id="mail" name="mail" placeholder="exemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"' ?> required>

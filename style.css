@@ -177,6 +177,7 @@ MARK:login.php
     width: 100%;
     max-width: 400px;
     text-align: center;
+    height: 750px;
 }
 
 .login-container h2 {

@@ -99,7 +99,7 @@
                 findUser: $("#nameProfileMacth").data('id')
             };
 
-            console.log(parameters);
+            // console.log(parameters);
 
             $.ajax({
                 data: parameters,
@@ -112,7 +112,7 @@
         }
 
         function reactionResult(logRes) {
-            console.log(logRes);
+            // console.log(logRes);
             if (logRes.status == 0) {
                 var storedUserProfiles = localStorage.getItem('userProfiles');
                 var userProfiles = JSON.parse(storedUserProfiles);
@@ -123,7 +123,7 @@
         }
 
         function findUserResult(logRes) {
-            console.log(logRes);
+            // console.log(logRes);
             if (logRes.status == 0) {
                 if (logRes.data.length == 0) {
                     $("#dontProfile").text('No hay perfiles disponibles');
@@ -132,7 +132,7 @@
                     localStorage.removeItem("userProfiles");
                 } else {
                     var foundUser = logRes.data[0];
-                    console.log(foundUser);
+                    // console.log(foundUser);
                     $("#nameProfileMacth").text(foundUser.name).data('id', foundUser.email);
                     $("#ageProfileMacth").text(foundUser.age);
                     $("#imgProfileMacth").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
