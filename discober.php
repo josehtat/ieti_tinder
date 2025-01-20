@@ -12,7 +12,7 @@
 
 <body id="bodyDiscober">
     <script>
-        <?php 
+        <?php
         session_start();
         unset($_SESSION['userProfiles']);
         if (!isset($_COOKIE['loggedUser'])) { ?>
@@ -25,6 +25,12 @@
     </header>
 
     <main id="mainDiscober">
+        <div id="overlay"></div>
+        <div id="popup">
+            <p id="popup-message"></p>
+            <button id="close-btn">Close</button>
+            <button id="redirect-btn">Go to Profile</button>
+        </div>
         <div id="matchDiscoberNotFound">
             <h1 id="dontProfile">No hay perfiles disponibles</h1>
         </div>
@@ -126,6 +132,26 @@
             console.log("ReactionResult: ");
             console.log(reactRes);
             if (reactRes.status == 0) {
+                if (reactRes.match == true) {
+                    const message = reactRes.data;
+                    if (message) {
+                        // Set the message
+                        $('#popup-message').text(message);
+
+                        // Show the popup and overlay
+                        $('#popup, #overlay').fadeIn();
+
+                        // Close button
+                        $('#close-btn').click(function() {
+                            $('#popup, #overlay').fadeOut();
+                        });
+
+                        // Redirect button
+                        $('#redirect-btn').click(function() {
+                            window.location.href = 'messages.php'; // Change to your desired URL
+                        });
+                    }
+                }
                 findUser(true);
             }
         }
@@ -144,7 +170,7 @@
                     $("#ageProfileMatch").text(foundUser.age);
                     $("#imgProfileMatch").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                 }
-            }   
+            }
         }
 
         findUser(false);

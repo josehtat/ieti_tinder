@@ -105,13 +105,16 @@ if (!isset($_SESSION['userProfiles'])) {
             if ($sexualOrientation == "heterosexual") {
                 $queryText = "SELECT * FROM users " .
                     "WHERE NOT sex = :sex AND NOT sex = 'NB' " .
-                    "AND (sex_orientation = 'heterosexual' OR sex_orientation = 'bisexual');";
+                    "AND (sex_orientation = 'heterosexual' OR sex_orientation = 'bisexual') " .
+                    "AND NOT email_user = :mail;";
             } else if ($sexualOrientation == "homosexual") {
                 $queryText = "SELECT * FROM users " .
                     "WHERE sex = :sex " .
-                    "AND (sex_orientation = 'homosexual' OR sex_orientation = 'bisexual');";
+                    "AND (sex_orientation = 'homosexual' OR sex_orientation = 'bisexual') " .
+                    "AND NOT email_user = :mail;";
             } else {
-                $queryText = "SELECT * FROM users;";
+                $queryText = "SELECT * FROM users " .
+                    "WHERE NOT email_user = :mail;";
             }
 
             try {
@@ -120,6 +123,7 @@ if (!isset($_SESSION['userProfiles'])) {
                 if ($sexualOrientation != "bisexual") {
                     $queryFinds->bindParam(':sex', $sex);
                 }
+                $queryFinds->bindParam(':mail', $_COOKIE['loggedUser']);
                 $queryFinds->execute();
             } catch (PDOException $e) {
                 echo "Error de SQL 2<br>\n";
@@ -168,18 +172,7 @@ if (!isset($_SESSION['userProfiles'])) {
                         $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
                     } else {
                         foreach ($queryInteraction as $inter) {
-                            if ($inter['like_user'] == null) {
-                                echo " Algo";
-                            } else {
-                                echo "No algo";
-                            }
-
-                            if ($inter['like_receptor'] != 0 || $inter['like_receptor'] != 1) {
-                                echo $inter['like_receptor'] . " - ";
-                            }
-
-
-                            if (($inter['id_user'] == $mail && $inter['like_user'] == null) || ($inter['id_receptor'] == $mail && is_null($inter['like_receptor']))) {
+                            if (($inter['id_user'] == $_COOKIE['loggedUser'] && $inter['like_user'] == null) || ($inter['id_receptor'] == $_COOKIE['loggedUser'] && is_null($inter['like_receptor']))) {
                                 $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
                             }
                         }

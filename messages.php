@@ -36,7 +36,7 @@
                     exit;
                 }
 
-                $queryText1 = "SELECT * FROM interactions WHERE id_user = :mail AND like_user = 1 AND like_receptor = 1;";
+                $queryText1 = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
 
                 try {
                     $queryText1 = $pdo->prepare($queryText1);
@@ -51,51 +51,7 @@
                     }
                 }
 
-                if ($queryText1->rowCount() <= 0) {
-                    $queryText2 = "SELECT * FROM interactions WHERE id_receptor = :mail AND like_user = 1 AND like_receptor = 1;";
-
-                    try {
-                        $queryText2 = $pdo->prepare($queryText2);
-                        $queryText2->bindParam(':mail', $_COOKIE['loggedUser']);
-                        $queryText2->execute();
-                    } catch (PDOException $e) {
-                        echo "Error de SQL<br>\n";
-                        $e = $queryText2->errorInfo();
-                        if ($e[0] != '00000') {
-                            echo "\nPDO::errorInfo():\n";
-                            die("Error accedint a dades: " . $e[2]);
-                        }
-                    }
-
-                    if ($queryText2->rowCount() <= 0) {
-                        echo "<p>Hay gente esperando para hablar contigo.<br> Devuelveles el like para comenzar a xatejar.</p>";
-                    } else {
-                        foreach ($queryText2 as $row) {
-                            $queryUserText = "SELECT * FROM users WHERE email_user = :mail;";
-
-                            try {
-                                $queryUser = $pdo->prepare($queryUserText);
-                                $queryUser->bindParam(':mail', $row['id_user']);
-                                $queryUser->execute();
-                            } catch (PDOException $e) {
-                                echo "Error de SQL<br>\n";
-                                $e = $queryUser->errorInfo();
-                                if ($e[0] != '00000') {
-                                    echo "\nPDO::errorInfo():\n";
-                                    die("Error accedint a dades: " . $e[2]);
-                                }
-                            }
-
-                            foreach ($queryUser as $rowUser) {
-                                echo "<div class='match'>
-                                        <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
-                                        <p>" . $rowUser['name'] . "</p>
-                                    </div>";
-                            }
-                        }
-                    }
-
-                } else {
+                if ($queryText1->rowCount() > 0) {
                     foreach ($queryText1 as $row) {
                         $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
 

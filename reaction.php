@@ -1,13 +1,14 @@
 <?php
 $match = false;
+$matchUser = null;
 //Comprueba se ha recibido reaction como parametro
 if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
     $reaction = null;
     if ($_POST["reaction"] == "like") {
-        $reaction = 1;
+        $reaction = 2;
     }
     if ($_POST["reaction"] == "dislike") {
-        $reaction = 0;
+        $reaction = 1;
     }
     $mail = $_COOKIE['loggedUser'];
     $findUser = $_POST['findUser'];
@@ -74,11 +75,12 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
     }
 
     if ($queryInsertReaction->rowCount() > 0) {
-
+        $logMessage = "Reacción enviada";
         //Comprobar si el usuario ha recibido una reacción antes
         $queryText = "SELECT * FROM interactions " .
             "WHERE (id_user = :mail OR id_receptor = :mail) " .
-            "AND (id_user = :findUser OR id_receptor = :findUser);";
+            "AND (id_user = :findUser OR id_receptor = :findUser) " .
+            "AND like_user = 2 AND like_receptor = 2;";
 
         try {
             //preparem i executem la consulta
@@ -98,13 +100,15 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
 
         if ($queryMatches->rowCount() > 0) {
             $match = true;
+            $matchUser = $findUser;
             $logMessage = $mail . " y " . $findUser . " han hecho match";
         }
 
         echo json_encode([
             'status' => $status,
             'data' => $logMessage,
-            'match' => $match
+            'match' => $match, 
+            'matchUser' => $matchUser
         ]);
     }
 }
