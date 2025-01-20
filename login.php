@@ -62,7 +62,7 @@
                     $logMessage = "Usuario incorrecto";
                 } else {
                     $queryText = "SELECT * FROM users " .
-                        "WHERE email_user = :mail AND password_user = :password;";
+                        "WHERE email_user = :mail AND password_user = :password AND account_status = 'active';";
 
                     try {
                         //preparem i executem la consulta
@@ -100,7 +100,6 @@
     </script>
 
     <div class="login-container">
-        <form action="login.php" method="post" class="login-form" id="login">
             <h1>Affinity</h1>
             <h2>Un lugar para encontrar tu amor</h2>
 
@@ -110,6 +109,8 @@
                     <p id="error-message"><?php echo $logMessage; ?></p>
                 <?php } ?>
             </div>
+
+        <form action="login.php" method="post" class="login-form" id="login">
 
             <div class="input-group">
                 <label for="mail">Email</label>

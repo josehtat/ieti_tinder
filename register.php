@@ -6,7 +6,7 @@
     <title>Register - Affinity</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 </head>
 <body class="register-body">
     <?php
@@ -49,14 +49,14 @@
                 $stmt->execute([$email, $password, $name, $surnames, $alias, $birthday, $location, $sex, $sexOrientation]);
                 
                 // Send verification email
-                $verificationLink = "http://tinder1.com/verify.php?token=" . $verificationToken;
+                $verificationLink = "http://tinder1.com/register.php?validate=" . $verificationToken;
                 $to = $email;
                 $subject = "Verify your Affinity account";
                 $message = "Welcome to Affinity!\n\nPlease click the following link to verify your account:\n" . $verificationLink;
-                $headers = "From: unai@ieti.site";
-                
+                $headers = "From: administration@tinder1.ieti.site" .  "\r\n" . 'Reply-To: administration@tinder1.ieti.site' .  "\r\n" . 'X-Mailer: PHP/' . phpversion();;
+
                 if(mail($to, $subject, $message, $headers)) {
-                    $status = 2;
+                    $status = 0;
                     $logMessage = "Registration successful! Please check your email to verify your account.";
                 } else {
                     $status = 3;
@@ -84,12 +84,12 @@
         <form action="register.php" method="post" class="register-form" id="registerForm">
             <div class="input-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                <input type="email" id="email" name="email" placeholder="" required>
             </div>
 
             <div class="input-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Minimum 8 characters" required>
+                <input type="password" id="password" name="password" placeholder="" minlength="8" required>
             </div>
 
             <div class="input-row">
@@ -127,6 +127,8 @@
                     <input type="text" id="longitude" name="longitude" required readonly>
                 </div>
             </div>
+
+            <input type="hidden" id="location" name="location" required>
 
             <div id="map" style="height: 300px; width: 100%;"></div>
 
@@ -186,6 +188,14 @@
             }
         });
 
+        // Crear un ícono personalizado
+        const customIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // URL de la imagen del ícono
+            iconSize: [30, 30], // Tamaño del ícono [ancho, alto]
+            iconAnchor: [15, 30], // Punto de anclaje [x, y]
+            popupAnchor: [0, -30] // Punto donde aparece el popup [x, y]
+        });
+
         // Configurar el mapa
         const map = L.map('map').setView([0, 0], 2); // Vista inicial del mapa
 
@@ -199,23 +209,24 @@
 
         // Detectar clics en el mapa
         map.on('click', function (e) {
-            const lat = e.latlng.lat.toFixed(6); // Redondear latitud
-            const lng = e.latlng.lng.toFixed(6); // Redondear longitud
+            const lat = e.latlng.lat.toFixed(5); // Redondear latitud a 5 decimales
+            const lng = e.latlng.lng.toFixed(5); // Redondear longitud a 5 decimales
 
-            // Mostrar las coordenadas en los campos de entrada
+            // Mostrar las coordenadas en los campos de entrada individuales
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
 
-            // Mostrar las coordenadas en el texto
-            document.getElementById('coordinates').textContent = `Lat: ${lat}, Lng: ${lng}`;
+            // Combinar las coordenadas en un formato único y asignarlo al campo oculto
+            document.getElementById('location').value = `${lat} ${lng}`;
 
-            // Mover o crear el marcador
+            // Mover o crear el marcador con el ícono personalizado
             if (marker) {
                 marker.setLatLng(e.latlng);
             } else {
-                marker = L.marker(e.latlng).addTo(map);
+                marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
             }
         });
+
     </script>
 </body>
 </html>
