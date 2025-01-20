@@ -167,13 +167,14 @@ if (!isset($_SESSION['userProfiles'])) {
                     $findEmail = $find['email_user'];
                     $findFullLocation = $find['location'];
                     $findLocation = explode(" ", $findFullLocation);
+                    $findPoints = $find['points'];
 
                     if ($queryInteraction->rowCount() <= 0) {
-                        $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
+                        $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1], 'points' => $findPoints);
                     } else {
                         foreach ($queryInteraction as $inter) {
                             if (($inter['id_user'] == $_COOKIE['loggedUser'] && $inter['like_user'] == null) || ($inter['id_receptor'] == $_COOKIE['loggedUser'] && is_null($inter['like_receptor']))) {
-                                $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1]);
+                                $foundUserList[] = array('email' => $findEmail, 'name' => $findName, 'age' => $findAge, 'latitude' => $findLocation[0], 'longitude' => $findLocation[1], 'points' => $findPoints);
                             }
                         }
                     }
@@ -210,6 +211,11 @@ if (!isset($_SESSION['userProfiles'])) {
                 // Ordenar la lista de usuarios por distancia
                 usort($foundUserList, function ($a, $b) {
                     return $a['distance'] - $b['distance'];
+                });
+
+                // Ordenar la lista de usuarios por puntuación
+                usort($foundUserList, function ($a, $b) {
+                    return $b['points'] - $a['points'];
                 });
 
                 $status = 0;

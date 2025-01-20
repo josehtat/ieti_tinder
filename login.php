@@ -88,6 +88,46 @@
                                 setcookie("loggedUser", $row['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
                                 $status = 0;
                                 $logMessage = "Usuario logeado: " . $row['email_user'];
+
+                                $queryText = "SELECT * FROM users " .
+                                    "WHERE email_user = :mail;";
+
+                                try {
+                                    //preparem i executem la consulta
+                                    $queryScore = $pdo->prepare($queryText);
+                                    $queryScore->bindParam(':mail', $row['email_user']);
+                                    $queryScore->execute();
+                                } catch (PDOException $e) {
+                                    echo "Error de SQL<br>\n";
+                                    //comprovo errors:
+                                    $e = $queryScore->errorInfo();
+                                    if ($e[0] != '00000') {
+                                        echo "\nPDO::errorInfo():\n";
+                                        die("Error accedint a dades: " . $e[2]);
+                                    }
+                                }
+
+                                if ($queryScore->rowCount() > 0 || $queryScore->rowCount() < 2) {
+                                    foreach ($queryScore as $row) {
+                                        $queryText = "UPDATE users SET points= :points WHERE email_user = :mail;";
+
+                                        try {
+                                            //preparem i executem la consulta
+                                            $queryUpdateScore = $pdo->prepare($queryText);
+                                            $queryUpdateScore->bindParam(':mail', $mail);
+                                            $points = $row['points'] + 1;
+                                            $queryUpdateScore->bindParam(':points', $points);
+                                            $queryUpdateScore->execute();
+                                        } catch (PDOException $e) {
+                                            echo "Error de SQL<br>\n";
+                                            //comprovo errors:
+                                            $e = $queryUpdateScore->errorInfo();
+                                            if ($e[0] != '00000') {
+                                                echo "\nPDO::errorInfo():\n";
+                                            }
+                                        }
+                                    }
+                                }
                 ?>
                                 window.location.href = "/discober.php";
             <?php

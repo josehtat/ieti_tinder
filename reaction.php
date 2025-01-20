@@ -27,6 +27,11 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
         exit;
     }
 
+    updateScore($mail, $pdo, 1);
+    if ($reaction == 2) {
+        updateScore($findUser, $pdo, 2);
+    }
+
     //Comprobar si el usuario ha recibido una reacción antes
     $queryText = "SELECT * FROM interactions " .
         "WHERE id_user = :findUser AND id_receptor = :mail;";
@@ -107,8 +112,51 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
         echo json_encode([
             'status' => $status,
             'data' => $logMessage,
-            'match' => $match, 
+            'match' => $match,
             'matchUser' => $matchUser
         ]);
+    }
+}
+
+function updateScore($mail, $pdo, $addedPoints)
+{
+    $queryText = "SELECT * FROM users " .
+        "WHERE email_user = :mail;";
+
+    try {
+        //preparem i executem la consulta
+        $queryScore = $pdo->prepare($queryText);
+        $queryScore->bindParam(':mail', $mail);
+        $queryScore->execute();
+    } catch (PDOException $e) {
+        echo "Error de SQL<br>\n";
+        //comprovo errors:
+        $e = $queryScore->errorInfo();
+        if ($e[0] != '00000') {
+            echo "\nPDO::errorInfo():\n";
+            die("Error accedint a dades: " . $e[2]);
+        }
+    }
+
+    if ($queryScore->rowCount() > 0 || $queryScore->rowCount() < 2) {
+        foreach ($queryScore as $row) {
+            $queryText = "UPDATE users SET points= :points WHERE email_user = :mail;";
+
+            try {
+                //preparem i executem la consulta
+                $queryUpdateScore = $pdo->prepare($queryText);
+                $queryUpdateScore->bindParam(':mail', $mail);
+                $points = $row['points'] + $addedPoints;
+                $queryUpdateScore->bindParam(':points', $points);
+                $queryUpdateScore->execute();
+            } catch (PDOException $e) {
+                echo "Error de SQL<br>\n";
+                //comprovo errors:
+                $e = $queryUpdateScore->errorInfo();
+                if ($e[0] != '00000') {
+                    echo "\nPDO::errorInfo():\n";
+                }
+            }
+        }
     }
 }
