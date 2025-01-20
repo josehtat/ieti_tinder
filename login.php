@@ -100,23 +100,26 @@
     </script>
 
     <div class="login-container">
-        <h2>Affinity</h2>
-        <h3>Un lugar para encontrar tu amor</h3>
         <form action="login.php" method="post" class="login-form" id="login">
-            <div class="input-group">
-                <label for="mail">Email</label>
-                <input type="email" id="mail" name="mail" placeholder="exemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"' ?> required>
-            </div>
-            <div class="input-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"' ?> required>
-            </div>
+            <h1>Affinity</h1>
+            <h2>Un lugar para encontrar tu amor</h2>
+
             <div class="error-group">
                 <?php
                 if ($status > 0) { ?>
                     <p id="error-message"><?php echo $logMessage; ?></p>
                 <?php } ?>
             </div>
+
+            <div class="input-group">
+                <label for="mail">Email</label>
+                <input type="email" id="mail" name="mail" placeholder="ejemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"' ?> required>
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"' ?> required>
+            </div>
+            
             <div class="submit-btn">
                 <button type="submit">Iniciar sesión</button>
             </div>
