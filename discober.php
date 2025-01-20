@@ -28,8 +28,8 @@
         <div id="overlay"></div>
         <div id="popup">
             <p id="popup-message"></p>
-            <button id="close-btn">Close</button>
-            <button id="redirect-btn">Go to Profile</button>
+            <button id="close-btn">Seguir descubriendo</button>
+            <button id="redirect-btn">Ir a la conversación</button>
         </div>
         <div id="matchDiscoberNotFound">
             <h1 id="dontProfile">No hay perfiles disponibles</h1>
