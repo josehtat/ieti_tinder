@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
     <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <title>Perfil</title>
 </head>
 
@@ -40,7 +42,7 @@
             $pw = "tinder123";
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
 
-            $queryText = "SELECT users.name, users.surnames, users.alias, users.sex, users.sex_orientation, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image 
+            $queryText = "SELECT users.name, users.surnames, users.alias, users.sex, users.sex_orientation, YEAR(CURDATE()) - YEAR(users.birthday) AS age, pictures.path AS image, users.location
                   FROM users 
 
                   LEFT JOIN pictures ON users.email_user = pictures.email_user 
@@ -58,6 +60,7 @@
                 $gender = $userInfo['sex'];
                 $orientation = $userInfo['sex_orientation'];
                 $age = $userInfo['age'];
+                $location = $userInfo['location'];
 
                 $queryImages = "SELECT path FROM pictures WHERE email_user = :mail";
                 $queryImgs = $pdo->prepare($queryImages);
@@ -101,19 +104,40 @@
 
                 <label for="genderProfile">Genero:</label>
                 <select id="genderProfile" name="genderProfile">
-                    <option value="M" <?php if ($gender == 'M') echo 'selected'; ?>>Masculino</option>
-                    <option value="F" <?php if ($gender == 'F') echo 'selected'; ?>>Femenino</option>
-                    <option value="NB" <?php if ($gender == 'NB') echo 'selected'; ?>>No Binario</option>
+                    <option value="M" <?php if ($gender == 'M')
+                        echo 'selected'; ?>>Masculino</option>
+                    <option value="F" <?php if ($gender == 'F')
+                        echo 'selected'; ?>>Femenino</option>
+                    <option value="NB" <?php if ($gender == 'NB')
+                        echo 'selected'; ?>>No Binario</option>
                 </select>
 
                 <label for="orientationProfile">Orientación sexual</label>
                 <select id="orientationProfile" name="orientationProfile">
-                    <option value="heterosexual" <?php if ($orientation == 'heterosexual') echo 'selected'; ?>>Heterosexual</option>
-                    <option value="homosexual" <?php if ($orientation == 'homosexual') echo 'selected'; ?>>Homosexual</option>
-                    <option value="bisexual" <?php if ($orientation == 'bisexual')echo 'selected'; ?>>Bisexual</option>
+                    <option value="heterosexual" <?php if ($orientation == 'heterosexual')
+                        echo 'selected'; ?>>
+                        Heterosexual</option>
+                    <option value="homosexual" <?php if ($orientation == 'homosexual')
+                        echo 'selected'; ?>>Homosexual
+                    </option>
+                    <option value="bisexual" <?php if ($orientation == 'bisexual')
+                        echo 'selected'; ?>>Bisexual</option>
                 </select>
                 </select>
 
+                <div class="input-row" id="locationInput">
+                    <div class="input-group">
+                        <label for="latitude">Latitud</label>
+                        <input type="text" id="latitude" name="latitude" required readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="longitude">Longitud</label>
+                        <input type="text" id="longitude" name="longitude" required readonly>
+                    </div>
+                </div>
+
+                <div id="map" style="height: 300px; width: 100%;"></div>
 
                 <button type="submit" id="saveButton">Guardar</button>
             </form>
@@ -200,6 +224,45 @@
     </nav>
 
     <script>
+        // Crear un ícono personalizado
+        const customIcon = L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // URL de la imagen del ícono
+            iconSize: [30, 30], // Tamaño del ícono [ancho, alto]
+            iconAnchor: [15, 30], // Punto de anclaje [x, y]
+            popupAnchor: [0, -30] // Punto donde aparece el popup [x, y]
+        });
+
+        // Configurar el mapa
+        const map = L.map('map').setView([0, 0], 2); // Vista inicial del mapa
+
+        // Agregar un mapa base (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        // Crear marcador vacío
+        let marker;
+
+        // Detectar clics en el mapa
+        map.on('click', function (e) {
+            const lat = e.latlng.lat.toFixed(6); // Redondear latitud
+            const lng = e.latlng.lng.toFixed(6); // Redondear longitud
+
+            // Mostrar las coordenadas en los campos de entrada
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+
+            // Mover o crear el marcador con el ícono personalizado
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+            }
+
+        });
+
+
+
         $(document).ready(function () {
             var images = <?php echo json_encode($images); ?>;
             var cont = 0;
@@ -273,7 +336,7 @@
                     data: form.serialize(),
                     success: function (response) {
                         console.log('Formulario enviado correctamente');
-                        $('#userProfile').show(); 
+                        $('#userProfile').show();
                         $('#editProfileSection').hide();
                         setupEventListeners();
                         window.location.href = "/profile.php";

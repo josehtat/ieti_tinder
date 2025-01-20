@@ -382,13 +382,16 @@ MARK: profile.php
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
     margin-top: 10px;
     height: 100%;
 }
 
 #userProfile {
     display: block;
+}
+
+#userInfo {
+    text-align: center;
 }
 
 #carouselContainer {
@@ -433,11 +436,12 @@ MARK: profile.php
 #editProfileSection {
     display: none;
     width: 80%;
-    margin: 0 auto;
+    margin: 60px auto;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
 #editProfileSection h3 {
@@ -536,7 +540,7 @@ MARK:message.php
 }
 
 #matchMessages {
-    margin: 80px 20px 20px;
+    margin: 50px 20px 20px;
 }
 
 #matchMessages h3 {
@@ -585,7 +589,7 @@ MARK:message.php
 
 
 #message {
-    margin: 100px 20px 70px;
+    margin: 30px 20px 70px;
 }
 
 #message h3 {
@@ -699,4 +703,9 @@ MARK:Control de errores
 .message-warning {
     background-color: #ffc107;
     color: #ffffff;
+}
+
+/*EStilos del Google Maps*/
+#locationInput {
+    display: none;
 }
