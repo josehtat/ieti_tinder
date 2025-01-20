@@ -64,7 +64,6 @@
                 $age = "No disponible";
                 $images = ["/path/to/default/profile/image.jpg"];
             }
-
         } catch (PDOException $e) {
             echo "Error al acceder a la base de datos - " . $e->getMessage();
         }
@@ -72,9 +71,16 @@
 
         <div id="userProfile">
             <div id="carouselContainer">
-                <button id="prevImage" class="carouselArrow">&#10094;</button>
+                <!-- <button id="prevImage" class="carouselArrow">&#10094;</button> -->
                 <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
-                <button id="nextImage" class="carouselArrow">&#10095;</button>
+                <!-- <button id="nextImage" class="carouselArrow">&#10095;</button> -->
+                <div id="carouselDots">
+                    <?php for ($i = 0; $i < count($images); $i++) { ?>
+                        <span class="carouselDot <?php if ($i == 0) {
+                                                        echo 'active';
+                                                    } ?>"></span>
+                    <?php } ?>
+                </div>
             </div>
 
             <div id="userInfo">
@@ -139,7 +145,6 @@
                     } else {
                         echo "No se ha podido actualizar los datos o no se realizaron cambios.";
                     }
-
                 } catch (PDOException $e) {
                     echo "Error al actualizar los datos: " . $e->getMessage();
                 }
@@ -168,40 +173,43 @@
     </nav>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var images = <?php echo json_encode($images); ?>;
             var cont = 0;
             var $carousel = $('#carouselContainer .profileImage');
 
             function changeImage() {
-                $carousel.fadeOut('fast', function () {
+                $carousel.fadeOut('fast', function() {
                     $carousel.attr('src', images[cont]);
                     $carousel.fadeIn('fast');
                 });
             }
 
             function setupEventListeners() {
-                $('#nextImage').off('click').on('click', function () {
+                /* $('#nextImage').off('click').on('click', function () {
                     cont = (cont + 1) % images.length;
                     changeImage();
                 });
                 $('#prevImage').off('click').on('click', function () {
                     cont = (cont - 1 + images.length) % images.length;
                     changeImage();
-                });
-                $carousel.off('click').on('click', function () {
+                }); */
+                $carousel.off('click').on('click', function() {
                     cont = (cont + 1) % images.length;
                     changeImage();
+                    $('.carouselDot').removeClass('active');
+                    $('.carouselDot').eq(cont).addClass('active');
                 });
-                $('#editButton').off('click').on('click', function () {
+
+                $('#editButton').off('click').on('click', function() {
                     $('#userProfile').hide();
                     $('#editProfileSection').show();
                 });
-                $('#viewButton').off('click').on('click', function () {
+                $('#viewButton').off('click').on('click', function() {
                     $('#userProfile').show();
                     $('#editProfileSection').hide();
                 });
-                $('#logout').off('click').on('click', function () {
+                $('#logout').off('click').on('click', function() {
                     logout();
                 });
             }
@@ -227,29 +235,32 @@
                 }
             }
 
-            $(document).ready(function () {
-                $("#logout").click(function (event) {
+            $(document).ready(function() {
+                $("#logout").click(function(event) {
                     logout();
                 });
             });
 
-            $('#editForm').on('submit', function (e) {
-                e.preventDefault(); var form = $(this); $.ajax({
+            $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
                     type: 'POST',
                     url: '',
                     data: form.serialize(),
-                    success: function (response) {
+                    success: function(response) {
                         console.log('Formulario enviado correctamente');
-                        $('#userProfile').show(); $('#editProfileSection').hide();
+                        $('#userProfile').show();
+                        $('#editProfileSection').hide();
                         setupEventListeners();
+                        window.location.href = "/profile.php";
                     },
-                    error: function (err) {
+                    error: function(err) {
                         console.log('Error en el envío del formulario: ', err);
                     }
                 });
             });
         });
-
     </script>
 </body>
 

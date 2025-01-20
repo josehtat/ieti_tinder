@@ -36,7 +36,7 @@
                     exit;
                 }
 
-                $queryText1 = "SELECT * FROM interactions WHERE id_user = :mail AND like_user = true AND like_receptor = true;";
+                $queryText1 = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
 
                 try {
                     $queryText1 = $pdo->prepare($queryText1);
@@ -51,51 +51,7 @@
                     }
                 }
 
-                if ($queryText1->rowCount() <= 0) {
-                    $queryText2 = "SELECT * FROM interactions WHERE id_receptor = :mail AND like_user = true AND like_receptor = true;";
-
-                    try {
-                        $queryText2 = $pdo->prepare($queryText2);
-                        $queryText2->bindParam(':mail', $_COOKIE['loggedUser']);
-                        $queryText2->execute();
-                    } catch (PDOException $e) {
-                        echo "Error de SQL<br>\n";
-                        $e = $queryText2->errorInfo();
-                        if ($e[0] != '00000') {
-                            echo "\nPDO::errorInfo():\n";
-                            die("Error accedint a dades: " . $e[2]);
-                        }
-                    }
-
-                    if ($queryText2->rowCount() <= 0) {
-                        echo "<p>Hay gente esperando para hablar contigo.<br> Devuelveles el like para comenzar a xatejar.</p>";
-                    } else {
-                        foreach ($queryText2 as $row) {
-                            $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
-
-                            try {
-                                $queryUser = $pdo->prepare($queryUser);
-                                $queryUser->bindParam(':mail', $row['id_user']);
-                                $queryUser->execute();
-                            } catch (PDOException $e) {
-                                echo "Error de SQL<br>\n";
-                                $e = $queryUser->errorInfo();
-                                if ($e[0] != '00000') {
-                                    echo "\nPDO::errorInfo():\n";
-                                    die("Error accedint a dades: " . $e[2]);
-                                }
-                            }
-
-                            foreach ($queryUser as $rowUser) {
-                                echo "<div class='match'>
-                                        <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
-                                        <p>" . $rowUser['name'] . "</p>
-                                    </div>";
-                            }
-                        }
-                    }
-
-                } else {
+                if ($queryText1->rowCount() > 0) {
                     foreach ($queryText1 as $row) {
                         $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
 
@@ -114,7 +70,7 @@
 
                         foreach ($queryUser as $rowUser) {
                             echo "<div class='match'>
-                                    <img src='profilePictures/" . $rowUser['email_user'] . ".jpg'>
+                                    <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
                                     <p>" . $rowUser['name'] . "</p>
                                 </div>";
                         }
@@ -130,17 +86,16 @@
             <h3>Mensajes</h3>
             <div id="messageBox">
                 <?php
-                $query = "
-                SELECT u.name, m.id_user, m.id_receptor, m.message_user, m.date
-                FROM users u
-                INNER JOIN messages m ON u.email_user = m.id_user
-                WHERE m.id_receptor = :currentUser
-                ORDER BY m.date DESC
-                LIMIT 10";
+                $query = "SELECT * FROM messages
+                WHERE (id_user = :mail OR id_receptor = :mail)
+                /*AND (id_user = :findUser OR id_receptor = :findUser)*/
+                ORDER BY date DESC
+                LIMIT 1";
 
                 try {
                     $stmt = $pdo->prepare($query);
-                    $stmt->bindParam(':currentUser', $_COOKIE['loggedUser']);
+                    $stmt->bindParam(':mail', $_COOKIE['loggedUser']);
+                    /*$stmt->bindParam(':findUser', $foundUser);*/
                     $stmt->execute();
                 } catch (PDOException $e) {
                     echo "Error en la consulta SQL: " . $e->getMessage();
@@ -151,9 +106,9 @@
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
                         echo "<div class='messageUser'>
-                            <img src='profilePictures/" . htmlspecialchars($row['id_user']) . ".jpg' alt='Foto de perfil'>
+                            <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
                             <div class='messageInfo'>
-                                <p class='userName'>" . htmlspecialchars($row['name']) . "</p>
+                                <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
                                 <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
                                 <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
                             </div>
@@ -173,7 +128,7 @@
                 <h3><a href="discober.php">Descubrir</a></h3>
             </li>
             <li>
-                <h3  id="markerPage"><a href="messages.php">Mensajes</a></h3>
+                <h3 id="markerPage"><a href="messages.php">Mensajes</a></h3>
             </li>
             <li>
                 <h3><a href="profile.php">Perfil</a></h3>
