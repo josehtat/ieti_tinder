@@ -87,15 +87,13 @@
             <div id="messageBox">
                 <?php
                 $query = "SELECT * FROM messages
-                WHERE (id_user = :mail OR id_receptor = :mail)
-                /*AND (id_user = :findUser OR id_receptor = :findUser)*/
-                ORDER BY date DESC
-                LIMIT 1";
+                        WHERE (id_user = :mail OR id_receptor = :mail)
+                        ORDER BY date DESC
+                        LIMIT 1";
 
                 try {
                     $stmt = $pdo->prepare($query);
                     $stmt->bindParam(':mail', $_COOKIE['loggedUser']);
-                    /*$stmt->bindParam(':findUser', $foundUser);*/
                     $stmt->execute();
                 } catch (PDOException $e) {
                     echo "Error en la consulta SQL: " . $e->getMessage();
@@ -105,20 +103,25 @@
                 // Renderizado de mensajes
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
-                        echo "<div class='messageUser'>
-                            <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
-                            <div class='messageInfo'>
-                                <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
-                                <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
-                                <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
-                            </div>
-                          </div>";
+                        echo "<form action='conversation.php' method='POST' class='messageForm'>
+                                <input type='hidden' name='message_id' value='" . htmlspecialchars($row['id']) . "'>
+                                <button type='submit' class='messageUser'>
+                                    <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
+                                    <div class='messageInfo'>
+                                        <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
+                                        <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
+                                        <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
+                                    </div>
+                                </button>
+                            </form>";
                     }
                 } else {
                     echo "<p>No hay mensajes disponibles. Empieza una conversación ahora.</p>";
                 }
                 ?>
             </div>
+
+
         </div>
     </main>
 

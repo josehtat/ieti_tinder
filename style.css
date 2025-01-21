@@ -147,8 +147,8 @@ MARK:discober.php
 }
 
 #nav h3 a:hover {
-    color: #FFC300;
-    border-bottom: 2px solid #FFC300;
+    color: #7B1FA2;
+    border-bottom: 2px solid #7B1FA2;
 }
 
 #nav h3#markerPage a {
@@ -636,6 +636,8 @@ MARK:message.php
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
 }
 
 .messageUser:hover {

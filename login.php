@@ -10,7 +10,6 @@
     <title>Login - Affinity</title>
 </head>
 
-
 <body id="loginIndex">
     <script>
         <?php
@@ -39,7 +38,6 @@
 
                 // Consulta para obtener al usuario
                 $queryText = "SELECT * FROM users WHERE email_user = :mail;";
-
                 try {
                     $queryUser = $pdo->prepare($queryText);
                     $queryUser->bindParam(':mail', $mail);
@@ -65,11 +63,15 @@
                         // Verificar contraseña
                         if ($user['password_user'] === $hashedPassword) {
                             setcookie("loggedUser", $user['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
+                            setcookie("userRole", $user['role'], time() + 1000 * 60 * 60 * 24 * 7); // Guardar el rol del usuario
+
+                            if ($user['role'] === 'admin') { ?>
+                                window.location.href = "/admin/index.php";
+                            <?php } else { ?>
+                                window.location.href = "/discober.php";
+                            <?php }
                             $status = 0;
                             $logMessage = "Usuario logueado correctamente.";
-                            ?>
-                            window.location.href = "/discober.php";
-                            <?php
                         } else {
                             $status = 2;
                             $logMessage = "Contraseña incorrecta.";
@@ -79,42 +81,41 @@
             }
         }
         ?>
-        </script>
+    </script>
 
     <div class="login-container">
-            <h1>Affinity</h1>
-            <h2>Un lugar para encontrar tu amor</h2>
+        <h1>Affinity</h1>
+        <h2>Un lugar para encontrar tu amor</h2>
 
-            <div class="error-group">
-                <?php
-                if ($status > 0) { ?>
-                    <p id="error-message"><?php echo $logMessage; ?></p>
-                <?php } ?>
-            </div>
+        <div class="error-group">
+            <?php if ($status > 0) { ?>
+                <p id="error-message"><?php echo $logMessage; ?></p>
+            <?php } ?>
+        </div>
 
         <form action="login.php" method="post" class="login-form" id="login">
-
             <div class="input-group">
                 <label for="mail">Email</label>
-                <input type="email" id="mail" name="mail" placeholder="ejemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"' ?> required>
+                <input type="email" id="mail" name="mail" placeholder="ejemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"'; ?> required>
             </div>
             <div class="input-group">
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"' ?> required>
+                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"'; ?> required>
             </div>
-            
+
             <div class="submit-btn">
                 <button type="submit">Iniciar sesión</button>
             </div>
 
-                <div class="forgot-password">
-                    <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
-                </div>
+            <div class="forgot-password">
+                <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
+            </div>
 
-                <div class="register-link">
-                    <p><a href="/register.php">Crear una cuenta nueva</a></p>
-                </div>
-            </form>
-        </div>
+            <div class="register-link">
+                <p><a href="/register.php">Crear una cuenta nueva</a></p>
+            </div>
+        </form>
+    </div>
 </body>
+
 </html>
