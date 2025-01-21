@@ -1,15 +1,18 @@
 /*
 MARK: General
 */
-body{
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
+html{
     background: linear-gradient(135deg, #7B1FA2, #FFC300);
-    overflow-y: hidden;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+body{
+    max-width: 460px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: #F4F4F4;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5); 
+    color: #1A1A1A;
 }
 ul{
     margin: unset;
@@ -157,21 +160,32 @@ MARK:discober.php
 MARK:login.php
 */
 
-.login-container {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 430px;
+#loginIndex {
+    background-color: unset;
+    box-shadow: unset;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
 }
 
+.login-container {
+    background-color: #F4F4F4;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 430px;
+    height: 100%;
+    text-align: center;
+}
+
 .login-container h1 {
+    margin-top: 12rem !important;
     color: #7B1FA2;
     text-align: center;
-    justify-content: center;
-    margin: 9rem 0 0.5rem;}
+    margin: 0 0 0.5rem;
+}
 
 .login-container h2 {
     color: #666;
@@ -182,7 +196,7 @@ MARK:login.php
 
 .login-container label {
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 5px;
 }
 
@@ -190,12 +204,11 @@ MARK:login.php
 .login-container input[type="password"],
 .login-container input[type="text"] {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #e1e1e1;
 }
 
 .login-container input[type="text"]:focus,
@@ -208,10 +221,14 @@ MARK:login.php
     border: 2px solid red !important;
 }
 
-.login-container .error-group {
+.login-container input{
+    box-sizing: border-box;
+}
+
+.login-container #error-message {
+    background-color: lightgray;
+    border: 1px solid red;
     color: red;
-    display: flex;
-    justify-content: center;
 }
 
 .login-container button {
@@ -243,10 +260,6 @@ MARK:login.php
 .input-group {
     margin-bottom: 15px;
     text-align: left;
-}
-
-.input-group input {
-    box-sizing: border-box;
 }
 
 .submit-btn {
@@ -690,9 +703,71 @@ MARK:Control de errores
     color: #ffffff;
 }
 
+/* Mensaje de tipo "información" */
+.message-info {
+    background-color: #4caf50;
+    color: #ffffff;
+}
+
+/* Mensaje de tipo "error" */
+.message-error {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+/* Mensaje de tipo "advertencia" */
+.message-warning {
+    background-color: #ffc107;
+    color: #ffffff;
+}
+
+/* Popup styling */
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#popup button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#popup button:hover {
+    background: #0056b3;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 /*-------------------------------
 MARK: resgister.php
 */
+
+#register-html{
+    height: auto;
+}
 
 .register-body {
     overflow-y: auto;
@@ -701,7 +776,6 @@ MARK: resgister.php
 .register-container {
     background: white;
     padding: 2rem;
-    border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 430px;
