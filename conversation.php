@@ -20,8 +20,8 @@
         try {
             $hostname = "localhost";
             $dbname = "ieti_tinder";
-            $dbUsername = "admin";
-            $pw = "holacaracola";
+            $dbUsername = "ietitinder";
+            $pw = "tinder123";
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
         } catch (PDOException $e) {
             echo "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
