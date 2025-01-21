@@ -20,9 +20,9 @@
     </script>
     <header id="headerProfile">
         <div id="logo">Affinity</div>
-        <div id="menuButtons">
-            <button id="viewButton">Mirar</button>
-            <button id="editButton">Editar</button>
+        <div id="menuTabs">
+            <button class="tablink" id="viewTab">Mirar</button>
+            <button class="tablink" id="editTab">Editar</button>
         </div>
         <div id="moreOptions">
             <p>...</p>
@@ -204,7 +204,7 @@
 
             ?>
 
-            <button id="editPhotosButton">Modificar les meves fotos</button>
+            <button id="editPhotosButton" onclick="location.href = 'photos.php';">Modificar les meves fotos</button>
         </div>
 
     </main>
@@ -288,14 +288,19 @@
                     cont = (cont + 1) % images.length;
                     changeImage();
                 });
-                $('#editButton').off('click').on('click', function () {
-                    $('#userProfile').hide();
-                    $('#editProfileSection').show();
-                });
-                $('#viewButton').off('click').on('click', function () {
+                $('#viewTab').click(function () {
                     $('#userProfile').show();
                     $('#editProfileSection').hide();
+                    $('#viewTab').addClass('active');
+                    $('#editTab').removeClass('active');
                 });
+                $('#editTab').click(function () {
+                    $('#userProfile').hide();
+                    $('#editProfileSection').show();
+                    $('#editTab').addClass('active');
+                    $('#viewTab').removeClass('active');
+                }); // Asegurarse de que 'Mirar' esté activo al cargar la página 
+                $('#viewTab').click();
                 $('#logout').off('click').on('click', function () {
                     logout();
                 });
