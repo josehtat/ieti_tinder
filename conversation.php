@@ -44,9 +44,9 @@
         <div id="logo">
             <?php echo "<img src='profilePictures/'$image_path[0].jpg alt ='Foto de perfil'>" ?>
         </div>
-        <div id="menuButtons">
-            <button id="viewButton">Conversación</button>
-            <button id="editButton">Perfil</button>
+        <div id="menuTabs">
+            <button class="tablink" id="viewTab">Conversación</button>
+            <button class="tablink" id="editTab">Perfil</button>
         </div>
     </header>
     <main id="mainProfile">
@@ -85,15 +85,19 @@
     <script>
         $(document).ready(function () {
             var $carousel = $('#carouselContainer .profileImage');
-            $('#editButton').off('click').on('click', function () {
-                console.log("Botón de editar clicado");
-                $('#userProfile').hide();
-                $('#editProfileSection').show();
-            });
-            $('#viewButton').off('click').on('click', function () {
-                $('#userProfile').show();
-                $('#editProfileSection').hide();
-            });
+            $('#viewTab').click(function () {
+                    $('#userProfile').show();
+                    $('#editProfileSection').hide();
+                    $('#viewTab').addClass('active');
+                    $('#editTab').removeClass('active');
+                });
+                $('#editTab').click(function () {
+                    $('#userProfile').hide();
+                    $('#editProfileSection').show();
+                    $('#editTab').addClass('active');
+                    $('#viewTab').removeClass('active');
+                }); // Asegurarse de que 'Mirar' esté activo al cargar la página 
+                $('#viewTab').click();
             $('#logout').off('click').on('click', function () {
                 logout();
             });

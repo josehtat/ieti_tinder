@@ -694,6 +694,10 @@ MARK:photos.php
     margin-top: 40px;
 }
 
+#mainPhotos h2 {
+    margin-top: 50px;
+}
+
 #photoGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

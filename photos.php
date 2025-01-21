@@ -20,7 +20,7 @@
     </header>
 
     <main id="mainPhotos">
-        <h2>Les meves fotos</h2>
+        <h2>Mis Fotos</h2>
         <div id="photoGrid">
             <?php
             $maxImages = 6;
@@ -47,7 +47,7 @@
                         $stmt = $pdo->prepare($query);
                         $stmt->bindParam(':id', $imageId);
                         if ($stmt->execute()) {
-                            echo "";
+                            echo "<script>window.location.href = 'photos.php';</script>";
                         } else {
                             echo "Error al eliminar la imagen.";
                         }
@@ -56,25 +56,21 @@
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['newPhoto']) && $_FILES['newPhoto']['error'] == UPLOAD_ERR_OK) {
                     // Si no se ha alcanzado el límite de imágenes, subir la nueva foto
-                    if ($totalImages < $maxImages) {
-                        $uploadDir = 'profilePictures/';
-                        $file_name = basename($_FILES['newPhoto']['name']);
-                        $uploadFile = $uploadDir . $file_name;
-                        if (move_uploaded_file($_FILES['newPhoto']['tmp_name'], $uploadFile)) {
-                            $query = "INSERT INTO pictures (email_user, path) VALUES (:email, :path)";
-                            $stmt = $pdo->prepare($query);
-                            $stmt->bindParam(':email', $_COOKIE['loggedUser']);
-                            $stmt->bindParam(':path', $uploadFile);
-                            if ($stmt->execute()) {
-                                echo "";
-                            } else {
-                                echo "Error en la ejecución de la consulta SQL.";
-                            }
+                    $uploadDir = 'profilePictures/';
+                    $file_name = basename($_FILES['newPhoto']['name']);
+                    $uploadFile = $uploadDir . $file_name;
+                    if (move_uploaded_file($_FILES['newPhoto']['tmp_name'], $uploadFile)) {
+                        $query = "INSERT INTO pictures (email_user, path) VALUES (:email, :path)";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->bindParam(':email', $_COOKIE['loggedUser']);
+                        $stmt->bindParam(':path', $uploadFile);
+                        if ($stmt->execute()) {
+                            echo "<script>window.location.href = 'photos.php';</script>";
                         } else {
-                            echo "Error al mover la foto a su destino final.";
+                            echo "Error en la ejecución de la consulta SQL.";
                         }
                     } else {
-                        echo "";
+                        echo "Error al mover la foto a su destino final.";
                     }
                 }
 
