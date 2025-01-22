@@ -74,10 +74,10 @@
                 <h3><a href="discober.php">Descubrir</a></h3>
             </li>
             <li>
-                <h3><a href="messages.php">Mensajes</a></h3>
+                <h3 id="markerPage"><a href="messages.php">Mensajes</a></h3>
             </li>
             <li>
-                <h3 id="markerPage"><a href="profile.php">Perfil</a></h3>
+                <h3><a href="profile.php">Perfil</a></h3>
             </li>
         </ul>
     </nav>
