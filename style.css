@@ -497,6 +497,7 @@ form button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 20px;
 }
 
 form button:hover {
@@ -580,7 +581,7 @@ MARK:message.php
     overflow-x: auto;
     padding: 15px 0;
     align-items: center;
-    scrollbar-width: none;
+    scrollbar-width: auto;
 }
 
 #matchBox::-webkit-scrollbar {

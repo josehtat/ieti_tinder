@@ -62,6 +62,8 @@
                 $age = $userInfo['age'];
                 $location = $userInfo['location'];
 
+                list($latitude, $longitude) = explode(" ", $location);
+
                 $queryImages = "SELECT path FROM pictures WHERE email_user = :mail";
                 $queryImgs = $pdo->prepare($queryImages);
                 $queryImgs->bindParam(':mail', $_COOKIE['loggedUser']);
@@ -125,35 +127,42 @@
                 </select>
                 </select>
 
-                <div class="input-row" id="locationInput">
-                    <div class="input-group">
-                        <label for="latitude">Latitud</label>
-                        <input type="text" id="latitude" name="latitude" required readonly>
-                    </div>
+                <label for="latitude">Latitud</label>
+                <input type="text" id="latitude" name="latitude" value="<?php echo $latitude; ?>" required readonly>
 
-                    <div class="input-group">
-                        <label for="longitude">Longitud</label>
-                        <input type="text" id="longitude" name="longitude" required readonly>
-                    </div>
-                </div>
+                <label for="longitude">Longitud</label>
+                <input type="text" id="longitude" name="longitude" value="<?php echo $longitude; ?>" required readonly>
+
 
                 <div id="map" style="height: 300px; width: 100%;"></div>
 
                 <button type="submit" id="saveButton">Guardar</button>
+
+                <?php
+                echo 'Latitud: ' . $_POST['latitude'] . '<br>';
+                echo 'Longitud: ' . $_POST['longitude'] . '<br>';
+
+                ?>
             </form>
             <?php
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 try {
+                    // Obtener los valores del formulario
                     $newName = $_POST['nameProfile'] ?? '';
                     $newSurname = $_POST['surnameProfile'] ?? '';
                     $newAlias = $_POST['aliasProfile'] ?? '';
                     $newGender = $_POST['genderProfile'] ?? '';
                     $newOrientation = $_POST['orientationProfile'] ?? '';
-
+                    $newLatitude = $_POST['latitude'] ?? '';
+                    $newLongitude = $_POST['longitude'] ?? '';
+                    $newLocation = $newLatitude . ' ' . $newLongitude;
+            
+                    // Crear la consulta de actualización
                     $queryText = "UPDATE users SET ";
                     $params = [];
 
+                    // Comprobar y agregar los valores a la consulta
                     if ($newName !== '') {
                         $queryText .= "name = :name, ";
                         $params[':name'] = $newName;
@@ -179,17 +188,26 @@
                         $params[':orientation'] = $newOrientation;
                     }
 
+                    if ($newLocation !== '') {
+                        $queryText .= "location = :location, ";
+                        $params[':location'] = $newLocation;
+                    }
+
+                    // Eliminar la coma y el espacio al final de la consulta
                     $queryText = rtrim($queryText, ', ');
 
+                    // Añadir la condición WHERE
                     $queryText .= " WHERE email_user = :email";
                     $params[':email'] = $_COOKIE['loggedUser'];
 
+                    // Preparar y ejecutar la consulta
                     $stmt = $pdo->prepare($queryText);
                     foreach ($params as $key => &$value) {
                         $stmt->bindParam($key, $value);
                     }
                     $stmt->execute();
 
+                    // Verificar si la actualización tuvo éxito
                     if ($stmt->rowCount() > 0) {
                         echo "Datos actualizados correctamente.";
                     } else {
@@ -200,6 +218,7 @@
                     echo "Error al actualizar los datos: " . $e->getMessage();
                 }
             }
+
 
 
             ?>
@@ -224,7 +243,7 @@
     </nav>
 
     <script>
-        // Crear un ícono personalizado
+        // Crear un icono personalizado para el marcador
         const customIcon = L.icon({
             iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // URL de la imagen del ícono
             iconSize: [30, 30], // Tamaño del ícono [ancho, alto]
@@ -233,15 +252,18 @@
         });
 
         // Configurar el mapa
-        const map = L.map('map').setView([0, 0], 2); // Vista inicial del mapa
+        const userLat = <?php echo floatval(explode(' ', $location)[0]); ?>;
+        const userLng = <?php echo floatval(explode(' ', $location)[1]); ?>;
+
+        const map = L.map('map').setView([userLat, userLng], 13); // Vista inicial del mapa
+
+        // Crear un marcador inicial en la ubicación del usuario (se puede eliminar si no se necesita)
+        let marker = L.marker([userLat, userLng], { icon: customIcon }).addTo(map);
 
         // Agregar un mapa base (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
         }).addTo(map);
-
-        // Crear marcador vacío
-        let marker;
 
         // Detectar clics en el mapa
         map.on('click', function (e) {
@@ -252,15 +274,15 @@
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
 
-            // Mover o crear el marcador con el ícono personalizado
+            // Mover el marcador o crear uno nuevo en la ubicación seleccionada
             if (marker) {
+                // Mover el marcador existente
                 marker.setLatLng(e.latlng);
             } else {
+                // Crear un nuevo marcador si aún no existe
                 marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
             }
-
         });
-
 
 
         $(document).ready(function () {
