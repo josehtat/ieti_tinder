@@ -36,71 +36,27 @@
                     exit;
                 }
 
-                $queryText1 = "SELECT * FROM interactions WHERE id_user = :mail AND like_user = 1 AND like_receptor = 1;";
+                $queryText = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
 
                 try {
-                    $queryText1 = $pdo->prepare($queryText1);
-                    $queryText1->bindParam(':mail', $_COOKIE['loggedUser']);
-                    $queryText1->execute();
+                    $queryInteractions = $pdo->prepare($queryText);
+                    $queryInteractions->bindParam(':mail', $_COOKIE['loggedUser']);
+                    $queryInteractions->execute();
                 } catch (PDOException $e) {
                     echo "Error de SQL<br>\n";
-                    $e = $queryText1->errorInfo();
+                    $e = $queryInteractions->errorInfo();
                     if ($e[0] != '00000') {
                         echo "\nPDO::errorInfo():\n";
                         die("Error accedint a dades: " . $e[2]);
                     }
                 }
 
-                if ($queryText1->rowCount() <= 0) {
-                    $queryText2 = "SELECT * FROM interactions WHERE id_receptor = :mail AND like_user = 1 AND like_receptor = 1;";
-
-                    try {
-                        $queryText2 = $pdo->prepare($queryText2);
-                        $queryText2->bindParam(':mail', $_COOKIE['loggedUser']);
-                        $queryText2->execute();
-                    } catch (PDOException $e) {
-                        echo "Error de SQL<br>\n";
-                        $e = $queryText2->errorInfo();
-                        if ($e[0] != '00000') {
-                            echo "\nPDO::errorInfo():\n";
-                            die("Error accedint a dades: " . $e[2]);
-                        }
-                    }
-
-                    if ($queryText2->rowCount() <= 0) {
-                        echo "<p>Hay gente esperando para hablar contigo.<br> Devuelveles el like para comenzar a xatejar.</p>";
-                    } else {
-                        foreach ($queryText2 as $row) {
-                            $queryUserText = "SELECT * FROM users WHERE email_user = :mail;";
-
-                            try {
-                                $queryUser = $pdo->prepare($queryUserText);
-                                $queryUser->bindParam(':mail', $row['id_user']);
-                                $queryUser->execute();
-                            } catch (PDOException $e) {
-                                echo "Error de SQL<br>\n";
-                                $e = $queryUser->errorInfo();
-                                if ($e[0] != '00000') {
-                                    echo "\nPDO::errorInfo():\n";
-                                    die("Error accedint a dades: " . $e[2]);
-                                }
-                            }
-
-                            foreach ($queryUser as $rowUser) {
-                                echo "<div class='match'>
-                                        <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
-                                        <p>" . $rowUser['name'] . "</p>
-                                    </div>";
-                            }
-                        }
-                    }
-
-                } else {
-                    foreach ($queryText1 as $row) {
-                        $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
+                if ($queryInteractions->rowCount() > 0) {
+                    foreach ($queryInteractions as $row) {
+                        $queryText = "SELECT * FROM users WHERE email_user = :mail;";
 
                         try {
-                            $queryUser = $pdo->prepare($queryUser);
+                            $queryUser = $pdo->prepare($queryText);
                             $queryUser->bindParam(':mail', $row['id_receptor']);
                             $queryUser->execute();
                         } catch (PDOException $e) {
@@ -119,6 +75,8 @@
                                 </div>";
                         }
                     }
+                } else {
+                    echo "<p>Hay gente esperando a hablar contigo.<br> Devuelve los likes para comenzar a hablar.</p>\n";
                 }
 
                 $numMatches = 0;
@@ -150,8 +108,8 @@
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
                         echo "<div class='messageUser'>
-                            <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
-                            <div class='messageInfo'>
+                            <img src='profilePictures/egil1.jpg' alt='Foto de perfil'>
+                                    <div class='messageInfo' onclick='window.location.href = \"conversation.php?mail=" . htmlspecialchars($row['id_user']) . "\"'>
                                 <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
                                 <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
                                 <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
@@ -159,7 +117,7 @@
                           </div>";
                     }
                 } else {
-                    echo "<p>No hay mensajes disponibles. Empieza una conversación ahora.</p>";
+                    echo "<p>No hay mensajes disponibles.<br> Empieza una conversación ahora.</p>";
                 }
                 ?>
             </div>
