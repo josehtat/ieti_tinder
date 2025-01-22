@@ -157,7 +157,7 @@
         }
 
         function findUserResult(logRes) {
-            console.log(logRes);
+            // console.log(logRes);
             if (logRes.status == 0) {
                 if (logRes.data.length == 0) {
                     $("#dontProfile").text('No hay perfiles disponibles');
