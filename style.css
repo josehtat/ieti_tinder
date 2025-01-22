@@ -40,6 +40,11 @@ MARK:discober.php
     border-radius: 0px 0px 8px 8px;
 }
 
+
+#mainDiscober {
+    height: calc(100vh - 18vh);
+}
+
 #matchDiscoberNotFound {
     position: relative;
     width: 100%;
@@ -53,21 +58,26 @@ MARK:discober.php
     height: 100%;
 }
 
-#dataProfileMacth {
+
+#dataProfileMatch {
     position: absolute;
-    top: 25px;
+    bottom: 150px;
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
 }
 
-#dataProfileMacth p {
+
+#dataProfileMatch p {
+
     margin: unset;
     padding: unset;
     color: #e1e1e1;
-    text-shadow: 1px 1px 2px black;
+    text-shadow: 2px 2px 3px black;
     font-size: 32px;
+    padding: 10px;
 }
+
 
 #imgProfileMacth {
     font-size: 32px;
@@ -83,9 +93,9 @@ MARK:discober.php
     align-items: center;
 }
 
-#imgProfileMacth img {
+#imgProfileMatch img {
     width: 100%;
-    height: 730px;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.8);
@@ -169,6 +179,7 @@ MARK:login.php
     background-color: unset;
     box-shadow: unset;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -177,20 +188,25 @@ MARK:login.php
 .login-container {
     background-color: #F4F4F4;
     padding: 30px;
-    border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 430px;
+    height: 100%;
     text-align: center;
 }
 
-.login-container h2 {
-    font-size: 24px;
+.login-container h1 {
+    margin-top: 12rem !important;
+    color: #7B1FA2;
+    text-align: center;
+    margin: 0 0 0.5rem;
 }
 
-.login-container h3 {
-    margin-bottom: 20px;
-    font-size: 18px;
+.login-container h2 {
+    color: #666;
+    text-align: center;
+    font-size: 1.1rem;
+    margin: 0 0 2rem;
 }
 
 .login-container label {
@@ -218,6 +234,10 @@ MARK:login.php
 
 .login-container .inputError {
     border: 2px solid red !important;
+}
+
+.login-container input {
+    box-sizing: border-box;
 }
 
 .login-container #error-message {
@@ -446,6 +466,29 @@ MARK: profile.php
     color: #ccc;
 }
 
+#carouselDots {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.carouselDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    text-shadow: 2px 2px 3px black;
+    margin: 0 5px;
+}
+
+.carouselDot.active {
+    background-color: #333;
+}
+
 .profileImage {
     width: 100%;
     max-width: 400px;
@@ -588,6 +631,12 @@ MARK:message.php
     display: none;
 }
 
+#matchBox>p {
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
 .match {
     flex-shrink: 0;
     width: 200px;
@@ -626,6 +675,12 @@ MARK:message.php
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+#messageBox>p {
+    width: 100%;
+    height: auto;
+    text-align: center;
 }
 
 .messageUser {
@@ -844,7 +899,168 @@ MARK:Control de errores
     color: #ffffff;
 }
 
+
 /*EStilos del Google Maps*/
 #locationInput {
     display: none;
+
+/* Popup styling */
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#popup button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#popup button:hover {
+    background: #0056b3;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/*-------------------------------
+MARK: resgister.php
+*/
+
+#register-html {
+    height: auto;
+}
+
+.register-body {
+    overflow-y: auto;
+}
+
+.register-container {
+    background: white;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 430px;
+}
+
+
+.register-container h1 {
+    color: #7B1FA2;
+    text-align: center;
+    margin: 0 0 0.5rem;
+}
+
+.register-container h2 {
+    color: #666;
+    text-align: center;
+    font-size: 1.1rem;
+    margin: 0 0 2rem;
+}
+
+.register-container .input-group {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.register-container .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.register-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.register-container input,
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+
+.register-container input:focus,
+select:focus {
+    outline: none;
+    border-color: #7B1FA2;
+    box-shadow: 0 0 0 3px rgba(123, 31, 162, 0.1);
+}
+
+.register-container button {
+    width: 100%;
+    padding: 1rem;
+    background: #7B1FA2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.register-container button:hover {
+    background: #6a1b8c;
+}
+
+.register-container .message {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.register-container .error-group {
+    color: red;
+    display: flex;
+    justify-content: center;
+}
+
+.register-container .success {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.register-container .login-link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.register-container .login-link a {
+    color: #7B1FA2;
+    text-decoration: none;
+}
+
+.register-container .login-link a:hover {
+    text-decoration: underline;
 }
