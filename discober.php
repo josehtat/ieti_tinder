@@ -12,7 +12,10 @@
 
 <body id="bodyDiscober">
     <script>
-        <?php if (!isset($_COOKIE['loggedUser'])) { ?>
+        <?php
+        session_start();
+        unset($_SESSION['userProfiles']);
+        if (!isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/";
         <?php } ?>
     </script>
@@ -22,16 +25,22 @@
     </header>
 
     <main id="mainDiscober">
+        <div id="overlay"></div>
+        <div id="popup">
+            <p id="popup-message"></p>
+            <button id="close-btn">Seguir descubriendo</button>
+            <button id="redirect-btn">Ir a la conversación</button>
+        </div>
         <div id="matchDiscoberNotFound">
             <h1 id="dontProfile">No hay perfiles disponibles</h1>
         </div>
         <div id="matchDiscober">
-            <div id="dataProfileMacth">
-                <p id="nameProfileMacth">Raul</p>
-                <p id="ageProfileMacth">34</p>
+            <div id="dataProfileMatch">
+                <p id="nameProfileMatch"></p>
+                <p id="ageProfileMatch"></p>
             </div>
-            <div id="imgProfileMacth">
-                <img src="profilePictures/rvidal2.jpg" alt="perfil">
+            <div id="imgProfileMatch">
+                <img src="" alt="perfil">
             </div>
             <div id="optionsMatch">
                 <ul>
@@ -66,83 +75,142 @@
     </nav>
 
     <script>
-        $foundUser = [];
+        var foundUser = [];
+        var cont = 0;
 
-        function findUser() {
-            var storedUserProfiles = localStorage.getItem('userProfiles');
-            if (storedUserProfiles) {
-                var userProfiles = JSON.parse(storedUserProfiles);
-                var logRes = { status: 0, data: userProfiles };
-                // Update the UI with the stored data
-                // You can loop through the userProfiles array and display the data as needed
-                findUserResult(logRes);
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
             }
+            return "";
+        }
 
-            if (!storedUserProfiles) {
-                var parameters = {};
-
-                $.ajax({
-                    data: parameters,
-                    url: 'askProfiles.php',
-                    type: 'POST',
-                    success: findUserResult,
-                    dataType: 'json'
-                });
+        function logMessage(errorCode, message) {
+            var text = "";
+            switch (errorCode) {
+                case 0:
+                    text = "[INFO - discober.php] " + message;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    text = "[ERROR - discober.php] " + message;
+                    break;
             }
+            var logParameters = {
+                text: text
+            };
+
+            $.ajax({
+                data: logParameters,
+                url: 'logs.php',
+                type: 'POST',
+                success: logResult,
+                dataType: 'json'
+            });
+        }
+
+        function logResult(logRes) {
+            console.log("logResult: ");
+            console.log(logRes);
+        }
+
+        function findUser(reaction) {
+            var parameters = {
+                reaction: reaction
+            };
+            console.log(parameters);
+
+            $.ajax({
+                data: parameters,
+                url: 'askProfiles.php',
+                type: 'POST',
+                success: findUserResult,
+                error: findUserResult,
+                dataType: 'json'
+            });
         }
 
         function likeFunction(reaction) {
 
             //Parametros tienen que ser la reaction y la id del perfil
-            var parameters = {
+            var reactParameters = {
                 reaction: reaction,
-                findUser: $("#nameProfileMacth").data('id')
+                findUser: $("#nameProfileMatch").data('id')
             };
 
-            console.log(parameters);
+            console.log(reactParameters);
 
             $.ajax({
-                data: parameters,
+                data: reactParameters,
                 url: 'reaction.php',
                 type: 'POST',
                 success: reactionResult,
-                error: reactionResult,
                 dataType: 'json'
             });
         }
 
-        function reactionResult(logRes) {
-            console.log(logRes);
-            if (logRes.status == 0) {
-                var storedUserProfiles = localStorage.getItem('userProfiles');
-                var userProfiles = JSON.parse(storedUserProfiles);
-                userProfiles.shift();
-                localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
-                findUser();
+        function reactionResult(reactRes) {
+            //console.log("ReactionResult: ");
+            //console.log(reactRes);
+            logMessage(reactRes.status, reactRes.data);
+            if (reactRes.status == 0) {
+                if (reactRes.match == true) {
+                    const message = reactRes.data;
+                    if (message) {
+                        // Set the message
+                        $('#popup-message').text(message);
+
+                        // Show the popup and overlay
+                        $('#popup, #overlay').fadeIn();
+
+                        // Close button
+                        $('#close-btn').click(function () {
+                            $('#popup, #overlay').fadeOut();
+                        });
+
+                        // Redirect button
+                        $('#redirect-btn').click(function () {
+                            window.location.href = 'messages.php'; // Change to your desired URL
+                        });
+                    }
+                }
+                findUser(true);
             }
         }
 
         function findUserResult(logRes) {
-            console.log(logRes);
+            // console.log(logRes);
             if (logRes.status == 0) {
                 if (logRes.data.length == 0) {
                     $("#dontProfile").text('No hay perfiles disponibles');
                     $("#matchDiscoberNotFound").toggle();
                     $("#matchDiscober").toggle();
-                    localStorage.removeItem("userProfiles");
+                    logMessage(logRes.status, getCookie("loggedUser") + " no ha encontrado más perfiles");
                 } else {
-                    var foundUser = logRes.data[0];
-                    console.log(foundUser);
-                    $("#nameProfileMacth").text(foundUser.name).data('id', foundUser.email);
-                    $("#ageProfileMacth").text(foundUser.age);
-                    $("#imgProfileMacth").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
-                    // Remove the first element from the logRes.data array
-                    localStorage.setItem('userProfiles', JSON.stringify(logRes.data));
+                    logMessage(logRes.status, getCookie("loggedUser") + " ha encontrado un perfil");
+                    foundUser = logRes.data[0];
+                    //console.log(foundUser);
+                    $("#nameProfileMatch").text(foundUser.name).data('id', foundUser.email);
+                    $("#ageProfileMatch").text(foundUser.age);
+                    $("#imgProfileMatch").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                 }
+            } else {
+                logMessage(logRes.status, logRes.data);
             }
         }
 
-        findUser();
+        findUser(false);
 
         $("#dislikeButton").click(function () {
             likeFunction('dislike');
