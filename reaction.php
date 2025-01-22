@@ -54,8 +54,8 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
 
     if ($queryReaction->rowCount() > 0) {
         $queryText = "UPDATE interactions " .
-            "SET like_receptor = :reaction " .
-            "SET date = CURRENT_TIMESTAMP() " .
+            "SET like_receptor = :reaction, " .
+            "date = CURRENT_TIMESTAMP() " .
             "WHERE id_user = :findUser AND id_receptor = :mail;";
     } else {
         $queryText = "INSERT INTO interactions " .

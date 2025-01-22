@@ -12,7 +12,7 @@ function createFileWithDate($text)
     // Definir el nombre del archivo con la fecha actual y la ruta completa
     $file = $logsFolder . $date . '.txt';
 
-    $logText = '[' . date('Y-m-d H:i:s') . '] ' . $text . '.';
+    $logText = '[' . date('Y-m-d H:i:s') . '] ' . $text;
 
     // Siempre escribir el texto en el archivo (agregar al final)
     file_put_contents($file, $logText . PHP_EOL, FILE_APPEND);
