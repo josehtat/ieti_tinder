@@ -57,7 +57,18 @@
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['newPhoto']) && $_FILES['newPhoto']['error'] == UPLOAD_ERR_OK) {
                     // Si no se ha alcanzado el límite de imágenes, subir la nueva foto
                     $uploadDir = 'profilePictures/';
-                    $file_name = basename($_FILES['newPhoto']['name']);
+                    $originalName = $_FILES['newPhoto']['name'];
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $query = "SELECT id FROM pictures ORDER BY id DESC; ";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute();
+                    $imageId = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    $mailInArray = explode('@', $_COOKIE['loggedUser']);
+                    $imageName = $mailInArray[0] . "" . $imageId['id'] . "." . $extension;
+
+                    $file_name = basename($imageName);
                     $uploadFile = $uploadDir . $file_name;
                     if (move_uploaded_file($_FILES['newPhoto']['tmp_name'], $uploadFile)) {
                         $query = "INSERT INTO pictures (email_user, path) VALUES (:email, :path)";
