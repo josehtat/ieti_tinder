@@ -81,7 +81,12 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
     }
 
     if ($queryInsertReaction->rowCount() > 0) {
-        $logMessage = "Reacción enviada";
+        if ($reaction == 2) {
+            $logMessage = $_COOKIE['loggedUser'] . " ha enviado un Like a " . $findUser;
+        } else {
+            $logMessage = $_COOKIE['loggedUser'] . " ha enviado un Dislike a " . $findUser;
+        }
+        
         //Comprobar si el usuario ha recibido una reacción antes
         $queryText = "SELECT * FROM interactions " .
             "WHERE (id_user = :mail OR id_receptor = :mail) " .
