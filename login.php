@@ -12,13 +12,47 @@
 
 <body id="loginIndex">
     <script>
+        function logMessage(errorCode, message) {
+            var text = "";
+            switch (errorCode) {
+                case 0:
+                    text = "[INFO - login.php] " + message;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    text = "[ERROR - login.php] " + message;
+                    break;
+            }
+            var logParameters = {
+                text: text
+            };
+
+            $.ajax({
+                data: logParameters,
+                url: 'logs.php',
+                type: 'POST',
+                success: logResult,
+                dataType: 'json'
+            });
+        }
+
+        function logResult(logRes) {
+            console.log("logResult: ");
+            console.log(logRes);
+        }
+
+    </script>
+
+    <script>
         <?php
         $status = 0;
         $logMessage = "";
 
         if (isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/discober.php";
-        <?php 
+            <?php
         } else {
             if (isset($_POST['mail']) && isset($_POST['password'])) {
                 $mail = $_POST['mail'];
@@ -50,20 +84,30 @@
                 if ($queryUser->rowCount() !== 1) {
                     $status = 1;
                     $logMessage = "Usuario no encontrado o datos incorrectos.";
+                    ?>
+                    logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                    <?php
+
                 } else {
                     $user = $queryUser->fetch(PDO::FETCH_ASSOC);
 
                     if ($user['account_status'] === 'to verify') {
                         $status = 3;
                         $logMessage = "Cuenta pendiente de verificación. Por favor, verifica tu correo.";
+                        ?>
+                        logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                        <?php
                     } elseif ($user['account_status'] === 'inactive') {
                         $status = 4;
                         $logMessage = "Cuenta inactiva. Contacta al soporte.";
+                        ?>
+                        logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                        <?php
                     } elseif ($user['account_status'] === 'active') {
                         // Verificar contraseña
                         if ($user['password_user'] === $hashedPassword) {
-                            setcookie("loggedUser", $user['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
                             setcookie("userRole", $user['role'], time() + 1000 * 60 * 60 * 24 * 7); // Guardar el rol del usuario
+                            setcookie("loggedUser", $user['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
 
                             if ($user['role'] === 'admin') { ?>
                                 window.location.href = "/admin/index.php";
@@ -75,6 +119,9 @@
                         } else {
                             $status = 2;
                             $logMessage = "Contraseña incorrecta.";
+                            ?>
+                            logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                            <?php
                         }
                     }
                 }
