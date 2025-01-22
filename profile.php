@@ -96,13 +96,13 @@
             <h3></h3>
             <form id="editForm" method="post">
                 <label for="nameProfile">Nombre:</label>
-                <input type="text" id="nameProfile" name="nameProfile" value="<?php echo $name; ?>">
+                <input type="text" id="nameProfile" name="nameProfile" value="<?php echo $name; ?>" required>
 
                 <label for="surnameProfile">Apellido:</label>
-                <input type="text" id="surnameProfile" name="surnameProfile" value="<?php echo $surname; ?>">
+                <input type="text" id="surnameProfile" name="surnameProfile" value="<?php echo $surname; ?>" required>
 
                 <label for="aliasProfile">Alias:</label>
-                <input type="text" id="aliasProfile" name="aliasProfile" value="<?php echo $alias; ?>">
+                <input type="text" id="aliasProfile" name="aliasProfile" value="<?php echo $alias; ?>" required>
 
                 <label for="genderProfile">Genero:</label>
                 <select id="genderProfile" name="genderProfile">
@@ -137,12 +137,6 @@
                 <div id="map" style="height: 300px; width: 100%;"></div>
 
                 <button type="submit" id="saveButton">Guardar</button>
-
-                <?php
-                echo 'Latitud: ' . $_POST['latitude'] . '<br>';
-                echo 'Longitud: ' . $_POST['longitude'] . '<br>';
-
-                ?>
             </form>
             <?php
 
@@ -150,77 +144,62 @@
                 try {
                     // Obtener los valores del formulario
                     $newName = $_POST['nameProfile'] ?? '';
-                    $newSurname = $_POST['surnameProfile'] ?? '';
+                    $newSurnames = $_POST['surnameProfile'] ?? '';
                     $newAlias = $_POST['aliasProfile'] ?? '';
                     $newGender = $_POST['genderProfile'] ?? '';
                     $newOrientation = $_POST['orientationProfile'] ?? '';
                     $newLatitude = $_POST['latitude'] ?? '';
                     $newLongitude = $_POST['longitude'] ?? '';
                     $newLocation = $newLatitude . ' ' . $newLongitude;
-            
-                    // Crear la consulta de actualización
+
+                    // Construir la consulta de actualización
                     $queryText = "UPDATE users SET ";
                     $params = [];
 
-                    // Comprobar y agregar los valores a la consulta
-                    if ($newName !== '') {
+                    if (!empty($newName)) {
                         $queryText .= "name = :name, ";
                         $params[':name'] = $newName;
                     }
-
-                    if ($newSurname !== '') {
-                        $queryText .= "surname = :surname, ";
-                        $params[':surname'] = $newSurname;
+                    if (!empty($newSurnames)) {
+                        $queryText .= "surnames = :surnames, ";
+                        $params[':surnames'] = $newSurnames;
                     }
-
-                    if ($newAlias !== '') {
+                    if (!empty($newAlias)) {
                         $queryText .= "alias = :alias, ";
                         $params[':alias'] = $newAlias;
                     }
-
-                    if ($newGender !== '') {
+                    if (!empty($newGender)) {
                         $queryText .= "sex = :gender, ";
                         $params[':gender'] = $newGender;
                     }
-
-                    if ($newOrientation !== '') {
+                    if (!empty($newOrientation)) {
                         $queryText .= "sex_orientation = :orientation, ";
                         $params[':orientation'] = $newOrientation;
                     }
-
-                    if ($newLocation !== '') {
+                    if (!empty($newLocation)) {
                         $queryText .= "location = :location, ";
                         $params[':location'] = $newLocation;
                     }
 
-                    // Eliminar la coma y el espacio al final de la consulta
+                    // Eliminar la coma final y añadir WHERE
                     $queryText = rtrim($queryText, ', ');
-
-                    // Añadir la condición WHERE
                     $queryText .= " WHERE email_user = :email";
                     $params[':email'] = $_COOKIE['loggedUser'];
 
                     // Preparar y ejecutar la consulta
                     $stmt = $pdo->prepare($queryText);
-                    foreach ($params as $key => &$value) {
-                        $stmt->bindParam($key, $value);
-                    }
-                    $stmt->execute();
+                    $stmt->execute($params);
 
-                    // Verificar si la actualización tuvo éxito
+                    // Verificar si se actualizaron filas
                     if ($stmt->rowCount() > 0) {
                         echo "Datos actualizados correctamente.";
                     } else {
-                        echo "No se ha podido actualizar los datos o no se realizaron cambios.";
+                        echo "No se realizaron cambios o no se encontró el usuario.";
                     }
-
                 } catch (PDOException $e) {
                     echo "Error al actualizar los datos: " . $e->getMessage();
                 }
             }
-
-
-
             ?>
 
             <button id="editPhotosButton" onclick="location.href = 'photos.php';">Modificar les meves fotos</button>
