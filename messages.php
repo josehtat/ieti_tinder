@@ -108,8 +108,8 @@
                 if ($stmt->rowCount() > 0) {
                     foreach ($stmt as $row) {
                         echo "<div class='messageUser'>
-                            <img src='profilePictures/rvidal2.jpg' alt='Foto de perfil'>
-                            <div class='messageInfo'>
+                            <img src='profilePictures/egil1.jpg' alt='Foto de perfil'>
+                                    <div class='messageInfo' onclick='window.location.href = \"conversation.php?mail=" . htmlspecialchars($row['id_user']) . "\"'>
                                 <p class='userName'>" . htmlspecialchars($row['id_user']) . "</p>
                                 <p class='lastMessage'>" . htmlspecialchars($row['message_user']) . "</p>
                                 <p class='messageDate'>" . htmlspecialchars($row['date']) . "</p>
