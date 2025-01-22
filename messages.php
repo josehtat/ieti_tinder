@@ -36,27 +36,27 @@
                     exit;
                 }
 
-                $queryText1 = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
+                $queryText = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
 
                 try {
-                    $queryText1 = $pdo->prepare($queryText1);
-                    $queryText1->bindParam(':mail', $_COOKIE['loggedUser']);
-                    $queryText1->execute();
+                    $queryInteractions = $pdo->prepare($queryText);
+                    $queryInteractions->bindParam(':mail', $_COOKIE['loggedUser']);
+                    $queryInteractions->execute();
                 } catch (PDOException $e) {
                     echo "Error de SQL<br>\n";
-                    $e = $queryText1->errorInfo();
+                    $e = $queryInteractions->errorInfo();
                     if ($e[0] != '00000') {
                         echo "\nPDO::errorInfo():\n";
                         die("Error accedint a dades: " . $e[2]);
                     }
                 }
 
-                if ($queryText1->rowCount() > 0) {
-                    foreach ($queryText1 as $row) {
-                        $queryUser = "SELECT * FROM users WHERE email_user = :mail;";
+                if ($queryInteractions->rowCount() > 0) {
+                    foreach ($queryInteractions as $row) {
+                        $queryText = "SELECT * FROM users WHERE email_user = :mail;";
 
                         try {
-                            $queryUser = $pdo->prepare($queryUser);
+                            $queryUser = $pdo->prepare($queryText);
                             $queryUser->bindParam(':mail', $row['id_receptor']);
                             $queryUser->execute();
                         } catch (PDOException $e) {
@@ -75,6 +75,8 @@
                                 </div>";
                         }
                     }
+                } else {
+                    echo "<p>Hay gente esperando a hablar contigo.<br> Devuelve los likes para comenzar a hablar.</p>\n";
                 }
 
                 $numMatches = 0;
@@ -115,7 +117,7 @@
                           </div>";
                     }
                 } else {
-                    echo "<p>No hay mensajes disponibles. Empieza una conversación ahora.</p>";
+                    echo "<p>No hay mensajes disponibles.<br> Empieza una conversación ahora.</p>";
                 }
                 ?>
             </div>
