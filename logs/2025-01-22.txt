@@ -5,3 +5,23 @@
 [2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha enviado un Like a fortiz@ieti.site
 [2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
 [2025-01-22 13:28:01] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.
+[2025-01-22 17:17:26] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:24:55] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:26:02] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:26:05] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:26:15] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:26:35] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:27:06] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:27:45] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:27:51] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:28:49] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:28:52] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:29:03] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:29:56] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:51:08] [INFO - discober.php] ltorres@ieti.site ha encontrado un perfil
+[2025-01-22 17:51:39] [INFO - login.php] Usuario admin@ieti.site se ha logueado correctamente.
+[2025-01-22 17:51:39] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
+[2025-01-22 17:52:29] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
+[2025-01-22 17:53:24] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
+[2025-01-22 17:53:52] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
+[2025-01-22 17:54:10] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
