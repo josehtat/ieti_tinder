@@ -903,6 +903,7 @@ MARK:Control de errores
 /*EStilos del Google Maps*/
 #locationInput {
     display: none;
+}
 
 /* Popup styling */
 #popup {
