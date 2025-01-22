@@ -5,3 +5,5 @@
 [2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha enviado un Like a fortiz@ieti.site
 [2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
 [2025-01-22 13:28:01] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.
+[2025-01-22 18:19:20] [INFO - discober.php] admin@ieti.site ha encontrado un perfil
+[2025-01-22 18:19:23] [INFO - profile.php] Usuario admin@ieti.site ha cerrado sesion correctamente.
