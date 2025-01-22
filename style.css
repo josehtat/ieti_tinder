@@ -79,12 +79,9 @@ MARK:discober.php
 }
 
 
-#imgProfileMacth {
+#imgProfileMatch {
     font-size: 32px;
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.9), 2px 2px 30px rgba(0, 0, 0, 0.7);
-}
-
-#perfilImgMatch {
     padding: 25px;
     height: 90%;
     overflow: hidden;
@@ -92,6 +89,7 @@ MARK:discober.php
     justify-content: center;
     align-items: center;
 }
+
 
 #imgProfileMatch img {
     width: 100%;
