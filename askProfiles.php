@@ -180,9 +180,21 @@ if (!isset($_SESSION['userProfiles'])) {
                     }
                 }
                 // Agregar la distancia a cada ubicación
-                foreach ($foundUserList as &$foundUser) {
+                foreach ($foundUserList as $key => &$foundUser) {
                     $foundUser['distance'] = haversine($location[0], $location[1], $foundUser['latitude'], $foundUser['longitude']);
                     $foundUser['pictures'] = array();
+                    //Remove from foundUserList if the distance is too big
+                    $maxDistance = 50000;
+                    if (isset($_POST['maxDistance'])) {
+                        
+                        $maxDistance = $_POST['maxDistance'];
+                    }
+                    echo $_POST['maxDistance'];
+
+                    if ($foundUser['distance'] > $maxDistance) {
+                        unset($foundUserList[$key]);
+                    }
+
 
                     $queryText = "SELECT * FROM pictures " .
                         "WHERE email_user = :findUser;";
