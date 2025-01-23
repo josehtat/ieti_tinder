@@ -70,8 +70,9 @@
 
                         foreach ($queryUser as $rowUser) {
                             echo "<div class='match'>
-                                    <img src='profilePictures/" . $rowUser['alias'] . "1.jpg'>
+                                    <img src=''.jpg'>
                                     <p>" . $rowUser['name'] . "</p>
+                                    <p class='matchMail'>" . $rowUser['email_user'] . "</p>
                                 </div>";
                         }
                     }

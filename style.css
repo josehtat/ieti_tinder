@@ -312,8 +312,9 @@ MARK: profile.php
 #headerProfile {
     position: fixed;
     top: 0;
-    width: 90%;
+    width: 100%;
     max-width: 450px;
+    font-size: 16px;
     display: flex;
     border-radius: 0px 0px 8px 8px;
     justify-content: space-between;
@@ -859,6 +860,10 @@ MARK:Control de errores
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     animation: fadeIn 5s forwards;
+}
+
+.matchMail {
+    display: hidden;
 }
 
 /* Animación para mostrar los mensajes */
