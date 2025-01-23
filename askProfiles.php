@@ -23,8 +23,14 @@ function haversine($lat1, $lon1, $lat2, $lon2)
     return $distance; // Retorna la distancia en kilómetros
 }
 
+
+$filter = false;
+if (isset($_POST['filter']) && $_POST['filter'] == true) {
+    $filter = true;
+}
+
 //Recoge cookie de userProfiles
-if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filter'] == false) || !isset($_POST['filter'])) {
+if (isset($_SESSION['userProfiles']) && ($filter == false)) {
     $status = 0;
     $foundUserList = $_SESSION['userProfiles'];
 
@@ -49,7 +55,8 @@ if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filt
     }
 }
 
-if (!isset($_SESSION['userProfiles']) || ((isset($_POST['filter']) && $_POST['filter'] == true) || !isset($_POST['filter']))) {
+
+if (!isset($_SESSION['userProfiles']) || $filter == false) {
     $foundUserList = array();
 
     try {
