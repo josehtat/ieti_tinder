@@ -43,7 +43,7 @@
         ?>
 
         <div id="backArrow">
-            <a href="messages.php" class="arrowLink">
+            <a href="messages.php" class="arrowLink" style="text-decoration: none;">
                 <span class="arrowLeft">&#x2190;</span>
             </a>
         </div>
@@ -74,7 +74,7 @@
                 $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 // Mostrar los mensajes
-                $last_time = null; // Para almacenar el último mensaje enviado
+                $last_time = null;
                 foreach ($messages as $message):
                     $sender = ($message['id_user'] == $_COOKIE['loggedUser']) ? 'sent' : 'received';
                     $message_time = strtotime($message['date']);
@@ -95,9 +95,16 @@
                         echo "<div class='date'>$formatted_date</div>";
                     }
 
-                    echo "<div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>";
+                    if ($sender == 'received') {
+                        echo "<div class='messageWithImage'>
+                                <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
+                                <div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>
+                              </div>";
+                    } else {
+                        echo "<div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>";
+                    }
 
-                    $last_time = $message_time; // Actualizamos la última hora
+                    $last_time = $message_time;
                 endforeach;
                 ?>
             </div>
@@ -133,7 +140,7 @@
 
                 if ($stmt->execute()) {
                     // Redirigir para recargar la página y mostrar el nuevo mensaje
-                    header("Location: conversation.php?mail=$receiver_email");
+                    echo "<script>window.location.href='conversation.php?mail=$receiver_email';</script>";
                     exit;
                 } else {
                     echo "Hubo un problema al enviar el mensaje.";
@@ -160,6 +167,7 @@
     </nav>
 
     <script>
+        
         $(document).ready(function () {
             var $carousel = $('#carouselContainer .profileImage');
             $('#viewTab').click(function () {

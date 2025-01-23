@@ -331,10 +331,13 @@ MARK: profile.php
 }
 
 #logo img {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     margin-right: 10px;
+    position: absolute;
+    top: 21px;
+    left: 45px;
 }
 
 #menuTabs {
@@ -344,8 +347,8 @@ MARK: profile.php
     border-radius: 8px 8px 0 0;
     overflow: hidden;
     z-index: 1;
-    position: fixed;
-    right: 554px;
+    position: absolute;
+    left: 132px;
 }
 
 .tablink {
@@ -757,6 +760,12 @@ MARK:conversation.php
     margin-top: 100px;
 }
 
+.profileImageConversation {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
 
 
 /* Estilos generales para la conversación */
@@ -771,10 +780,30 @@ MARK:conversation.php
     border-radius: 8px;
 }
 
+/* Estilos para los mensajes */
+.messageWithImage {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profileImageConversation {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.messageConversation {
+    background-color: #d6d4d4;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
 /* Estilos para los mensajes enviados */
 .messageConversation.sent {
     background-color: #D8BFD8;
-    ;
     /* Color de fondo de los mensajes enviados */
     margin-left: auto;
     margin-top: 10px;
@@ -788,11 +817,12 @@ MARK:conversation.php
 .messageConversation.received {
     background-color: #d6d4d4;
     margin-right: auto;
-    margin-top: 10px;
+    margin-top: 20px;
     padding: 10px;
     border-radius: 12px;
     max-width: 70%;
     word-wrap: break-word;
+    margin-left: 7px;
 }
 
 /* Para las fechas */
@@ -804,7 +834,13 @@ MARK:conversation.php
     margin-top: 20px;
 }
 
+.backArrow .arroowLink {
+    text-decoration: none;
+}
 
+.arrowLeft {
+    font-size: 45px;
+}
 /* Estilo del formulario de mensaje */
 #sendMessage form {
     display: flex;
