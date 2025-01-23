@@ -24,7 +24,7 @@ function haversine($lat1, $lon1, $lat2, $lon2)
 }
 
 //Recoge cookie de userProfiles
-if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filter'] == false)) {
+if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filter'] == false) || !isset($_POST['filter']) ) {
     $status = 0;
     $foundUserList = $_SESSION['userProfiles'];
 
