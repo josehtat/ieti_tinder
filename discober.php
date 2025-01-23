@@ -193,12 +193,12 @@
                         $('#popup, #overlay').fadeIn();
 
                         // Close button
-                        $('#close-btn').click(function() {
+                        $('#close-btn').click(function () {
                             $('#popup, #overlay').fadeOut();
                         });
 
                         // Redirect button
-                        $('#redirect-btn').click(function() {
+                        $('#redirect-btn').click(function () {
                             window.location.href = 'messages.php'; // Change to your desired URL
                         });
                     }
@@ -218,6 +218,10 @@
                 } else {
                     logMessage(logRes.status, getCookie("loggedUser") + " ha encontrado un perfil");
                     foundUser = logRes.data[0];
+                    if ($("#matchDiscoberNotFound").is(":visible")) {
+                        $("#matchDiscoberNotFound").toggle();
+                        $("#matchDiscober").toggle();
+                    }
                     //console.log(foundUser);
                     $("#nameProfileMatch").text(foundUser.name).data('id', foundUser.email);
                     $("#ageProfileMatch").text(foundUser.age);
@@ -230,21 +234,21 @@
 
         findUser(false);
 
-        $("#dislikeButton").click(function() {
+        $("#dislikeButton").click(function () {
             likeFunction('dislike');
-            setTimeout(function() {
+            setTimeout(function () {
                 toggleImage('dislike');
             }, 250);
 
         });
 
-        $("#likeButton").click(function() {
+        $("#likeButton").click(function () {
             likeFunction('like');
-            setTimeout(function() {
+            setTimeout(function () {
                 toggleImage('like');
             }, 250);
         });
-        $("#filterOptions p").click(function() {
+        $("#filterOptions p").click(function () {
             $("#filterOptionsList").toggle();
         });
 
@@ -304,16 +308,17 @@
         $maxAge.on("input", updateRange);
         updateRange();
 
-        $("#maxDistance").on("input", function() {
+        $("#maxDistance").on("input", function () {
             $("#maxDistanceValue").text($("#maxDistance").val());
         });
 
-        $("#filterButton").on("click", function() {
+        $("#filterButton").on("click", function () {
             const maxDistance = $("#maxDistance").val();
             const minAge = $("#minAge").val();
             const maxAge = $("#maxAge").val();
             var filterParameters = {
                 reaction: false,
+                filter: true,
                 maxDistance: maxDistance,
                 minAge: minAge,
                 maxAge: maxAge
@@ -329,12 +334,24 @@
             });
         });
 
-        $("#resetButton").on("click", function() {
+        $("#resetButton").on("click", function () {
             $("#maxDistance").val(50);
             $("#maxDistanceValue").text(50);
             $("#minAge").val(18);
             $("#maxAge").val(38);
-            findUser(false);
+            var filterParameters = {
+                reaction: false,
+                filter: true,
+            };
+
+            $.ajax({
+                data: filterParameters,
+                url: 'askProfiles.php',
+                type: 'POST',
+                success: findUserResult,
+                error: findUserResult,
+                dataType: 'json'
+            });
         });
     </script>
 </body>

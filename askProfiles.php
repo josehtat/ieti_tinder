@@ -24,7 +24,7 @@ function haversine($lat1, $lon1, $lat2, $lon2)
 }
 
 //Recoge cookie de userProfiles
-if (isset($_SESSION['userProfiles'])) {
+if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filter'] == false)) {
     $status = 0;
     $foundUserList = $_SESSION['userProfiles'];
 
@@ -49,7 +49,7 @@ if (isset($_SESSION['userProfiles'])) {
     }
 }
 
-if (!isset($_SESSION['userProfiles'])) {
+if (!isset($_SESSION['userProfiles']) || (isset($_POST['filter']) && $_POST['filter'] == true)) {
     $foundUserList = array();
 
     try {
@@ -183,15 +183,28 @@ if (!isset($_SESSION['userProfiles'])) {
                 foreach ($foundUserList as $key => &$foundUser) {
                     $foundUser['distance'] = haversine($location[0], $location[1], $foundUser['latitude'], $foundUser['longitude']);
                     $foundUser['pictures'] = array();
-                    //Remove from foundUserList if the distance is too big
-                    $maxDistance = 50000;
+
+                    $maxDistance = 50;
                     if (isset($_POST['maxDistance'])) {
-                        
                         $maxDistance = $_POST['maxDistance'];
                     }
-                    echo $_POST['maxDistance'];
+
+                    $minAge = 18;
+                    if (isset($_POST['minAge'])) {
+                        $minAge = $_POST['minAge'];
+                    }
+
+                    $maxAge = 38;
+                    if (isset($_POST['maxAge'])) {
+                        $maxAge = $_POST['maxAge'];
+                    }
 
                     if ($foundUser['distance'] > $maxDistance) {
+                        unset($foundUserList[$key]);
+                    }
+                    
+                    //Age must be be between minAge and maxAge
+                    if ($foundUser['age'] < $minAge || $foundUser['age'] > $maxAge) {
                         unset($foundUserList[$key]);
                     }
 
