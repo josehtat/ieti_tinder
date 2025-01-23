@@ -9,7 +9,6 @@
     <title>Conversación</title>
 </head>
 
-
 <body id="bodyConversation">
     <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
@@ -57,7 +56,7 @@
     </header>
     <main id="mainConversation">
         <div id="userConversation">
-            <div class="conversation">
+            <div class="conversation" id="messagesContainer">
                 <?php
                 // Obtener los mensajes entre el usuario logueado y el receptor
                 $query = "
@@ -139,7 +138,7 @@
                 $stmt->bindParam(':date', $date);
 
                 if ($stmt->execute()) {
-                    // Redirigir para recargar la página y mostrar el nuevo mensaje
+                    // Recargar la página para mostrar el nuevo mensaje
                     echo "<script>window.location.href='conversation.php?mail=$receiver_email';</script>";
                     exit;
                 } else {
@@ -167,8 +166,23 @@
     </nav>
 
     <script>
-        
         $(document).ready(function () {
+            function fetchMessages() {
+                $.ajax({
+                    url: 'fetch_messages.php',
+                    type: 'GET',
+                    data: { mail: '<?php echo $mail_receptor; ?>' },
+                    success: function (data) {
+                        $('#messagesContainer').html(data);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error al obtener mensajes: ' + error);
+                    }
+                });
+            }
+
+            setInterval(fetchMessages, 5000); // Actualiza cada 5 segundos
+
             var $carousel = $('#carouselContainer .profileImage');
             $('#viewTab').click(function () {
                 $('#userProfile').show();
@@ -181,14 +195,19 @@
                 $('#editProfileSection').show();
                 $('#editTab').addClass('active');
                 $('#viewTab').removeClass('active');
-            }); // Asegurarse de que 'Mirar' esté activo al cargar la página 
+            });
+
+            // Asegurarse de que 'Conversación' esté activo al cargar la página
             $('#viewTab').click();
             $('#logout').off('click').on('click', function () {
                 logout();
             });
-        });
 
+            // Llamar a fetchMessages al cargar la página
+            fetchMessages();
+        });
     </script>
+
 </body>
 
 </html>
