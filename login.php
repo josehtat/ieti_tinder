@@ -10,7 +10,6 @@
     <title>Login - Affinity</title>
 </head>
 
-
 <body id="loginIndex">
     <script>
         function logMessage(errorCode, message) {
@@ -51,6 +50,34 @@
         $status = 0;
         $logMessage = "";
 
+        // Handle verification
+        if (isset($_GET['validate'])) {
+            $email = $_GET['validate'];
+            
+            try {
+                $hostname = "localhost";
+                $dbname = "ieti_tinder";
+                $dbUsername = "ietitinder";
+                $pw = "tinder123";
+                $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+                
+                // Update user status to active
+                $updateStmt = $pdo->prepare("UPDATE users SET account_status = 'active' WHERE email_user = ? AND account_status = 'to verify'");
+                $updateStmt->execute([$email]);
+                
+                if ($updateStmt->rowCount() > 0) {
+                    $status = 0;
+                    $logMessage = "Account successfully verified! You can now login.";
+                } else {
+                    $status = 2;
+                    $logMessage = "Invalid verification link or account already verified.";
+                }
+            } catch (PDOException $e) {
+                $status = 4;
+                $logMessage = "Database error: " . $e->getMessage();
+            }
+        }
+
         if (isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/discober.php";
             <?php
@@ -73,7 +100,6 @@
 
                 // Consulta para obtener al usuario
                 $queryText = "SELECT * FROM users WHERE email_user = :mail;";
-
                 try {
                     $queryUser = $pdo->prepare($queryText);
                     $queryUser->bindParam(':mail', $mail);
@@ -108,15 +134,16 @@
                     } elseif ($user['account_status'] === 'active') {
                         // Verificar contraseña
                         if ($user['password_user'] === $hashedPassword) {
+                            setcookie("userRole", $user['role'], time() + 1000 * 60 * 60 * 24 * 7); // Guardar el rol del usuario
                             setcookie("loggedUser", $user['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
-                            $status = 0;
-                            $logMessage = "Usuario " . $user['email_user'] . " se ha logueado correctamente.";
-                            ?>
-                            logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
-                            setTimeout(function() {
+
+                            if ($user['role'] === 'admin') { ?>
+                                window.location.href = "/admin/index.php";
+                            <?php } else { ?>
                                 window.location.href = "/discober.php";
-                            }, 100);
-                            <?php
+                            <?php }
+                            $status = 0;
+                            $logMessage = "Usuario logueado correctamente.";
                         } else {
                             $status = 2;
                             $logMessage = "Contraseña incorrecta.";
@@ -136,38 +163,34 @@
         <h2>Un lugar para encontrar tu amor</h2>
 
         <div class="error-group">
-            <?php
-            if ($status > 0) { ?>
+            <?php if ($status > 0) { ?>
                 <p id="error-message"><?php echo $logMessage; ?></p>
             <?php } ?>
         </div>
 
         <form action="login.php" method="post" class="login-form" id="login">
-
             <div class="input-group">
                 <label for="mail">Email</label>
-                <input type="email" id="mail" name="mail" placeholder="ejemplo@ieti.site" <?php if ($status == 1)
-                    echo 'class="inputError"' ?> required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2)
-                    echo 'class="inputError"' ?> required>
-                </div>
+                <input type="email" id="mail" name="mail" placeholder="ejemplo@ieti.site" <?php if ($status == 1) echo 'class="inputError"'; ?> required>
+            </div>
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="pass1234" <?php if ($status == 2) echo 'class="inputError"'; ?> required>
+            </div>
 
-                <div class="submit-btn">
-                    <button type="submit">Iniciar sesión</button>
-                </div>
+            <div class="submit-btn">
+                <button type="submit">Iniciar sesión</button>
+            </div>
 
-                <div class="forgot-password">
-                    <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
-                </div>
+            <div class="forgot-password">
+                <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
+            </div>
 
-                <div class="register-link">
-                    <p><a href="/register.php">Crear una cuenta nueva</a></p>
-                </div>
-            </form>
-        </div>
-    </body>
+            <div class="register-link">
+                <p><a href="/register.php">Crear una cuenta nueva</a></p>
+            </div>
+        </form>
+    </div>
+</body>
 
-    </html>
+</html>

@@ -13,34 +13,6 @@
     $status = 0;
     $logMessage = "";
 
-    // Handle verification
-    if (isset($_GET['validate'])) {
-        $email = $_GET['validate'];
-        
-        try {
-            $hostname = "localhost";
-            $dbname = "ieti_tinder";
-            $dbUsername = "ietitinder";
-            $pw = "tinder123";
-            $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
-            
-            // Update user status to active
-            $updateStmt = $pdo->prepare("UPDATE users SET account_status = 'active' WHERE email_user = ? AND account_status = 'to verify'");
-            $updateStmt->execute([$email]);
-            
-            if ($updateStmt->rowCount() > 0) {
-                $status = 0;
-                $logMessage = "Account successfully verified! You can now login.";
-            } else {
-                $status = 2;
-                $logMessage = "Invalid verification link or account already verified.";
-            }
-        } catch (PDOException $e) {
-            $status = 4;
-            $logMessage = "Database error: " . $e->getMessage();
-        }
-    }
-
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
         $password = hash('sha256', $_POST['password']);
@@ -68,7 +40,7 @@
                 $logMessage = "Email already registered";
             } else {
                 // Create verification link with email
-                $verificationLink = "http://localhost/register.php?validate=" . urlencode($email);
+                $verificationLink = "http://tinder1.ieti.site/login.php?validate=" . urlencode($email);
                 $to = $email;
                 $subject = "Verify your Affinity account";
                 $message = "Welcome to Affinity!\n\nPlease click the following link to verify your account:\n" . $verificationLink;

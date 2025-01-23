@@ -213,8 +213,8 @@ MARK:discober.php
 }
 
 #nav h3 a:hover {
-    color: #FFC300;
-    border-bottom: 2px solid #FFC300;
+    color: #7B1FA2;
+    border-bottom: 2px solid #7B1FA2;
 }
 
 #nav h3#markerPage a {
@@ -367,8 +367,9 @@ MARK: profile.php
 #headerProfile {
     position: fixed;
     top: 0;
-    width: 90%;
+    width: 100%;
     max-width: 450px;
+    font-size: 16px;
     display: flex;
     border-radius: 0px 0px 8px 8px;
     justify-content: space-between;
@@ -744,6 +745,8 @@ MARK:message.php
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
 }
 
 .messageUser:hover {
@@ -823,7 +826,6 @@ MARK:photos.php
     border-radius: 45px;
     cursor: pointer;
     position: absolute;
-    top: 0;
     right: 0;
 }
 
@@ -913,6 +915,10 @@ MARK:Control de errores
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     opacity: 0;
     animation: fadeIn 5s forwards;
+}
+
+.matchMail {
+    display: hidden;
 }
 
 /* Animación para mostrar los mensajes */
