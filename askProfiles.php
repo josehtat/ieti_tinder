@@ -24,13 +24,12 @@ function haversine($lat1, $lon1, $lat2, $lon2)
 }
 
 
-$filter = false;
 if (isset($_POST['filter']) && $_POST['filter'] == true) {
-    $filter = true;
+    unset($_SESSION['userProfiles']);
 }
 
 //Recoge cookie de userProfiles
-if (isset($_SESSION['userProfiles']) && ($filter == false)) {
+if (isset($_SESSION['userProfiles'])) {
     $status = 0;
     $foundUserList = $_SESSION['userProfiles'];
 
@@ -56,7 +55,7 @@ if (isset($_SESSION['userProfiles']) && ($filter == false)) {
 }
 
 
-if (!isset($_SESSION['userProfiles']) || (isset($_SESSION['userProfiles']) && $filter == true)) {
+if (!isset($_SESSION['userProfiles'])) {
     $foundUserList = array();
 
     try {
@@ -69,7 +68,6 @@ if (!isset($_SESSION['userProfiles']) || (isset($_SESSION['userProfiles']) && $f
         echo "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
         exit;
     }
-
 
     //preparem i executem la consulta
     $queryText = "SELECT * FROM users " .
