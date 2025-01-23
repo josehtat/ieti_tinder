@@ -331,6 +331,16 @@ MARK: profile.php
     top: 0;
 }
 
+#logo img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: absolute;
+    top: 21px;
+    left: 45px;
+}
+
 #menuTabs {
     display: flex;
     justify-content: space-around;
@@ -338,6 +348,8 @@ MARK: profile.php
     border-radius: 8px 8px 0 0;
     overflow: hidden;
     z-index: 1;
+    position: absolute;
+    left: 132px;
 }
 
 .tablink {
@@ -730,6 +742,147 @@ MARK:message.php
 
 /*---------------------------*/
 /*
+MARK:conversation.php
+*/
+
+#bodyConversation {
+    width: 100%;
+    max-width: 460px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+#mainConversation {
+    margin-top: 100px;
+}
+
+.profileImageConversation {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+
+/* Estilos generales para la conversación */
+.conversation {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 20px;
+    padding-bottom: 20px;
+    max-height: 640px;
+    overflow-y: auto;
+    border-radius: 8px;
+}
+
+/* Estilos para los mensajes */
+.messageWithImage {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profileImageConversation {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.messageConversation {
+    background-color: #d6d4d4;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+/* Estilos para los mensajes enviados */
+.messageConversation.sent {
+    background-color: #D8BFD8;
+    /* Color de fondo de los mensajes enviados */
+    margin-left: auto;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+/* Estilos para los mensajes recibidos */
+.messageConversation.received {
+    background-color: #d6d4d4;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-wrap: break-word;
+    margin-left: 7px;
+}
+
+/* Para las fechas */
+.date {
+    font-size: 12px;
+    color: #888;
+    margin: 5px 0;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.backArrow .arroowLink {
+    text-decoration: none;
+}
+
+.arrowLeft {
+    font-size: 45px;
+}
+/* Estilo del formulario de mensaje */
+#sendMessage form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 270px;
+    position: absolute;
+    width: 100%;
+    margin: 0px auto;
+    left: 0;
+    bottom: 100px;
+}
+
+#sendMessage textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: none;
+    width: 100%;
+    height: 20px;
+    max-width: 381px;
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+#sendMessage button {
+    padding: 10px;
+    background-color: #D8BFD8;
+    color: black;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 405px;
+    margin: 0 auto;
+}
+
+#sendMessage button:hover {
+    background-color: #d3b4d3;
+    ;
+}
+
+/*---------------------------*/
+/*
 MARK:photos.php
 */
 
@@ -908,6 +1061,7 @@ MARK:Control de errores
 #locationInput {
     display: none;
 }
+
 /* Popup styling */
 #popup {
     display: none;
