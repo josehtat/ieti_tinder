@@ -39,25 +39,68 @@
                 $countStmt->execute();
                 $countResult = $countStmt->fetch(PDO::FETCH_ASSOC);
                 $totalImages = $countResult['total'];
-
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletePhoto'])) {
                     if ($totalImages > 1) {
                         $imageId = $_POST['deletePhoto'];
-                        $query = "DELETE FROM pictures WHERE id = :id";
-                        $stmt = $pdo->prepare($query);
-                        $stmt->bindParam(':id', $imageId);
-                        if ($stmt->execute()) {
-                            echo "<script>window.location.href = 'photos.php';</script>";
-                        } else {
-                            echo "Error al eliminar la imagen.";
+
+                        try {
+                            // Obtener la ruta de la imagen desde la base de datos
+                            $query = "SELECT path FROM pictures WHERE id = :id";
+                            $stmt = $pdo->prepare($query);
+                            $stmt->bindParam(':id', $imageId);
+                            $stmt->execute();
+                            $photo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                            if ($photo) {
+                                $filePath = $photo['path'];
+
+                                // Verificar si el archivo físico existe
+                                if (file_exists($filePath)) {
+                                    // Intentar eliminar el archivo físico
+                                    if (!unlink($filePath)) {
+                                        echo "Error al eliminar el archivo físico.";
+                                        exit;
+                                    }
+                                } else {
+                                    echo "El archivo físico no existe.";
+                                }
+
+                                // Eliminar la imagen de la base de datos
+                                $query = "DELETE FROM pictures WHERE id = :id";
+                                $stmt = $pdo->prepare($query);
+                                $stmt->bindParam(':id', $imageId);
+                                if ($stmt->execute()) {
+                                    echo "<script>window.location.href = 'photos.php';</script>";
+                                } else {
+                                    echo "Error al eliminar la imagen de la base de datos.";
+                                }
+                            } else {
+                                echo "La imagen no se encontró en la base de datos.";
+                            }
+                        } catch (PDOException $e) {
+                            echo "Error en la base de datos: " . $e->getMessage();
                         }
+                    } else {
+                        echo "Debe haber al menos una imagen.";
                     }
                 }
+
 
                 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['newPhoto']) && $_FILES['newPhoto']['error'] == UPLOAD_ERR_OK) {
                     // Si no se ha alcanzado el límite de imágenes, subir la nueva foto
                     $uploadDir = 'profilePictures/';
-                    $file_name = basename($_FILES['newPhoto']['name']);
+                    $originalName = $_FILES['newPhoto']['name'];
+                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+
+                    $query = "SELECT id FROM pictures ORDER BY id DESC; ";
+                    $stmt = $pdo->prepare($query);
+                    $stmt->execute();
+                    $imageId = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $mailInArray = explode('@', $_COOKIE['loggedUser']);
+                    $imageName = $mailInArray[0] . "" . $imageId['id'] . "." . $extension;
+
+                    $file_name = basename($imageName);
                     $uploadFile = $uploadDir . $file_name;
                     if (move_uploaded_file($_FILES['newPhoto']['tmp_name'], $uploadFile)) {
                         $query = "INSERT INTO pictures (email_user, path) VALUES (:email, :path)";

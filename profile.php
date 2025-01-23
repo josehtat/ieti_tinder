@@ -87,8 +87,8 @@
                 <div id="carouselDots">
                     <?php for ($i = 0; $i < count($images); $i++) { ?>
                         <span class="carouselDot <?php if ($i == 0) {
-                                                        echo 'active';
-                                                    } ?>"></span>
+                            echo 'active';
+                        } ?>"></span>
                     <?php } ?>
                 </div>
             </div>
@@ -276,7 +276,7 @@
             var $carousel = $('#carouselContainer .profileImage');
 
             function changeImage() {
-                $carousel.fadeOut('fast', function() {
+                $carousel.fadeOut('fast', function () {
                     $carousel.attr('src', images[cont]);
                     $carousel.fadeIn('fast');
                 });
@@ -291,20 +291,20 @@
                     cont = (cont - 1 + images.length) % images.length;
                     changeImage();
                 }); */
-                $carousel.off('click').on('click', function() {
+                $carousel.off('click').on('click', function () {
                     cont = (cont + 1) % images.length;
                     changeImage();
                     $('.carouselDot').removeClass('active');
                     $('.carouselDot').eq(cont).addClass('active');
                 });
-              
+
                 $('#viewTab').click(function () {
                     $('#userProfile').show();
                     $('#editProfileSection').hide();
                     $('#viewTab').addClass('active');
                     $('#editTab').removeClass('active');
                 });
-              
+
                 $('#editTab').click(function () {
                     $('#userProfile').hide();
                     $('#editProfileSection').show();
@@ -312,7 +312,7 @@
                     $('#viewTab').removeClass('active');
                 }); // Asegurarse de que 'Mirar' esté activo al cargar la página 
                 $('#viewTab').click();
-                $('#logout').off('click').on('click', function () {
+                $("#logout").click(function (event) {
                     logout();
                 });
             }
@@ -334,15 +334,43 @@
             function logoutResult(logRes) {
                 console.log(logRes);
                 if (logRes.status == 0) {
+                    logMessage(logRes.status, logRes.data);
+                    setTimeout(function() {
                     window.location.href = "/";
+                    }, 100);
                 }
             }
 
-            $(document).ready(function() {
-                $("#logout").click(function(event) {
-                    logout();
+            function logMessage(errorCode, message) {
+                var text = "";
+                switch (errorCode) {
+                    case 0:
+                        text = "[INFO - profile.php] " + message;
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        text = "[ERROR - profile.php] " + message;
+                        break;
+                }
+                var logParameters = {
+                    text: text
+                };
+
+                $.ajax({
+                    data: logParameters,
+                    url: 'logs.php',
+                    type: 'POST',
+                    success: logResult,
+                    dataType: 'json'
                 });
-            });
+            }
+
+            function logResult(logRes) {
+                console.log("logResult: ");
+                console.log(logRes);
+            }
 
             $('#editForm').on('submit', function (e) {
                 e.preventDefault(); var form = $(this);
@@ -350,14 +378,14 @@
                     type: 'POST',
                     url: '',
                     data: form.serialize(),
-                    success: function(response) {
+                    success: function (response) {
                         console.log('Formulario enviado correctamente');
                         $('#userProfile').show();
                         $('#editProfileSection').hide();
                         setupEventListeners();
                         window.location.href = "/profile.php";
                     },
-                    error: function(err) {
+                    error: function (err) {
                         console.log('Error en el envío del formulario: ', err);
                     }
                 });

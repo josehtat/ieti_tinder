@@ -76,6 +76,7 @@
 
     <script>
         var foundUser = [];
+        var cont = 0;
 
         function getCookie(cname) {
             let name = cname + "=";
@@ -91,6 +92,37 @@
                 }
             }
             return "";
+        }
+
+        function logMessage(errorCode, message) {
+            var text = "";
+            switch (errorCode) {
+                case 0:
+                    text = "[INFO - discober.php] " + message;
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                    text = "[ERROR - discober.php] " + message;
+                    break;
+            }
+            var logParameters = {
+                text: text
+            };
+
+            $.ajax({
+                data: logParameters,
+                url: 'logs.php',
+                type: 'POST',
+                success: logResult,
+                dataType: 'json'
+            });
+        }
+
+        function logResult(logRes) {
+            console.log("logResult: ");
+            console.log(logRes);
         }
 
         function findUser(reaction) {
@@ -129,8 +161,9 @@
         }
 
         function reactionResult(reactRes) {
-            console.log("ReactionResult: ");
-            console.log(reactRes);
+            //console.log("ReactionResult: ");
+            //console.log(reactRes);
+            logMessage(reactRes.status, reactRes.data);
             if (reactRes.status == 0) {
                 if (reactRes.match == true) {
                     const message = reactRes.data;
@@ -142,12 +175,12 @@
                         $('#popup, #overlay').fadeIn();
 
                         // Close button
-                        $('#close-btn').click(function() {
+                        $('#close-btn').click(function () {
                             $('#popup, #overlay').fadeOut();
                         });
 
                         // Redirect button
-                        $('#redirect-btn').click(function() {
+                        $('#redirect-btn').click(function () {
                             window.location.href = 'messages.php'; // Change to your desired URL
                         });
                     }
@@ -163,29 +196,33 @@
                     $("#dontProfile").text('No hay perfiles disponibles');
                     $("#matchDiscoberNotFound").toggle();
                     $("#matchDiscober").toggle();
+                    logMessage(logRes.status, getCookie("loggedUser") + " no ha encontrado más perfiles");
                 } else {
+                    logMessage(logRes.status, getCookie("loggedUser") + " ha encontrado un perfil");
                     foundUser = logRes.data[0];
-                    console.log(foundUser);
+                    //console.log(foundUser);
                     $("#nameProfileMatch").text(foundUser.name).data('id', foundUser.email);
                     $("#ageProfileMatch").text(foundUser.age);
                     $("#imgProfileMatch").html('<img src="' + foundUser.pictures[0] + '" alt="perfil">');
                 }
+            } else {
+                logMessage(logRes.status, logRes.data);
             }
         }
 
         findUser(false);
 
-        $("#dislikeButton").click(function() {
+        $("#dislikeButton").click(function () {
             likeFunction('dislike');
-            setTimeout(function() {
+            setTimeout(function () {
                 toggleImage('dislike');
             }, 250);
 
         });
 
-        $("#likeButton").click(function() {
+        $("#likeButton").click(function () {
             likeFunction('like');
-            setTimeout(function() {
+            setTimeout(function () {
                 toggleImage('like');
             }, 250);
         });

@@ -54,8 +54,8 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
 
     if ($queryReaction->rowCount() > 0) {
         $queryText = "UPDATE interactions " .
-            "SET like_receptor = :reaction " .
-            "SET date = CURRENT_TIMESTAMP() " .
+            "SET like_receptor = :reaction, " .
+            "date = CURRENT_TIMESTAMP() " .
             "WHERE id_user = :findUser AND id_receptor = :mail;";
     } else {
         $queryText = "INSERT INTO interactions " .
@@ -81,7 +81,12 @@ if (isset($_POST["reaction"]) && isset($_POST["findUser"])) {
     }
 
     if ($queryInsertReaction->rowCount() > 0) {
-        $logMessage = "Reacción enviada";
+        if ($reaction == 2) {
+            $logMessage = $_COOKIE['loggedUser'] . " ha enviado un Like a " . $findUser;
+        } else {
+            $logMessage = $_COOKIE['loggedUser'] . " ha enviado un Dislike a " . $findUser;
+        }
+        
         //Comprobar si el usuario ha recibido una reacción antes
         $queryText = "SELECT * FROM interactions " .
             "WHERE (id_user = :mail OR id_receptor = :mail) " .
