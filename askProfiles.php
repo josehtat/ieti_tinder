@@ -49,7 +49,7 @@ if (isset($_SESSION['userProfiles']) && (isset($_POST['filter']) && $_POST['filt
     }
 }
 
-if (!isset($_SESSION['userProfiles']) || (isset($_POST['filter']) && $_POST['filter'] == true || !isset($_POST['filter']))) {
+if (!isset($_SESSION['userProfiles']) || ((isset($_POST['filter']) && $_POST['filter'] == true) || !isset($_POST['filter']))) {
     $foundUserList = array();
 
     try {
