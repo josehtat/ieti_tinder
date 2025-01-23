@@ -89,11 +89,15 @@
 
                         // Obtener información del usuario y renderizar
                         foreach ($queryUser as $rowUser) {
-                            echo "<div class='match'>
-                                    <img src=''.jpg'>
-                                    <p>" . $rowUser['name'] . "</p>
-                                    <p class='matchMail'>" . $rowUser['email_user'] . "</p>
-                                </div>";
+                            // Imprimir la ruta de la imagen para depurar
+                            $matchImagePath = $imageRow && !empty($imageRow['path']) ? htmlspecialchars($imageRow['path']) : 'default.jpg';
+
+                            echo "<a href='conversation.php?mail=" . htmlspecialchars($rowUser['email_user']) . "' class='match' style='text-decoration: none'>
+                                    <div>
+                                        <img src='" . $matchImagePath . "' alt='Foto de perfil'>
+                                        <p>" . htmlspecialchars($rowUser['name']) . "</p>
+                                    </div>
+                                  </a>";
                         }
                     }
                 } else {
