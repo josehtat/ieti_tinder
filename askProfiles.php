@@ -56,7 +56,7 @@ if (isset($_SESSION['userProfiles']) && ($filter == false)) {
 }
 
 
-if (!isset($_SESSION['userProfiles']) || $filter == false) {
+if (!isset($_SESSION['userProfiles']) || (isset($_SESSION['userProfiles']) && $filter == true)) {
     $foundUserList = array();
 
     try {

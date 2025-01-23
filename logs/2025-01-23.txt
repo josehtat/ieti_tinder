@@ -93,3 +93,5 @@
 [2025-01-23 10:55:14] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.
 [2025-01-23 14:30:18] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
 [2025-01-23 14:36:24] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 14:49:49] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 14:49:51] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
