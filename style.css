@@ -564,7 +564,7 @@ MARK: profile.php
     border-bottom: none;
 }
 
-#logout {
+#logout, #deleteAccount {
     background: none;
     border: none;
     color: inherit;
