@@ -25,19 +25,23 @@
         <div id="filterOptions">
             <p>&#9776;</p>
             <div id="filterOptionsList">
-                <div class="slider-container">
-                    <label for="maxDistance">Distancia máxima:</label>
-                    <input type="range" id="maxDistance" min="1" max="200" value="50" step="1">
-                    <span id="maxDistanceValue">50</span>
+                <h3>Filtrar por Preferencias</h3>
+                <label for="maxDistance">Distancia máxima:</label>
+                <input type="range" id="maxDistance" class="slider" min="1" max="200" value="50">
+                <p id="maxDistanceValue">50 km</p>
+
+
+                <br><label for="minAge">Rango de edad:</label>
+                <div class="range-input">
+                    
+                    <input type="number" id="minAge" min="18" max="100" value="18">
+                    <input type="number" id="maxAge" min="18" max="100" value="38">
                 </div>
 
-                <label for="minAge">Rango de edad:</label><br>
-                <input type="number" id="minAge" min="18" max="100" value="18">
-                <input type="number" id="maxAge" min="18" max="100" value="38">
-                <br>
-                <button id="filterButton">Filtrar</button>
-                <button id="resetButton">Eliminar Filtro</button>
-
+                <div class="filter-buttons">
+                    <button id="filterButton">Filtrar</button>
+                    <button id="resetButton">Eliminar Filtro</button>
+                </div>
             </div>
         </div>
     </header>
@@ -193,12 +197,12 @@
                         $('#popup, #overlay').fadeIn();
 
                         // Close button
-                        $('#close-btn').click(function () {
+                        $('#close-btn').click(function() {
                             $('#popup, #overlay').fadeOut();
                         });
 
                         // Redirect button
-                        $('#redirect-btn').click(function () {
+                        $('#redirect-btn').click(function() {
                             window.location.href = 'messages.php'; // Change to your desired URL
                         });
                     }
@@ -234,21 +238,21 @@
 
         findUser(false);
 
-        $("#dislikeButton").click(function () {
+        $("#dislikeButton").click(function() {
             likeFunction('dislike');
-            setTimeout(function () {
+            setTimeout(function() {
                 toggleImage('dislike');
             }, 250);
 
         });
 
-        $("#likeButton").click(function () {
+        $("#likeButton").click(function() {
             likeFunction('like');
-            setTimeout(function () {
+            setTimeout(function() {
                 toggleImage('like');
             }, 250);
         });
-        $("#filterOptions p").click(function () {
+        $("#filterOptions p").click(function() {
             $("#filterOptionsList").toggle();
         });
 
@@ -308,11 +312,11 @@
         $maxAge.on("input", updateRange);
         updateRange();
 
-        $("#maxDistance").on("input", function () {
-            $("#maxDistanceValue").text($("#maxDistance").val());
+        $("#maxDistance").on("input", function() {
+            $("#maxDistanceValue").text($("#maxDistance").val() + " km");
         });
 
-        $("#filterButton").on("click", function () {
+        $("#filterButton").on("click", function() {
             const maxDistance = $("#maxDistance").val();
             const minAge = $("#minAge").val();
             const maxAge = $("#maxAge").val();
@@ -334,7 +338,7 @@
             });
         });
 
-        $("#resetButton").on("click", function () {
+        $("#resetButton").on("click", function() {
             $("#maxDistance").val(50);
             $("#maxDistanceValue").text(50);
             $("#minAge").val(18);
