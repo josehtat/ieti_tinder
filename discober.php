@@ -33,7 +33,7 @@
 
                 <br><label for="minAge">Rango de edad:</label>
                 <div class="range-input">
-                    
+
                     <input type="number" id="minAge" min="18" max="100" value="18">
                     <input type="number" id="maxAge" min="18" max="100" value="38">
                 </div>
@@ -50,8 +50,10 @@
         <div id="overlay"></div>
         <div id="popup">
             <p id="popup-message"></p>
-            <button id="close-btn">Seguir descubriendo</button>
-            <button id="redirect-btn">Ir a la conversación</button>
+            <div class="popup-buttons">
+                <button id="close-btn">Seguir descubriendo</button>
+                <button id="redirect-btn">Ir a la conversación</button>
+            </div>
         </div>
         <div id="matchDiscoberNotFound">
             <h1 id="dontProfile">No hay perfiles disponibles</h1>
@@ -191,7 +193,7 @@
                     const message = reactRes.data;
                     if (message) {
                         // Set the message
-                        $('#popup-message').text(message);
+                        $('#popup-message').text("Tu y " + foundUser.name + " habeís hecho match!");
 
                         // Show the popup and overlay
                         $('#popup, #overlay').fadeIn();

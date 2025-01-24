@@ -1212,32 +1212,78 @@ MARK:Control de errores
 }
 
 /* Popup styling */
+
+/* Estilo del contenedor de la ventana emergente */
 #popup {
     display: none;
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border: 2px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 20px;
-    text-align: center;
     z-index: 1000;
+    transform: translate(-50%, -50%);
+    
+    background-color: #d8bfd8;
+    /* Fondo lavanda */
+    border-radius: 15px;
+    /* Bordes redondeados */
+    padding: 20px;
+    /* Espaciado interno */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Sombra suave */
+    color: #1a1a1a;
+    /* Texto oscuro */
+    font-family: 'Arial', sans-serif;
+    /* Fuente consistente */
+    width: 90%;
+    /* Ancho responsivo */
+    max-width: 400px;
+    /* Ancho máximo */
+    text-align: center;
+    /* Centrar contenido */
 }
 
-#popup button {
-    margin: 10px;
-    padding: 10px 20px;
+/* Estilo del mensaje */
+#popup p {
+    font-size: 20px;
+    /* Aumenta el tamaño de la fuente */
+    font-weight: bold;
+    /* Texto en negrita */
+    margin-bottom: 20px;
+    color: #7b1fa2;
+    /* Cambia el color a morado principal */
+}
+
+/* Botones */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    /* Separación entre botones */
+}
+
+.popup-buttons button {
+    background-color: #7b1fa2;
+    /* Morado principal */
+    color: #f4f4f4;
+    /* Texto blanco */
     border: none;
-    background: #007BFF;
-    color: white;
+    border-radius: 10px;
+    /* Bordes redondeados */
+    padding: 10px 15px;
+    /* Tamaño del botón */
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
-    font-size: 16px;
+    flex: 1;
+    /* Hacer que los botones ocupen el mismo espacio */
+    transition: background-color 0.3s ease;
 }
 
-#popup button:hover {
-    background: #0056b3;
+.popup-buttons button:hover {
+    background-color: #1a1a1a;
+    /* Negro al pasar el ratón */
+    color: #ffc300;
+    /* Amarillo para el texto al hacer hover */
 }
 
 #overlay {
