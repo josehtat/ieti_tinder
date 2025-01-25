@@ -826,6 +826,12 @@ MARK:conversation.php
     margin-left: 7px;
 }
 
+.heartButton {
+    border: none;
+    text-decoration: none;
+    background-color: transparent
+}
+
 /* Para las fechas */
 .date {
     font-size: 12px;

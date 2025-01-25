@@ -57,59 +57,9 @@
     <main id="mainConversation">
         <div id="userConversation">
             <div class="conversation" id="messagesContainer">
-                <?php
-                // Obtener los mensajes entre el usuario logueado y el receptor
-                $query = "
-                    SELECT id_user, message_user, date 
-                    FROM messages
-                    WHERE (id_user = :user_email AND id_receptor = :receiver_email)
-                    OR (id_user = :receiver_email AND id_receptor = :user_email)
-                    ORDER BY date ASC
-                ";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(':user_email', $_COOKIE['loggedUser']);
-                $stmt->bindParam(':receiver_email', $mail_receptor);
-                $stmt->execute();
-                $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                // Mostrar los mensajes
-                $last_time = null;
-                foreach ($messages as $message):
-                    $sender = ($message['id_user'] == $_COOKIE['loggedUser']) ? 'sent' : 'received';
-                    $message_time = strtotime($message['date']);
-                    $current_time = time();
-                    $time_diff = $current_time - $message_time;
-
-                    // Mostrar la fecha solo si ha pasado más de 5 minutos desde el último mensaje
-                    $show_date = false;
-
-                    // Si es el primer mensaje o han pasado más de 5 minutos desde el último mensaje, mostramos la fecha
-                    if (!$last_time || $time_diff > 300) {
-                        $show_date = true;
-                    }
-
-                    // Mostrar la fecha solo si se debe mostrar
-                    if ($show_date) {
-                        $formatted_date = date("d M Y, H:i", $message_time);
-                        echo "<div class='date'>$formatted_date</div>";
-                    }
-
-                    if ($sender == 'received') {
-                        echo "<div class='messageWithImage'>
-                                <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
-                                <div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>
-                              </div>";
-                    } else {
-                        echo "<div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>";
-                    }
-
-                    $last_time = $message_time;
-                endforeach;
-                ?>
             </div>
         </div>
 
-        <!-- Formulario para enviar mensajes -->
         <div id="sendMessage">
             <form method="POST" action="conversation.php?mail=<?php echo $mail_receptor; ?>">
                 <textarea name="message" placeholder="Mensaje" required></textarea>
@@ -119,7 +69,6 @@
         </div>
 
         <?php
-        // Enviar mensaje al hacer submit
         if (isset($_POST['send_message'])) {
             try {
                 // Obtener el mensaje y el email del usuario logueado
@@ -167,44 +116,66 @@
 
     <script>
         $(document).ready(function () {
-            function fetchMessages() {
+            $(document).on('click', '.heartButton', function () {
+                var messageId = $(this).data('message-id');
                 $.ajax({
                     url: 'fetch_messages.php',
-                    type: 'GET',
-                    data: { mail: '<?php echo $mail_receptor; ?>' },
-                    success: function (data) {
-                        $('#messagesContainer').html(data);
+                    type: 'POST',
+                    data: { message_id: messageId, user_email: '<?php echo $_COOKIE['loggedUser']; ?>' },
+                    success: function (response) {
+                        if (response.success) {
+                            var heartImage = $('#heartImage_' + messageId);
+                            heartImage.attr('src', response.newStatus ? 'img/corazonV1.png' : 'img/corazonV2.png');
+                        } else {
+                            console.log(response.message); // Mostrar mensaje de error en la consola
+                        }
                     },
                     error: function (xhr, status, error) {
-                        console.log('Error al obtener mensajes: ' + error);
+                        console.log('Error al dar like: ' + error); // Registrar cualquier otro error en la consola
                     }
                 });
-            }
-
-            setInterval(fetchMessages, 5000); // Actualiza cada 5 segundos
-
-            var $carousel = $('#carouselContainer .profileImage');
-            $('#viewTab').click(function () {
-                $('#userProfile').show();
-                $('#editProfileSection').hide();
-                $('#viewTab').addClass('active');
-                $('#editTab').removeClass('active');
-            });
-            $('#editTab').click(function () {
-                $('#userProfile').hide();
-                $('#editProfileSection').show();
-                $('#editTab').addClass('active');
-                $('#viewTab').removeClass('active');
-            });
-
-            // Asegurarse de que 'Conversación' esté activo al cargar la página
-            $('#viewTab').click();
-            $('#logout').off('click').on('click', function () {
-                logout();
             });
 
             // Llamar a fetchMessages al cargar la página
             fetchMessages();
+        });
+
+        function fetchMessages() {
+            $.ajax({
+                url: 'fetch_messages.php',
+                type: 'GET',
+                data: { mail: '<?php echo $mail_receptor; ?>' },
+                success: function (data) {
+                    $('#messagesContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error al obtener mensajes: ' + error);
+                }
+            });
+        }
+
+
+
+
+        setInterval(fetchMessages, 5000);
+
+        var $carousel = $('#carouselContainer .profileImage');
+        $('#viewTab').click(function () {
+            $('#userProfile').show();
+            $('#editProfileSection').hide();
+            $('#viewTab').addClass('active');
+            $('#editTab').removeClass('active');
+        });
+        $('#editTab').click(function () {
+            $('#userProfile').hide();
+            $('#editProfileSection').show();
+            $('#editTab').addClass('active');
+            $('#viewTab').removeClass('active');
+        });
+
+        $('#viewTab').click();
+        $('#logout').off('click').on('click', function () {
+            logout();
         });
     </script>
 
