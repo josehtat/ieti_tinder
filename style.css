@@ -801,6 +801,7 @@ MARK:conversation.php
     max-width: 70%;
     word-wrap: break-word;
 }
+
 /* Estilos para los mensajes enviados */
 .messageConversation.sent {
     background-color: #D8BFD8;
@@ -841,6 +842,7 @@ MARK:conversation.php
 .arrowLeft {
     font-size: 45px;
 }
+
 /* Estilo del formulario de mensaje */
 #sendMessage form {
     display: flex;
@@ -1216,4 +1218,70 @@ select:focus {
 
 .register-container .login-link a:hover {
     text-decoration: underline;
+}
+
+/*-------------------------------
+MARK: error403.php y error404.php
+*/
+
+.bodyForbidden {
+    font-family: 'Geometry Soft Pro Bold N', sans-serif;
+    background-color: transparent;
+    color: white;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.bodyForbidden a {
+    color: white;
+    display: inline-block;
+    background-color: #ff4081;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 12em;
+    height: auto;
+    text-align: center;
+    line-height: 2;
+    margin: 20px auto;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+}
+
+.bodyForbidden a:hover {
+    color: white;
+    background-color: #c50243;
+}
+
+.finalForbiScreen {
+    background-color: #7B1FA2;
+    text-align: center;
+    font-size: 1.8rem;
+    width: 90%;
+    max-width: 700px;
+    height: auto;
+    border-radius: 20px;
+    border: 3px solid #F18D1F;
+    margin: auto;
+    padding: 30px 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+}
+
+/* Respuesta para pantallas pequeñas */
+@media (max-width: 460px) {
+    .finalForbiScreen {
+        font-size: 1.4rem;
+        width: 90%;
+        padding: 20px 10px;
+    }
+
+    .bodyForbidden a {
+        width: 10em;
+        font-size: 1rem;
+    }
 }
