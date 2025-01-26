@@ -50,6 +50,34 @@
         $status = 0;
         $logMessage = "";
 
+        // Handle verification
+        if (isset($_GET['validate'])) {
+            $email = $_GET['validate'];
+            
+            try {
+                $hostname = "localhost";
+                $dbname = "ieti_tinder";
+                $dbUsername = "ietitinder";
+                $pw = "tinder123";
+                $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+                
+                // Update user status to active
+                $updateStmt = $pdo->prepare("UPDATE users SET account_status = 'active' WHERE email_user = ? AND account_status = 'to verify'");
+                $updateStmt->execute([$email]);
+                
+                if ($updateStmt->rowCount() > 0) {
+                    $status = 0;
+                    $logMessage = "Account successfully verified! You can now login.";
+                } else {
+                    $status = 2;
+                    $logMessage = "Invalid verification link or account already verified.";
+                }
+            } catch (PDOException $e) {
+                $status = 4;
+                $logMessage = "Database error: " . $e->getMessage();
+            }
+        }
+
         if (isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/discober.php";
             <?php

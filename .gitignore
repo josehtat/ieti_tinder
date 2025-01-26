@@ -1,2 +1,4 @@
 #Ignora los ficheros de logs
 logs/*
+profilePictures/*
+vendor
