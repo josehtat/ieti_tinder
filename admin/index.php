@@ -2,7 +2,7 @@
 // Verificar si el usuario tiene la cookie de autenticación y el rol adecuado
 if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['userRole'] !== 'admin') {
     // Redirigir al login si no está autenticado como administrador
-    header("Location: /error403.php");
+    http_response_code(403);
     exit;
 }
 
