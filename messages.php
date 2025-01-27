@@ -36,8 +36,8 @@
                     exit;
                 }
 
+                // Obtener todos los matches
                 $queryText = "SELECT * FROM interactions WHERE (id_user = :mail OR id_receptor = :mail) AND like_user = 2 AND like_receptor = 2;";
-
                 try {
                     $queryInteractions = $pdo->prepare($queryText);
                     $queryInteractions->bindParam(':mail', $_COOKIE['loggedUser']);
@@ -55,6 +55,27 @@
                     foreach ($queryInteractions as $row) {
                         // Identificar el usuario del match
                         $matchedUser = ($row['id_user'] == $_COOKIE['loggedUser']) ? $row['id_receptor'] : $row['id_user'];
+
+                        // Verificar si hay mensajes entre los dos usuarios
+                        $queryMessages = "SELECT COUNT(*) FROM messages WHERE (id_user = :user1 AND id_receptor = :user2) OR (id_user = :user2 AND id_receptor = :user1)";
+                        try {
+                            $queryCheckMessages = $pdo->prepare($queryMessages);
+                            $queryCheckMessages->bindParam(':user1', $_COOKIE['loggedUser']);
+                            $queryCheckMessages->bindParam(':user2', $matchedUser);
+                            $queryCheckMessages->execute();
+                            $messageCount = $queryCheckMessages->fetchColumn();
+
+                            if ($messageCount > 0) {
+                                continue; // Omitir este match si hay mensajes
+                            }
+                        } catch (PDOException $e) {
+                            echo "Error de SQL<br>\n";
+                            $e = $queryCheckMessages->errorInfo();
+                            if ($e[0] != '00000') {
+                                echo "\nPDO::errorInfo():\n";
+                                die("Error accedint a dades: " . $e[2]);
+                            }
+                        }
 
                         // Consulta para obtener datos del usuario
                         $queryText = "SELECT * FROM users WHERE email_user = :mail;";
