@@ -19,7 +19,7 @@
         <?php } ?>
     </script>
     <header id="headerProfile">
-        <div id="logo">Affinity</div>
+        <h2>Affinity</h2>
         <div id="menuTabs">
             <button class="tablink" id="viewTab">Mirar</button>
             <button class="tablink" id="editTab">Editar</button>

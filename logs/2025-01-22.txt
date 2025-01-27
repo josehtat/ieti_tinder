@@ -1,7 +1,0 @@
-[2025-01-22 13:27:56] [INFO - login.php] Usuario ablanco@ieti.site se ha logueado correctamente.
-[2025-01-22 13:27:56] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
-[2025-01-22 13:27:57] [INFO - discober.php] ablanco@ieti.site ha enviado un Dislike a rvidal@ieti.site
-[2025-01-22 13:27:57] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
-[2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha enviado un Like a fortiz@ieti.site
-[2025-01-22 13:27:58] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
-[2025-01-22 13:28:01] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.

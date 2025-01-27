@@ -1,0 +1,97 @@
+[2025-01-23 09:22:35] [INFO - login.php] Usuario ablanco@ieti.site se ha logueado correctamente.
+[2025-01-23 09:24:22] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:24:47] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:25:03] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:25:06] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:25:23] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:25:35] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:25:40] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:26:20] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:26:25] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:26:28] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:27:20] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:27:34] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:28:58] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:29:06] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:29:50] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:30:09] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:32:11] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:32:24] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:32:49] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:33:01] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:34:36] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:34:45] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:34:53] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:35:03] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:35:09] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:35:10] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:35:22] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:36:06] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:36:24] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:36:36] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:37:04] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:37:11] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:37:20] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:37:23] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:38:07] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:38:51] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:39:07] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:39:10] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:39:14] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:39:16] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:39:25] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:44:52] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:44:58] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:45:00] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:45:17] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:45:35] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:46:39] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:46:47] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:47:03] [INFO - discober.php] ablanco@ieti.site ha encontrado un perfil
+[2025-01-23 09:47:08] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:48:31] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:48:40] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:48:50] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:48:55] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 09:49:01] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:26:54] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:27:37] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.
+[2025-01-23 10:27:41] [INFO - login.php] Usuario acortes@ieti.site se ha logueado correctamente.
+[2025-01-23 10:27:41] [INFO - discober.php] acortes@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:28:37] [INFO - discober.php] acortes@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:30:14] [INFO - discober.php] acortes@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:30:17] [INFO - discober.php] acortes@ieti.site ha encontrado un perfil
+[2025-01-23 10:30:22] [INFO - discober.php] acortes@ieti.site ha encontrado un perfil
+[2025-01-23 10:30:22] [INFO - discober.php] acortes@ieti.site ha encontrado un perfil
+[2025-01-23 10:30:50] [INFO - profile.php] Usuario acortes@ieti.site ha cerrado sesion correctamente.
+[2025-01-23 10:30:52] [INFO - login.php] Usuario cvega@ieti.site se ha logueado correctamente.
+[2025-01-23 10:30:53] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:31:26] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:31:29] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:31:35] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:31:38] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:31:39] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:31:57] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:32:09] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:32:26] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:32:36] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:32:44] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:32:54] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:17] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:20] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:54:23] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:54:30] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:32] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:32] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:34] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:37] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:40] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:54:41] [INFO - discober.php] cvega@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:54:43] [INFO - discober.php] cvega@ieti.site ha encontrado un perfil
+[2025-01-23 10:54:54] [INFO - profile.php] Usuario cvega@ieti.site ha cerrado sesion correctamente.
+[2025-01-23 10:54:59] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 10:55:14] [INFO - profile.php] Usuario ablanco@ieti.site ha cerrado sesion correctamente.
+[2025-01-23 14:30:18] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 14:36:24] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 14:49:49] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles
+[2025-01-23 14:49:51] [INFO - discober.php] ablanco@ieti.site no ha encontrado más perfiles

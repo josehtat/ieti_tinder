@@ -22,6 +22,24 @@
 
     <header id="headerDiscober">
         <h2>Affinity</h2>
+        <div id="filterOptions">
+            <p>&#9776;</p>
+            <div id="filterOptionsList">
+                <div class="slider-container">
+                    <label for="maxDistance">Distancia máxima:</label>
+                    <input type="range" id="maxDistance" min="1" max="200" value="50" step="1">
+                    <span id="maxDistanceValue">50</span>
+                </div>
+
+                <label for="minAge">Rango de edad:</label><br>
+                <input type="number" id="minAge" min="18" max="100" value="18">
+                <input type="number" id="maxAge" min="18" max="100" value="38">
+                <br>
+                <button id="filterButton">Filtrar</button>
+                <button id="resetButton">Eliminar Filtro</button>
+
+            </div>
+        </div>
     </header>
 
     <main id="mainDiscober">
@@ -190,7 +208,7 @@
         }
 
         function findUserResult(logRes) {
-            // console.log(logRes);
+            console.log(logRes);
             if (logRes.status == 0) {
                 if (logRes.data.length == 0) {
                     $("#dontProfile").text('No hay perfiles disponibles');
@@ -200,6 +218,10 @@
                 } else {
                     logMessage(logRes.status, getCookie("loggedUser") + " ha encontrado un perfil");
                     foundUser = logRes.data[0];
+                    if ($("#matchDiscoberNotFound").is(":visible")) {
+                        $("#matchDiscoberNotFound").toggle();
+                        $("#matchDiscober").toggle();
+                    }
                     //console.log(foundUser);
                     $("#nameProfileMatch").text(foundUser.name).data('id', foundUser.email);
                     $("#ageProfileMatch").text(foundUser.age);
@@ -225,6 +247,111 @@
             setTimeout(function () {
                 toggleImage('like');
             }, 250);
+        });
+        $("#filterOptions p").click(function () {
+            $("#filterOptionsList").toggle();
+        });
+
+        const $minAge = $("#minAge");
+        const $maxAge = $("#maxAge");
+
+        function isNumeric(str) {
+            if (typeof str != "string") return false // we only process strings!  
+            return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+        }
+
+        function updateRange() {
+            if (!isNumeric($minAge.val())) {
+                $minAge.val(18);
+            }
+
+            if (!isNumeric($maxAge.val())) {
+                $maxAge.val(38);
+            }
+            const min = parseInt($minAge.val());
+            const max = parseInt($maxAge.val());
+
+            const minStr = min.toString();
+            const maxStr = max.toString();
+
+            if (minStr.length > 1) {
+                if (min < 18) {
+                    $minAge.val(18);
+                }
+                if (min > 100) {
+                    $minAge.val(100);
+                }
+            }
+            if (maxStr.length > 1) {
+                if (max < 18) {
+                    $maxAge.val(18);
+                }
+                if (max > 100) {
+                    $maxAge.val(100);
+                }
+            }
+
+            if (minStr.length > 1 && maxStr.length > 1) {
+                // Prevent overlap
+                if (min > max - 1) {
+                    $minAge.val(max - 1);
+                }
+                if (max < min + 1) {
+                    $maxAge.val(min + 1);
+                }
+            }
+        }
+
+        // Initialize slider
+        $minAge.on("input", updateRange);
+        $maxAge.on("input", updateRange);
+        updateRange();
+
+        $("#maxDistance").on("input", function () {
+            $("#maxDistanceValue").text($("#maxDistance").val());
+        });
+
+        $("#filterButton").on("click", function () {
+            const maxDistance = $("#maxDistance").val();
+            const minAge = $("#minAge").val();
+            const maxAge = $("#maxAge").val();
+            var filterParameters = {
+                reaction: false,
+                filter: true,
+                maxDistance: maxDistance,
+                minAge: minAge,
+                maxAge: maxAge
+            };
+            //console.log(filterParameters);
+            $.ajax({
+                data: filterParameters,
+                url: 'askProfiles.php',
+                type: 'POST',
+                success: findUserResult,
+                error: findUserResult,
+                dataType: 'json'
+            });
+        });
+
+        $("#resetButton").on("click", function () {
+            $("#maxDistance").val(50);
+            $("#maxDistanceValue").text(50);
+            $("#minAge").val(18);
+            $("#maxAge").val(38);
+            var filterParameters = {
+                reaction: false,
+                filter: true,
+            };
+
+            $.ajax({
+                data: filterParameters,
+                url: 'askProfiles.php',
+                type: 'POST',
+                success: findUserResult,
+                error: findUserResult,
+                dataType: 'json'
+            });
         });
     </script>
 </body>
