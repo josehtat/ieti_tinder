@@ -30,15 +30,21 @@
 
         $mail_receptor = $_GET['mail'];
 
-        $query = "SELECT p.path
-        FROM pictures p
-        JOIN users u ON p.email_user = u.email_user
-        WHERE u.email_user = :mail_receptor";
+        // Obtener imágenes del perfil del receptor
+        $query = "SELECT p.path FROM pictures p JOIN users u ON p.email_user = u.email_user WHERE u.email_user = :mail_receptor";
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':mail_receptor', $mail_receptor);
         $stmt->execute();
-        $row = $stmt->fetch();
-        $image_path = $row['path'];
+        $images = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // Obtener nombre y edad del receptor
+        $query = "SELECT u.name, TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) AS age FROM users u WHERE u.email_user = :mail_receptor";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':mail_receptor', $mail_receptor);
+        $stmt->execute();
+        $user_info = $stmt->fetch();
+        $name = $user_info['name'];
+        $age = $user_info['age'];
         ?>
 
         <div id="backArrow">
@@ -47,7 +53,7 @@
             </a>
         </div>
         <div id="logo">
-            <?php echo "<img src='$image_path' alt='Foto de perfil'>" ?>
+            <?php echo "<img src='{$images[0]}' alt='Foto de perfil'>" ?>
         </div>
         <div id="menuTabs">
             <button class="tablink" id="viewTab">Conversación</button>
@@ -56,16 +62,34 @@
     </header>
     <main id="mainConversation">
         <div id="userConversation">
-            <div class="conversation" id="messagesContainer">
+            <div class="conversation" id="messagesContainer"></div>
+            <div id="sendMessage">
+                <form method="POST" action="conversation.php?mail=<?php echo $mail_receptor; ?>">
+                    <textarea name="message" placeholder="Mensaje" required></textarea>
+                    <input type="hidden" name="receiver_email" value="<?php echo $mail_receptor; ?>">
+                    <button type="submit" name="send_message">Enviar</button>
+                </form>
             </div>
         </div>
 
-        <div id="sendMessage">
-            <form method="POST" action="conversation.php?mail=<?php echo $mail_receptor; ?>">
-                <textarea name="message" placeholder="Mensaje" required></textarea>
-                <input type="hidden" name="receiver_email" value="<?php echo $mail_receptor; ?>">
-                <button type="submit" name="send_message">Enviar</button>
-            </form>
+        <div id="editProfileConversation" style="display: none;">
+            <div id="userProfile">
+                <div id="carouselContainer">
+                    <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
+                    <div id="carouselDots">
+                        <?php for ($i = 0; $i < count($images); $i++) { ?>
+                            <span class="carouselDot <?php if ($i == 0) {
+                                echo 'active';
+                            } ?>"></span>
+                        <?php } ?>
+                    </div>
+                </div>
+
+                <div id="userInfo">
+                    <h2 id="userName"><?php echo $name; ?></h2>
+                    <span id="userAge"><?php echo $age; ?> años</span>
+                </div>
+            </div>
         </div>
 
         <?php
@@ -113,71 +137,114 @@
             </li>
         </ul>
     </nav>
+</body>
 
-    <script>
-        $(document).ready(function () {
-            $(document).on('click', '.heartButton', function () {
-                var messageId = $(this).data('message-id');
-                $.ajax({
-                    url: 'fetch_messages.php',
-                    type: 'POST',
-                    data: { message_id: messageId, user_email: '<?php echo $_COOKIE['loggedUser']; ?>' },
-                    success: function (response) {
-                        if (response.success) {
-                            var heartImage = $('#heartImage_' + messageId);
-                            heartImage.attr('src', response.newStatus ? 'img/corazonV1.png' : 'img/corazonV2.png');
-                        } else {
-                            console.log(response.message); // Mostrar mensaje de error en la consola
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Error al dar like: ' + error); // Registrar cualquier otro error en la consola
-                    }
-                });
-            });
+</html>
 
-            // Llamar a fetchMessages al cargar la página
-            fetchMessages();
-        });
 
-        function fetchMessages() {
+
+<script>
+    $(document).ready(function () {
+
+        $(document).on('click', '.heartButton', function () {
+            var messageId = $(this).data('message-id');
             $.ajax({
                 url: 'fetch_messages.php',
-                type: 'GET',
-                data: { mail: '<?php echo $mail_receptor; ?>' },
-                success: function (data) {
-                    $('#messagesContainer').html(data);
+                type: 'POST',
+                data: { message_id: messageId, user_email: '<?php echo $_COOKIE['loggedUser']; ?>' },
+                success: function (response) {
+                    if (response.success) {
+                        var heartImage = $('#heartImage_' + messageId);
+                        heartImage.attr('src', response.newStatus ? 'img/corazonV1.png' : 'img/corazonV2.png');
+                    } else {
+                        console.log(response.message); // Mostrar mensaje de error en la consola
+                    }
                 },
                 error: function (xhr, status, error) {
-                    console.log('Error al obtener mensajes: ' + error);
+                    console.log('Error al dar like: ' + error); // Registrar cualquier otro error en la consola
                 }
+            });
+        });
+
+        // Llamar a fetchMessages al cargar la página
+        fetchMessages();
+
+        // Tabs functionality
+        var images = <?php echo json_encode($images); ?>;
+        var cont = 0;
+        var $carousel = $('#carouselContainer .profileImage');
+
+        function changeImage() {
+            $carousel.fadeOut('fast', function () {
+                $carousel.attr('src', images[cont]);
+                $carousel.fadeIn('fast');
             });
         }
 
-
-
-
-        setInterval(fetchMessages, 5000);
-
-        var $carousel = $('#carouselContainer .profileImage');
+        $carousel.off('click').on('click', function () {
+            cont = (cont + 1) % images.length;
+            changeImage();
+            $('.carouselDot').removeClass('active');
+            $('.carouselDot').eq(cont).addClass('active');
+        });
         $('#viewTab').click(function () {
-            $('#userProfile').show();
-            $('#editProfileSection').hide();
+            $('#userConversation').show();
+            $('#editProfileConversation').hide();
             $('#viewTab').addClass('active');
             $('#editTab').removeClass('active');
         });
+
         $('#editTab').click(function () {
-            $('#userProfile').hide();
-            $('#editProfileSection').show();
+            $('#userConversation').hide();
+            $('#editProfileConversation').show();
             $('#editTab').addClass('active');
             $('#viewTab').removeClass('active');
         });
 
-        $('#viewTab').click();
-        $('#logout').off('click').on('click', function () {
-            logout();
+        $('#viewTab').click(); // Set default tab
+
+        // Fetch messages every 5 seconds
+        setInterval(fetchMessages, 5000);
+
+        // Carrusel de imágenes
+        var images = <?php echo json_encode($images); ?>;
+        var cont = 0;
+        var $carousel = $('#carouselContainer .profileImage');
+
+        function changeImage() {
+            $carousel.fadeOut('fast', function () {
+                $carousel.attr('src', images[cont]);
+                $carousel.fadeIn('fast');
+            });
+        }
+
+        $('#prevImage').click(function () {
+            cont = (cont > 0) ? cont - 1 : images.length - 1;
+            changeImage();
         });
-    </script>
+
+        $('#nextImage').click(function () {
+            cont = (cont < images.length - 1) ? cont + 1 : 0;
+            changeImage();
+        });
+    });
+
+    function fetchMessages() {
+        $.ajax({
+            url: 'fetch_messages.php',
+            type: 'GET',
+            data: { mail: '<?php echo $mail_receptor; ?>' },
+            success: function (data) {
+                $('#messagesContainer').html(data);
+            },
+            error: function (xhr, status, error) {
+                console.log('Error al obtener mensajes: ' + error);
+            }
+        });
+    }
+</script>
+
+
 
 </body>
 

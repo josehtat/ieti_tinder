@@ -104,22 +104,20 @@ foreach ($messages as $message):
                 <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
                 <div class='messageConversation $sender'>
                     " . htmlspecialchars($message['message_user']) . "
-                    <button class='heartButton' data-message-id='" . $message['id'] . "'>
-                        <img src='" . $heart_image . "' alt='Heart' id='heartImage_" . $message['id'] . "'>
-                    </button>
                 </div>
+                                <button class='heartButton' data-message-id='" . $message['id'] . "'>
+                    <img src='" . $heart_image . "' alt='Heart' class='heartImageRight' id='heartImage_" . $message['id'] . "'>
+                </button>
               </div>";
     } else {
+        echo "<div class='messageWithImage'>";
         if ($message['like_message']) {
-            echo "<div class='messageConversation $sender'>
-                    " . htmlspecialchars($message['message_user']) . "
-                    <img src='$heart_image' alt='Heart' id='heartImage_" . $message['id'] . "'>
-                  </div>";
-        } else {
-            echo "<div class='messageConversation $sender'>
-                    " . htmlspecialchars($message['message_user']) . "
-                  </div>";
+            echo "<img src='$heart_image' alt='Heart' class='heartImageLeft' id='heartImage_" . $message['id'] . "'>";
         }
+        echo "<div class='messageConversation $sender'>
+                " . htmlspecialchars($message['message_user']) . "
+              </div>
+             </div>";
     }
 
     $last_time = $message_time;
