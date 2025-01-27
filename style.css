@@ -35,6 +35,11 @@ nav {
 /*
 MARK:discober.php
 */
+
+#bodyDiscober {
+    overflow: hidden;
+}
+
 #headerDiscober {
     position: fixed;
     top: 0;
@@ -1053,20 +1058,20 @@ MARK:Control de errores
 /* Contenedor para los mensajes */
 #messages-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
 }
 
 /* Estilos comunes para todos los mensajes */
 .message {
+    position: fixed;
+    top: 106px;
+    right: 580px;
+    z-index: 9999;
     padding: 15px;
+    text-align: center;
     margin: 10px 0;
     border-radius: 5px;
     font-size: 14px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
+    width: 200px;
     animation: fadeIn 5s forwards;
 }
 
@@ -1194,6 +1199,10 @@ MARK: resgister.php
 .register-container .input-group {
     box-sizing: border-box;
     margin: 0;
+}
+
+.register-container .input-group option:first-child {
+    display: none;
 }
 
 .register-container .input-row {

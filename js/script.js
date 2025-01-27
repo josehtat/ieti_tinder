@@ -41,13 +41,13 @@ function showMessage(type, message) {
     var container = document.getElementById('messages-container');
     container.appendChild(messageContainer);
 
-    // Eliminar el mensaje después de 5 segundos
+    // Eliminar el mensaje después de 2 segundos
     setTimeout(function() {
         messageContainer.style.opacity = 0;
         setTimeout(function() {
             container.removeChild(messageContainer);
         }, 500);
-    }, 5000);
+    }, 2000);
 }
 
 // Cambiar imagen al hacer clic

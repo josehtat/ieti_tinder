@@ -32,12 +32,26 @@
             $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
             
             // Check if email already exists
-            $checkEmail = $pdo->prepare("SELECT email_user FROM users WHERE email_user = ?");
+            $checkEmail = $pdo->prepare("SELECT email_user, account_status FROM users WHERE email_user = ?");
             $checkEmail->execute([$email]);
             
             if ($checkEmail->rowCount() > 0) {
-                $status = 1;
-                $logMessage = "Email already registered";
+
+                foreach ($checkEmail as $row) {
+                    if ($row['account_status'] == 'active') {
+                        $status = 2;
+                        $logMessage = "Account already verified";
+                        break;
+                    } else if ($row['account_status'] == 'inactive') {
+                        $query = "UPDATE users SET password_user = ?, name = ?, surnames = ?, alias = ?, birthday = ?, location = ?, sex = ?, sex_orientation = ?, account_status = 'to verify' WHERE email_user = ?";
+                        break;
+                    } else if ($row['account_status'] == 'to verify') {
+                        $status = 2;
+                        $logMessage = "Account to be verified";
+                        break;
+                    }
+                }
+
             } else {
                 // Create verification link with email
                 $verificationLink = "http://tinder1.ieti.site/login.php?validate=" . urlencode($email);
@@ -53,7 +67,7 @@
                     // Only insert user if email was sent successfully
                     $query = "INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, location, sex, sex_orientation, account_status) 
                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'to verify')";
-                    
+
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([$email, $password, $name, $surnames, $alias, $birthday, $location, $sex, $sexOrientation]);
                     
@@ -137,6 +151,7 @@
                 <div class="input-group">
                     <label for="sex">Sexo</label>
                     <select id="sex" name="sex" required>
+                        <option value="" disabled selected>Seleccionar una opción</option>
                         <option value="M">Hombre</option>
                         <option value="F">Mujer</option>
                         <option value="Other">No Binario</option>
@@ -144,12 +159,13 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="sexOrientation">Orientacion Sexual</label>
+                    <label for="sexOrientation">Orientación Sexual</label>
                     <select id="sexOrientation" name="sexOrientation" required>
+                        <option value="" disabled selected>Seleccionar una opción</option>
                         <option value="Heterosexual">Heterosexual</option>
                         <option value="Homosexual">Homosexual</option>
                         <option value="Bisexual">Bisexual</option>
-                    </select>                
+                    </select>
                 </div>
             </div>
 
