@@ -975,6 +975,46 @@ MARK:conversation.php
     margin-left: 7px;
 }
 
+.heartImageLeft {
+    float: left;
+    margin-right: 5px;
+    width: 24px;
+    height: 24px;
+}
+
+.heartImageRight {
+    float: right;
+    margin-left: 5px;
+    width: 24px;
+    height: 24px;
+}
+
+.heartButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.heartButton img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+#editProfileConversation {
+        display: none;
+        width: 90%;
+        height: 100%;
+        max-height: 1500px;
+        margin: 20px auto 10px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        overflow: auto;
+}
+
+
 /* Para las fechas */
 .date {
     font-size: 12px;
@@ -1445,4 +1485,87 @@ select:focus {
 
 .register-container .login-link a:hover {
     text-decoration: underline;
+}
+
+/*-------------------------------
+MARK: error403.php y error404.php
+*/
+
+.bodyForbidden {
+    font-family: 'Geometry Soft Pro Bold N', sans-serif;
+    background-color: transparent;
+    color: white;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+.bodyForbidden a {
+    color: white;
+    display: inline-block;
+    background-color: #ff4081;
+    text-decoration: none;
+    border-radius: 8px;
+    width: 12em;
+    height: auto;
+    text-align: center;
+    line-height: 2;
+    margin: 20px auto;
+    padding: 10px 15px;
+    font-size: 1.2rem;
+}
+
+.bodyForbidden a:hover {
+    color: white;
+    background-color: #c50243;
+}
+
+.finalForbiScreen {
+    background-color: white;
+    color: #7B1FA2;
+    text-align: center;
+    font-size: 1.8rem;
+    width: 90%;
+    max-width: 700px;
+    height: auto;
+    border-radius: 20px;
+    border: 3px solid #F18D1F;
+    margin: auto;
+    padding: 30px 20px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+    line-height: 1.5;
+}
+
+/* Respuesta para pantallas pequeñas */
+@media (max-width: 460px) {
+    .finalForbiScreen {
+        font-size: 1.4rem;
+        width: 90%;
+        padding: 20px 10px;
+    }
+
+    .bodyForbidden a {
+        width: 10em;
+        font-size: 1rem;
+    }
+}
+
+/*-------------------------------
+MARK: forgot_password.php
+*/
+
+.forgotPassword-body {
+    background-color: transparent;
+    color: white;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
     <script src="/js/jquery-3.7.1.min.js"></script>
     <title>Fotos</title>
 </head>
-
 <body id="bodyPhotos">
     <script>
         <?php if (!isset($_COOKIE['loggedUser'])) { ?>
@@ -18,7 +16,6 @@
     <header id="headerProfile">
         <div id="logo">Affinity</div>
     </header>
-
     <main id="mainPhotos">
         <h2>Mis Fotos</h2>
         <div id="photoGrid">
@@ -31,108 +28,22 @@
             $pw = "tinder123";
             try {
                 $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
-
-                // Verificar el número de imágenes antes de permitir una nueva subida
-                $countQuery = "SELECT count(*) as total FROM pictures WHERE email_user = :email";
-                $countStmt = $pdo->prepare($countQuery);
-                $countStmt->bindParam(':email', $_COOKIE['loggedUser']);
-                $countStmt->execute();
-                $countResult = $countStmt->fetch(PDO::FETCH_ASSOC);
-                $totalImages = $countResult['total'];
-                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deletePhoto'])) {
-                    if ($totalImages > 1) {
-                        $imageId = $_POST['deletePhoto'];
-
-                        try {
-                            // Obtener la ruta de la imagen desde la base de datos
-                            $query = "SELECT path FROM pictures WHERE id = :id";
-                            $stmt = $pdo->prepare($query);
-                            $stmt->bindParam(':id', $imageId);
-                            $stmt->execute();
-                            $photo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                            if ($photo) {
-                                $filePath = $photo['path'];
-
-                                // Verificar si el archivo físico existe
-                                if (file_exists($filePath)) {
-                                    // Intentar eliminar el archivo físico
-                                    if (!unlink($filePath)) {
-                                        echo "Error al eliminar el archivo físico.";
-                                        exit;
-                                    }
-                                } else {
-                                    echo "El archivo físico no existe.";
-                                }
-
-                                // Eliminar la imagen de la base de datos
-                                $query = "DELETE FROM pictures WHERE id = :id";
-                                $stmt = $pdo->prepare($query);
-                                $stmt->bindParam(':id', $imageId);
-                                if ($stmt->execute()) {
-                                    echo "<script>window.location.href = 'photos.php';</script>";
-                                } else {
-                                    echo "Error al eliminar la imagen de la base de datos.";
-                                }
-                            } else {
-                                echo "La imagen no se encontró en la base de datos.";
-                            }
-                        } catch (PDOException $e) {
-                            echo "Error en la base de datos: " . $e->getMessage();
-                        }
-                    } else {
-                        echo "Debe haber al menos una imagen.";
-                    }
-                }
-
-
-                if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['newPhoto']) && $_FILES['newPhoto']['error'] == UPLOAD_ERR_OK) {
-                    // Si no se ha alcanzado el límite de imágenes, subir la nueva foto
-                    $uploadDir = 'profilePictures/';
-                    $originalName = $_FILES['newPhoto']['name'];
-                    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-
-                    $query = "SELECT id FROM pictures ORDER BY id DESC; ";
-                    $stmt = $pdo->prepare($query);
-                    $stmt->execute();
-                    $imageId = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    $mailInArray = explode('@', $_COOKIE['loggedUser']);
-                    $imageName = $mailInArray[0] . "" . $imageId['id'] . "." . $extension;
-
-                    $file_name = basename($imageName);
-                    $uploadFile = $uploadDir . $file_name;
-                    if (move_uploaded_file($_FILES['newPhoto']['tmp_name'], $uploadFile)) {
-                        $query = "INSERT INTO pictures (email_user, path) VALUES (:email, :path)";
-                        $stmt = $pdo->prepare($query);
-                        $stmt->bindParam(':email', $_COOKIE['loggedUser']);
-                        $stmt->bindParam(':path', $uploadFile);
-                        if ($stmt->execute()) {
-                            echo "<script>window.location.href = 'photos.php';</script>";
-                        } else {
-                            echo "Error en la ejecución de la consulta SQL.";
-                        }
-                    } else {
-                        echo "Error al mover la foto a su destino final.";
-                    }
-                }
-
-                // Mostrar las imágenes
                 $query = "SELECT id, path FROM pictures WHERE email_user = :email";
                 $stmt = $pdo->prepare($query);
                 $stmt->bindParam(':email', $_COOKIE['loggedUser']);
                 $stmt->execute();
                 $images = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $totalImages = count($images);
+
                 foreach ($images as $image) {
                     echo '<div class="photoBox">
                             <img src="' . htmlspecialchars($image['path']) . '" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;">
-                            <form method="post" style="z-index: 5"> 
-                                <input type="hidden" name="deletePhoto" value="' . $image['id'] . '"> 
-                                <button type="submit" class="deletePhotoBtn">X</button> 
+                            <form method="post" style="z-index: 5">
+                                <input type="hidden" name="deletePhoto" value="' . $image['id'] . '">
+                                <button type="submit" class="deletePhotoBtn">X</button>
                             </form>
                         </div>';
                 }
-
             } catch (PDOException $e) {
                 echo "Error al acceder a la base de datos: " . $e->getMessage();
             }
@@ -145,7 +56,6 @@
             </div>
         </div>
     </main>
-
     <nav id="nav">
         <ul>
             <li>
@@ -161,29 +71,54 @@
     </nav>
     <script>
         $(document).ready(function () {
-            function toggleAddPhotoButton() {
-                const totalImages = <?php echo $totalImages; ?>;
+            function toggleAddPhotoButton(totalImages) {
                 const maxImages = <?php echo $maxImages; ?>;
-                if (totalImages == maxImages) {
+                if (totalImages >= maxImages) {
                     $('.addPhoto').hide();
                 } else {
                     $('.addPhoto').show();
                 }
             }
 
-            toggleAddPhotoButton();
+            toggleAddPhotoButton(<?php echo $totalImages; ?>);
 
             $('#newPhoto').on('change', function () {
-                $('#uploadPhotoForm').submit();
+                var formData = new FormData($('#uploadPhotoForm')[0]);
+                $.ajax({
+                    url: 'handle_photos.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#photoGrid .addPhoto').before('<div class="photoBox"><img src="' + response.imagePath + '" alt="Foto" style="width: 100%; height: 100%; object-fit: cover;"><form method="post" style="z-index: 5"><input type="hidden" name="deletePhoto" value="' + response.imageId + '"><button type="submit" class="deletePhotoBtn">X</button></form></div>');
+                            toggleAddPhotoButton(response.totalImages);
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                });
             });
 
-            $('.addPhotoBtn').click(function () {
-                $('#newPhoto').click();
+            $(document).on('click', '.deletePhotoBtn', function (e) {
+                e.preventDefault();
+                var form = $(this).closest('form');
+                $.ajax({
+                    url: 'handle_photos.php',
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            form.closest('.photoBox').remove();
+                            toggleAddPhotoButton(response.totalImages);
+                        } else {
+                            alert(response.message);
+                        }
+                    }
+                });
             });
         });
-
-
     </script>
 </body>
-
 </html>
