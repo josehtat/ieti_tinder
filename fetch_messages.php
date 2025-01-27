@@ -7,7 +7,43 @@ try {
     $pw = "tinder123";
     $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", $dbUsername, $pw);
 } catch (PDOException $e) {
-    echo "Error al acceder a la base de datos - " . $e->getMessage() . "\n";
+    echo json_encode(["success" => false, "message" => "Error al acceder a la base de datos."]);
+    exit;
+}
+
+// Manejar solicitudes POST para actualizar "likes"
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $messageId = $_POST['message_id'];
+    $userEmail = $_POST['user_email'];
+
+    try {
+        // Obtener el estado actual de like_message
+        $query = "SELECT like_message FROM messages WHERE id = :id_message";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id_message', $messageId);
+        $stmt->execute();
+        $message = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Invertir el valor de like_message
+        $newStatus = !$message['like_message'];
+
+        // Actualizar el valor de like_message en la base de datos
+        $updateQuery = "UPDATE messages SET like_message = :new_status WHERE id = :id_message";
+        $updateStmt = $pdo->prepare($updateQuery);
+        $updateStmt->bindParam(':new_status', $newStatus, PDO::PARAM_BOOL);
+        $updateStmt->bindParam(':id_message', $messageId);
+        $updateStmt->execute();
+
+        echo json_encode([
+            "success" => true,
+            "newStatus" => $newStatus
+        ]);
+    } catch (PDOException $e) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Error al cambiar el estado del corazón: " . $e->getMessage()
+        ]);
+    }
     exit;
 }
 
@@ -27,7 +63,7 @@ $image_path = $row['path'];
 
 // Obtener los mensajes entre el usuario logueado y el receptor
 $query = "
-    SELECT id_user, message_user, date 
+    SELECT id, id_user, message_user, like_message, date 
     FROM messages
     WHERE (id_user = :user_email AND id_receptor = :receiver_email)
     OR (id_user = :receiver_email AND id_receptor = :user_email)
@@ -61,13 +97,27 @@ foreach ($messages as $message):
         echo "<div class='date'>$formatted_date</div>";
     }
 
+    $heart_image = $message['like_message'] ? 'img/corazonV1.png' : 'img/corazonV2.png';
+
     if ($sender == 'received') {
         echo "<div class='messageWithImage'>
                 <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
-                <div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>
+                <div class='messageConversation $sender'>
+                    " . htmlspecialchars($message['message_user']) . "
+                </div>
+                                <button class='heartButton' data-message-id='" . $message['id'] . "'>
+                    <img src='" . $heart_image . "' alt='Heart' class='heartImageRight' id='heartImage_" . $message['id'] . "'>
+                </button>
               </div>";
     } else {
-        echo "<div class='messageConversation $sender'>" . htmlspecialchars($message['message_user']) . "</div>";
+        echo "<div class='messageWithImage'>";
+        if ($message['like_message']) {
+            echo "<img src='$heart_image' alt='Heart' class='heartImageLeft' id='heartImage_" . $message['id'] . "'>";
+        }
+        echo "<div class='messageConversation $sender'>
+                " . htmlspecialchars($message['message_user']) . "
+              </div>
+             </div>";
     }
 
     $last_time = $message_time;
