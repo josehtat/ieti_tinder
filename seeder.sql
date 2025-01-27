@@ -41,6 +41,7 @@ CREATE TABLE messages (
     id_receptor VARCHAR(255),
     message_user TEXT,
     date DATETIME,
+    like_message TINYINT(1) DEFAULT 0,
     FOREIGN KEY (id_user) REFERENCES users(email_user) ON DELETE CASCADE,
     FOREIGN KEY (id_receptor) REFERENCES users(email_user) ON DELETE CASCADE
 );
@@ -412,6 +413,3 @@ INSERT INTO pictures (email_user, path) VALUES
 
 INSERT INTO pictures (email_user, path) VALUES
 ('msanchez@ieti.site', '/profilePictures/msanchez2.jpg');
-
-INSERT INTO messages (id_user, id_receptor, message_user, date) VALUES
-('jgarcia@ieti.site', 'mmartinez@ieti.site', 'Hi, I am Joan Garcia! How are you?', '2023-05-14 10:00:00');

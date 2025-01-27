@@ -37,9 +37,10 @@
         <div id="overlay"></div>
         <div id="popup">
             <p id="popup-message"></p>
+            <input type="text" id="confirmation-input" placeholder="Escribe 'BORRAR' para confirmar" />
             <div class="popup-buttons">
-                <button id="close-btn">Seguir descubriendo</button>
-                <button id="redirect-btn">Ir a la conversación</button>
+                <button id="close-btn">Cancelar</button>
+                <button id="delete-button" disabled>Confirmar</button>
             </div>
         </div>
         <?php
@@ -364,25 +365,31 @@
                 // Show the popup and overlay
                 $('#popup, #overlay').fadeIn();
 
+                $('#confirmation-input').on('input', function() {
+                    if ($(this).val() == 'BORRAR') {
+                        $('#delete-button').prop('disabled', false);
+                    } else {
+                        $('#delete-button').prop('disabled', true);
+                    }
+                })
+
                 // Close button
                 $('#close-btn').click(function() {
                     $('#popup, #overlay').fadeOut();
                 });
 
                 // Redirect button
-                $('#redirect-btn').click(function() {
+                $('#delete-button').click(function() {
                     var parameters = {};
 
                     $.ajax({
                         data: parameters,
-                        url: 'deleteAccount.php',
+                        url: 'delete-account.php',
                         type: 'POST',
-                        success: logoutResult,
+                        success: deleteAccountResult,
                         dataType: 'json'
                     });
                 });
-
-
             }
 
             function deleteAccountResult(logRes) {

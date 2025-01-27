@@ -564,7 +564,8 @@ MARK: profile.php
     border-bottom: none;
 }
 
-#logout, #deleteAccount {
+#logout,
+#deleteAccount {
     background: none;
     border: none;
     color: inherit;
@@ -1221,7 +1222,7 @@ MARK:Control de errores
     left: 50%;
     z-index: 1000;
     transform: translate(-50%, -50%);
-    
+
     background-color: #d8bfd8;
     /* Fondo lavanda */
     border-radius: 15px;
@@ -1261,6 +1262,20 @@ MARK:Control de errores
     /* Separación entre botones */
 }
 
+#confirmation-input {
+    width: calc(100% - 20px);
+    /* Ancho igual al contenedor menos los márgenes */
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #f4f4f4;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    /* Asegura que el padding no aumente el ancho */
+}
+
 .popup-buttons button {
     background-color: #7b1fa2;
     /* Morado principal */
@@ -1277,6 +1292,20 @@ MARK:Control de errores
     flex: 1;
     /* Hacer que los botones ocupen el mismo espacio */
     transition: background-color 0.3s ease;
+}
+
+#delete-button {
+    background: rgba(0, 0, 0, 0.5);
+    /* Oscurecido */
+    cursor: not-allowed;
+    /* Deshabilitado por defecto */
+}
+
+#delete-button:enabled {
+    background-color: #7b1fa2;
+    /* Morado cuando está habilitado */
+    cursor: pointer;
+    /* Pointer cuando esta habilitado */
 }
 
 .popup-buttons button:hover {
