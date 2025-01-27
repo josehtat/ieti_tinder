@@ -6,10 +6,6 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
     exit;
 }
 
-// Eliminar la cookie de loggedUser y userRole al entrar en el panel administrativo
-setcookie("loggedUser", "", time() - 3600, "/"); // Eliminar cookie loggedUser
-setcookie("userRole", "", time() - 3600, "/");  // Eliminar cookie userRole
-
 // Puedes añadir un mensaje o lógica adicional aquí, si lo necesitas
 ?>
 <!DOCTYPE html>
@@ -18,12 +14,42 @@ setcookie("userRole", "", time() - 3600, "/");  // Eliminar cookie userRole
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/script.js"></script>
     <title>Panel Administrativo</title>
 </head>
 
-<body>
-    <h1>Bienvenido al Panel Administrativo</h1>
-    <p>Esta sección es solo para usuarios con rol de administrador.</p>
+<body class="admin-body">
+    <div class="admin-container">
+        <h1>Bienvenido al Panel Administrativo</h1>
+        <p>Esta sección es solo para usuarios con rol de administrador.</p>
+        <div>
+            <button id="backButton">Cerrar sesión de administrador</button>
+            <button id="usersButton">Ver usuarios</button>
+            <button id="logsButton">Ver logs</button>
+        </div>
+    </div>
+    <script>
+        // Resto de tu JavaScript
+        $(document).ready(function() {
+            // Resto de tu JavaScript
+            $("#backButton").click(function() {
+                $.post("/clear-cookies.php", function() {
+                    // Redirect after cookies are cleared
+                    window.location.href = "/";
+                });
+            });
+
+            $("#logsButton").click(function() {
+                window.location.href = "/admin/logs.php";
+            });
+
+            $("#usersButton").click(function() {
+                window.location.href = "users.php";
+            });
+        })
+    </script>
 </body>
 
 </html>

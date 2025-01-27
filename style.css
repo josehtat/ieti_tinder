@@ -7,7 +7,7 @@ html {
     font-family: Arial, sans-serif;
 }
 
-body {
+body:not(.admin-body) {
     max-width: 460px;
     height: 100%;
     margin: 0 auto;
@@ -1002,16 +1002,16 @@ MARK:conversation.php
 }
 
 #editProfileConversation {
-        display: none;
-        width: 90%;
-        height: 100%;
-        max-height: 1500px;
-        margin: 20px auto 10px;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        overflow: auto;
+    display: none;
+    width: 90%;
+    height: 100%;
+    max-height: 1500px;
+    margin: 20px auto 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
 }
 
 
@@ -1568,4 +1568,209 @@ MARK: forgot_password.php
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+}
+
+/*-------------------------------
+MARK: admin
+*/
+body.admin-body {
+    height: 100%;
+    margin: 10px;
+    background-color: #F4F4F4;
+    color: #1A1A1A;
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
+}
+
+.admin-container {
+    background-color: #F4F4F4;
+    padding: 30px;
+    text-align: center;
+}
+
+.admin-container h2 {
+    color: #333;
+    /* Color del título */
+    font-size: 24px;
+    /* Tamaño de fuente para el título */
+    margin-bottom: 15px;
+    /* Espacio debajo del título */
+    text-align: center;
+    /* Centrar el título */
+    text-transform: uppercase;
+    /* Convertir a mayúsculas para mayor énfasis */
+    letter-spacing: 1px;
+    /* Espaciado entre letras */
+}
+
+.admin-container table {
+    width: 100%;
+    /* Ocupa tot l'espai disponible */
+    border-collapse: collapse;
+    /* Elimina espais entre cel·les */
+    margin: 20px 0;
+    /* Espai entre la taula i altres elements */
+    font-size: 18px;
+    /* Mida del text */
+    text-align: left;
+    /* Text alineat a l'esquerra */
+}
+
+.admin-container th,
+.admin-container td {
+    padding: 12px 15px;
+    /* Espai interior de cel·les */
+    border: 1px solid #ddd;
+    /* Borde suau per a les cel·les */
+}
+
+.admin-container th {
+    background-color: #f4f4f4;
+    /* Fons per a l'encapçalament */
+    font-weight: bold;
+}
+
+.admin-container tr:nth-child(even) {
+    background-color: #f9f9f9;
+    /* Color de fons alternatiu */
+}
+
+.admin-container tr:hover {
+    background-color: #f1f1f1;
+    /* Color en passar el ratolí per damunt */
+}
+
+a.viewLog {
+    color: #007bff;
+    /* Blau per als enllaços */
+    text-decoration: none;
+    /* Elimina subratllat */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+a.viewLog:hover {
+    text-decoration: underline;
+    /* Subratllat en passar el ratolí */
+}
+
+#logPagination {
+    display: flex;
+    /* Disposición flexible para alinear elementos */
+    justify-content: center;
+    /* Centra los enlaces horizontalmente */
+    align-items: center;
+    /* Centra verticalmente (por si cambian los tamaños) */
+    margin-top: 20px;
+    /* Espacio entre la tabla y la paginación */
+    gap: 10px;
+    /* Espacio entre los enlaces */
+}
+
+#logPagination a {
+    display: inline-block;
+    /* Asegura que los enlaces tengan tamaño ajustado */
+    padding: 10px 15px;
+    /* Espaciado interno */
+    border: 1px solid #ddd;
+    /* Borde sutil */
+    border-radius: 5px;
+    /* Bordes redondeados */
+    background-color: #f9f9f9;
+    /* Fondo claro */
+    color: #007bff;
+    /* Color del texto */
+    text-decoration: none;
+    /* Sin subrayado */
+    font-weight: bold;
+    /* Texto en negrita */
+    transition: background-color 0.3s, color 0.3s;
+    /* Efecto suave en hover */
+    cursor: pointer;
+    /* Icono de clic para el enlace */
+}
+
+#logPagination a:hover {
+    background-color: #007bff;
+    /* Fondo azul al pasar el ratón */
+    color: #fff;
+    /* Texto blanco al pasar el ratón */
+}
+
+#logPagination a.active {
+    background-color: #007bff;
+    /* Fondo azul para el enlace activo */
+    color: #fff;
+    /* Texto blanco para el enlace activo */
+    cursor: default;
+    /* Sin efecto de clic para el activo */
+    pointer-events: none;
+    /* Desactiva interacción */
+}
+
+#logPagination a.disabled {
+    background-color: #e0e0e0;
+    /* Fondo gris claro */
+    color: #b0b0b0;
+    /* Color de texto gris */
+    cursor: not-allowed;
+    /* Cursor que indica deshabilitado */
+    pointer-events: none;
+    /* Desactiva la interacción */
+    border: 1px solid #ccc;
+    /* Borde gris claro */
+}
+
+#logContainer {
+    background-color: #f4f4f9;
+    /* Fondo claro para el contenedor */
+    padding: 20px;
+    /* Espaciado interno */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Sombra sutil para dar profundidad */
+    max-height: 700px;
+    /* Altura máxima con barra de desplazamiento */
+    overflow-y: auto;
+    /* Desplazamiento vertical si es necesario */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Fuente moderna y clara */
+}
+
+#logContainer p {
+    background-color: #fff;
+    /* Fondo blanco para cada línea del log */
+    margin: 10px 0;
+    /* Margen superior e inferior para separar las líneas */
+    padding: 12px 15px;
+    /* Espaciado interno para que el texto no esté pegado al borde */
+    border-left: 5px solid #007bff;
+    /* Barra lateral azul para resaltar cada línea */
+    border-radius: 5px;
+    /* Bordes redondeados para las líneas */
+    font-size: 14px;
+    /* Tamaño de fuente cómodo para leer */
+    color: #333;
+    /* Color del texto */
+    line-height: 1.6;
+    /* Mejor espaciado entre líneas */
+    word-wrap: break-word;
+    /* Evita que el texto se desborde */
+    white-space: pre-wrap;
+    /* Mantiene los saltos de línea del log */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    /* Sombra sutil para dar efecto */
+}
+
+#logContainer p:nth-child(odd) {
+    background-color: #f9f9f9;
+    /* Fondo alternado para mejorar la legibilidad */
+}
+
+#logContainer p:hover {
+    background-color: #e6f7ff;
+    /* Fondo azul claro al pasar el ratón */
+    border-left-color: #0056b3;
+    /* Cambiar el color de la barra lateral al hacer hover */
 }

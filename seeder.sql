@@ -169,7 +169,7 @@ INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, l
 ('msanchez@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Matias', 'Sanchez Rivera', 'msanchez', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active');
 
 INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, location, sex, sex_orientation, account_status, role) VALUES
-('unai@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Matias', 'Sanchez Rivera', 'msanchez', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active', 'admin');
+('admin@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Jose', 'Administrador', 'admin', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active', 'admin');
 
 
 /*Insert 80 pictures to pictures table*/
