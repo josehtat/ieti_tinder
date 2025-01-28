@@ -134,7 +134,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             });
 
             var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
-            var totalPages = <?php echo $total_pages; ?>; // Total de paginas
+            var totalPages = <?php echo isset($total_pages) ? $total_pages : 1; ?>; // Total de paginas
 
             $("#logPagination").on("click", "a", function() {
                 var page = $(this).text();
@@ -172,10 +172,10 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 if (element.text() == currentPage) {
                     element.addClass("active");
                 }
-                if (element.text() == ">" && currentPage == <?php echo $total_pages; ?>) {
+                if (element.text() == ">" && currentPage == totalPages) {
                     element.addClass("disabled");
                 }
-                if (element.text() == ">>" && currentPage == <?php echo $total_pages; ?>) {
+                if (element.text() == ">>" && currentPage == totalPages) {
                     element.addClass("disabled");
                 }
 
