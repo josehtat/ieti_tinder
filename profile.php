@@ -27,13 +27,22 @@
         <div id="moreOptions">
             <p>...</p>
             <ul id="moreOptionsList">
-                <li id="logoutProfile"><button id="logout">Cerrar sesión</p></button></li>
+                <li id="logoutProfile"><button id="logout">Cerrar sesión</button></li>
                 <li id="editPwdProfile">Modificar la contraseña</li>
-                <li id="deleteProfile">Eliminar la cuenta</li>
+                <li id="deleteProfile"><button id="deleteAccount">Eliminar la cuenta</button></li>
             </ul>
         </div>
     </header>
     <main id="mainProfile">
+        <div id="overlay"></div>
+        <div id="popup">
+            <p id="popup-message"></p>
+            <input type="text" id="confirmation-input" placeholder="Escribe 'BORRAR' para confirmar" />
+            <div class="popup-buttons">
+                <button id="close-btn">Cancelar</button>
+                <button id="delete-button" disabled>Confirmar</button>
+            </div>
+        </div>
         <?php
         try {
             $hostname = "localhost";
@@ -87,8 +96,8 @@
                 <div id="carouselDots">
                     <?php for ($i = 0; $i < count($images); $i++) { ?>
                         <span class="carouselDot <?php if ($i == 0) {
-                            echo 'active';
-                        } ?>"></span>
+                                                        echo 'active';
+                                                    } ?>"></span>
                     <?php } ?>
                 </div>
             </div>
@@ -113,23 +122,23 @@
                 <label for="genderProfile">Genero:</label>
                 <select id="genderProfile" name="genderProfile">
                     <option value="M" <?php if ($gender == 'M')
-                        echo 'selected'; ?>>Masculino</option>
+                                            echo 'selected'; ?>>Masculino</option>
                     <option value="F" <?php if ($gender == 'F')
-                        echo 'selected'; ?>>Femenino</option>
+                                            echo 'selected'; ?>>Femenino</option>
                     <option value="NB" <?php if ($gender == 'NB')
-                        echo 'selected'; ?>>No Binario</option>
+                                            echo 'selected'; ?>>No Binario</option>
                 </select>
 
                 <label for="orientationProfile">Orientación sexual</label>
                 <select id="orientationProfile" name="orientationProfile">
                     <option value="heterosexual" <?php if ($orientation == 'heterosexual')
-                        echo 'selected'; ?>>
+                                                        echo 'selected'; ?>>
                         Heterosexual</option>
                     <option value="homosexual" <?php if ($orientation == 'homosexual')
-                        echo 'selected'; ?>>Homosexual
+                                                    echo 'selected'; ?>>Homosexual
                     </option>
                     <option value="bisexual" <?php if ($orientation == 'bisexual')
-                        echo 'selected'; ?>>Bisexual</option>
+                                                    echo 'selected'; ?>>Bisexual</option>
                 </select>
                 </select>
 
@@ -243,7 +252,9 @@
         const map = L.map('map').setView([userLat, userLng], 13); // Vista inicial del mapa
 
         // Crear un marcador inicial en la ubicación del usuario (se puede eliminar si no se necesita)
-        let marker = L.marker([userLat, userLng], { icon: customIcon }).addTo(map);
+        let marker = L.marker([userLat, userLng], {
+            icon: customIcon
+        }).addTo(map);
 
         // Agregar un mapa base (OpenStreetMap)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -251,7 +262,7 @@
         }).addTo(map);
 
         // Detectar clics en el mapa
-        map.on('click', function (e) {
+        map.on('click', function(e) {
             const lat = e.latlng.lat.toFixed(6); // Redondear latitud
             const lng = e.latlng.lng.toFixed(6); // Redondear longitud
 
@@ -265,18 +276,20 @@
                 marker.setLatLng(e.latlng);
             } else {
                 // Crear un nuevo marcador si aún no existe
-                marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+                marker = L.marker(e.latlng, {
+                    icon: customIcon
+                }).addTo(map);
             }
         });
 
 
-        $(document).ready(function () {
+        $(document).ready(function() {
             var images = <?php echo json_encode($images); ?>;
             var cont = 0;
             var $carousel = $('#carouselContainer .profileImage');
 
             function changeImage() {
-                $carousel.fadeOut('fast', function () {
+                $carousel.fadeOut('fast', function() {
                     $carousel.attr('src', images[cont]);
                     $carousel.fadeIn('fast');
                 });
@@ -291,29 +304,32 @@
                     cont = (cont - 1 + images.length) % images.length;
                     changeImage();
                 }); */
-                $carousel.off('click').on('click', function () {
+                $carousel.off('click').on('click', function() {
                     cont = (cont + 1) % images.length;
                     changeImage();
                     $('.carouselDot').removeClass('active');
                     $('.carouselDot').eq(cont).addClass('active');
                 });
 
-                $('#viewTab').click(function () {
+                $('#viewTab').click(function() {
                     $('#userProfile').show();
                     $('#editProfileSection').hide();
                     $('#viewTab').addClass('active');
                     $('#editTab').removeClass('active');
                 });
 
-                $('#editTab').click(function () {
+                $('#editTab').click(function() {
                     $('#userProfile').hide();
                     $('#editProfileSection').show();
                     $('#editTab').addClass('active');
                     $('#viewTab').removeClass('active');
                 }); // Asegurarse de que 'Mirar' esté activo al cargar la página 
                 $('#viewTab').click();
-                $("#logout").click(function (event) {
+                $("#logout").click(function(event) {
                     logout();
+                });
+                $('#deleteAccount').click(function(event) {
+                    deleteAccount();
                 });
             }
 
@@ -336,7 +352,52 @@
                 if (logRes.status == 0) {
                     logMessage(logRes.status, logRes.data);
                     setTimeout(function() {
-                    window.location.href = "/";
+                        window.location.href = "/";
+                    }, 100);
+                }
+            }
+
+            function deleteAccount() {
+
+                // Set the message
+                $('#popup-message').text("¿Estás seguro de que deseas borrar tu cuenta?");
+
+                // Show the popup and overlay
+                $('#popup, #overlay').fadeIn();
+
+                $('#confirmation-input').on('input', function() {
+                    if ($(this).val() == 'BORRAR') {
+                        $('#delete-button').prop('disabled', false);
+                    } else {
+                        $('#delete-button').prop('disabled', true);
+                    }
+                })
+
+                // Close button
+                $('#close-btn').click(function() {
+                    $('#popup, #overlay').fadeOut();
+                });
+
+                // Redirect button
+                $('#delete-button').click(function() {
+                    var parameters = {};
+
+                    $.ajax({
+                        data: parameters,
+                        url: 'delete-account.php',
+                        type: 'POST',
+                        success: deleteAccountResult,
+                        dataType: 'json'
+                    });
+                });
+            }
+
+            function deleteAccountResult(logRes) {
+                console.log(logRes);
+                if (logRes.status == 0) {
+                    logMessage(logRes.status, logRes.data);
+                    setTimeout(function() {
+                        window.location.href = "/";
                     }, 100);
                 }
             }
@@ -372,20 +433,21 @@
                 console.log(logRes);
             }
 
-            $('#editForm').on('submit', function (e) {
-                e.preventDefault(); var form = $(this);
+            $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
                 $.ajax({
                     type: 'POST',
                     url: '',
                     data: form.serialize(),
-                    success: function (response) {
+                    success: function(response) {
                         console.log('Formulario enviado correctamente');
                         $('#userProfile').show();
                         $('#editProfileSection').hide();
                         setupEventListeners();
                         window.location.href = "/profile.php";
                     },
-                    error: function (err) {
+                    error: function(err) {
                         console.log('Error en el envío del formulario: ', err);
                     }
                 });

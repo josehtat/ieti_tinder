@@ -9,9 +9,13 @@
 
 <body>
     <script>
-        <?php if (isset($_COOKIE['loggedUser'])) { ?>
-            window.location.href = "/discober.php";
-        <?php } else { ?>
+        <?php if (isset($_COOKIE['loggedUser'])) {
+            if (isset($_COOKIE['userRole']) && $_COOKIE['userRole'] == 'admin') { ?>
+                window.location.href = "/admin/index.php";
+            <?php } else { ?>
+                window.location.href = "/discober.php";
+            <?php }
+        } else { ?>
             window.location.href = "/login.php";
         <?php } ?>
     </script>

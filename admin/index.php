@@ -2,13 +2,10 @@
 // Verificar si el usuario tiene la cookie de autenticación y el rol adecuado
 if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['userRole'] !== 'admin') {
     // Redirigir al login si no está autenticado como administrador
-    header("Location: /error403.php");
-    exit;
+    http_response_code(403);
+    header("Location: ../error/403.php");
+    die("Error 403: Prohibido");
 }
-
-// Eliminar la cookie de loggedUser y userRole al entrar en el panel administrativo
-setcookie("loggedUser", "", time() - 3600, "/"); // Eliminar cookie loggedUser
-setcookie("userRole", "", time() - 3600, "/");  // Eliminar cookie userRole
 
 // Puedes añadir un mensaje o lógica adicional aquí, si lo necesitas
 ?>
@@ -18,12 +15,50 @@ setcookie("userRole", "", time() - 3600, "/");  // Eliminar cookie userRole
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+    <script src="/js/script.js"></script>
     <title>Panel Administrativo</title>
 </head>
 
-<body>
-    <h1>Bienvenido al Panel Administrativo</h1>
-    <p>Esta sección es solo para usuarios con rol de administrador.</p>
+<body class="admin-body">
+    <div class="admin-container">
+        <header>
+            <div class="header-content">
+                <h1>Bienvenido al Panel Administrativo</h1>
+                <p>Esta sección es solo para usuarios con rol de administrador.</p>
+            </div>
+            <div class="header-buttons">
+                <button id="exitButton">Cerrar sesión de administrador</button>
+            </div>
+        </header>
+        <main>
+            <p>Esta es la pantalla de inicio de la sección de administración.</p>
+            <button id="usersButton">Ver usuarios</button>
+            <button id="logsButton">Ver logs</button>
+        </main>
+    </div>
+
+    <script>
+        // Resto de tu JavaScript
+        $(document).ready(function() {
+            // Resto de tu JavaScript
+            $("#exitButton").click(function() {
+                $.post("/clear-cookies.php", function() {
+                    // Redirect after cookies are cleared
+                    window.location.href = "/";
+                });
+            });
+
+            $("#logsButton").click(function() {
+                window.location.href = "/admin/logs.php";
+            });
+
+            $("#usersButton").click(function() {
+                window.location.href = "/admin/users.php";
+            });
+        })
+    </script>
 </body>
 
 </html>

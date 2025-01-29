@@ -111,15 +111,18 @@ if (!isset($_SESSION['userProfiles'])) {
                 $queryText = "SELECT * FROM users " .
                     "WHERE NOT sex = :sex AND NOT sex = 'NB' " .
                     "AND (sex_orientation = 'heterosexual' OR sex_orientation = 'bisexual') " .
-                    "AND NOT email_user = :mail;";
+                    "AND NOT email_user = :mail " .
+                    "AND NOT role = 'admin';";
             } else if ($sexualOrientation == "homosexual") {
                 $queryText = "SELECT * FROM users " .
                     "WHERE sex = :sex " .
                     "AND (sex_orientation = 'homosexual' OR sex_orientation = 'bisexual') " .
-                    "AND NOT email_user = :mail;";
+                    "AND NOT email_user = :mail " .
+                    "AND NOT role = 'admin';";
             } else {
                 $queryText = "SELECT * FROM users " .
-                    "WHERE NOT email_user = :mail;";
+                    "WHERE NOT email_user = :mail " .
+                    "AND NOT role = 'admin';";
             }
 
             try {
