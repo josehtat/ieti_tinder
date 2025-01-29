@@ -204,9 +204,9 @@
                     <label for="sexOrientation">Orientación Sexual</label>
                     <select id="sexOrientation" name="sexOrientation" required>
                         <option value="" disabled selected>Seleccionar una opción</option>
-                        <option value="Heterosexual">Heterosexual</option>
-                        <option value="Homosexual">Homosexual</option>
-                        <option value="Bisexual">Bisexual</option>
+                        <option value="heterosexual">Heterosexual</option>
+                        <option value="homosexual">Homosexual</option>
+                        <option value="bisexual">Bisexual</option>
                     </select>
                 </div>
             </div>
