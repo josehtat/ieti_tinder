@@ -1641,7 +1641,7 @@ body.admin-body {
     width: 100%;
     padding: 10px 15px;
     border: none;
-    background-color: #007bff;
+    background-color: #7b1fa2;
     color: white;
     font-size: 14px;
     cursor: pointer;
@@ -1650,7 +1650,7 @@ body.admin-body {
 }
 
 .header-buttons button:hover {
-    background-color: #0056b3;
+    background-color: #1a1a1a;
 }
 
 .admin-container main {
@@ -1716,7 +1716,7 @@ body.admin-body {
 }
 
 a.viewLog, a.viewUser {
-    color: #007bff;
+    color: #7b1fa2;
     /* Blau per als enllaços */
     text-decoration: none;
     /* Elimina subratllat */
@@ -1766,14 +1766,14 @@ a.viewLog:hover, a.viewUser:hover {
 }
 
 #logPagination a:hover, #userPagination a:hover {
-    background-color: #007bff;
+    background-color: #7b1fa2;
     /* Fondo azul al pasar el ratón */
     color: #fff;
     /* Texto blanco al pasar el ratón */
 }
 
 #logPagination a.active, #userPagination a.active {
-    background-color: #007bff;
+    background-color: #7b1fa2;
     /* Fondo azul para el enlace activo */
     color: #fff;
     /* Texto blanco para el enlace activo */
@@ -1820,7 +1820,7 @@ a.viewLog:hover, a.viewUser:hover {
     /* Margen superior e inferior para separar las líneas */
     padding: 12px 15px;
     /* Espaciado interno para que el texto no esté pegado al borde */
-    border-left: 5px solid #007bff;
+    border-left: 5px solid #7b1fa2;
     /* Barra lateral azul para resaltar cada línea */
     border-radius: 5px;
     /* Bordes redondeados para las líneas */
@@ -1846,6 +1846,6 @@ a.viewLog:hover, a.viewUser:hover {
 #logContainer p:hover {
     background-color: #e6f7ff;
     /* Fondo azul claro al pasar el ratón */
-    border-left-color: #0056b3;
+    border-left-color: #1a1a1a;
     /* Cambiar el color de la barra lateral al hacer hover */
 }
