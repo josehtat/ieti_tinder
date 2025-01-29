@@ -50,6 +50,10 @@
 
     <script>
         <?php
+        require 'vendor/autoload.php';
+        use PHPMailer\PHPMailer\PHPMailer;
+        use PHPMailer\PHPMailer\SMTP;
+        use PHPMailer\PHPMailer\Exception;
         $status = 0;
         $logMessage = "";
 
@@ -58,7 +62,7 @@
             <?php
         } else {
             if (isset($_POST['mail'])) {
-                $mail = $_POST['mail'];
+                $mailText = $_POST['mail'];
 
                 try {
                     $hostname = "localhost";
@@ -70,7 +74,7 @@
                     // Verificar si el correo electrónico existe en la base de datos
                     $queryText = "SELECT * FROM users WHERE email_user = :mail";
                     $queryUser = $pdo->prepare($queryText);
-                    $queryUser->bindParam(':mail', $mail);
+                    $queryUser->bindParam(':mail', $mailText);
                     $queryUser->execute();
 
                     if ($queryUser->rowCount() === 1) {
@@ -81,15 +85,8 @@
 
                         // Insertar token en la base de datos
                         $insertToken = $pdo->prepare("INSERT INTO password_resets (email, token) VALUES (?, ?)");
-                        $insertToken->execute([$mail, $token]);
+                        $insertToken->execute([$mailText, $token]);
 
-                        // Incluir el autoload de Composer
-                        require 'vendor/autoload.php';
-
-                        //use PHPMailer\PHPMailer\PHPMailer;
-                        //use PHPMailer\PHPMailer\SMTP;
-                        //use PHPMailer\PHPMailer\Exception;
-        
                         $mail = new PHPMailer(true);
 
                         try {
@@ -104,14 +101,14 @@
                             $mail->Port = 465;
 
                             // Destinatarios
-                            $mail->setFrom('unaimunoz2024@gmail.com', 'Unai');
-                            $mail->addAddress($mail); // El correo del usuario
+                            $mail->setFrom('affinity@gmail.com', 'Affinity');
+                            $mail->addAddress($mailText); // El correo del usuario
         
                             // Contenido del correo
                             $mail->isHTML(true);
                             $mail->Subject = 'Restablecer contraseña';
-                            $mail->Body = "Hola,<br><br>Haga clic en el siguiente enlace para restablecer su contraseña: <a href='http://tu_dominio.com/reset_password.php?token=$token'>Restablecer Contraseña</a><br><br>Si no solicitó este cambio, ignore este correo.";
-                            $mail->AltBody = "Hola,\n\nHaga clic en el siguiente enlace para restablecer su contraseña: http://tu_dominio.com/reset_password.php?token=$token\n\nSi no solicitó este cambio, ignore este correo.";
+                            $mail->Body = "Hola,<br><br>Haga clic en el siguiente enlace para restablecer su contraseña: <a href='http://tinder1.ieti.site/forgot_password.php?token=$token'>Restablecer Contraseña</a><br><br>Si no solicitó este cambio, ignore este correo.";
+                            $mail->AltBody = "Hola,\n\nHaga clic en el siguiente enlace para restablecer su contraseña: http://tinder1.ieti.site/forgot_password.php?token=$token\n\nSi no solicitó este cambio, ignore este correo.";
 
                             $mail->send();
                             $status = 0;
@@ -129,7 +126,7 @@
                     $logMessage = "Error al acceder a la base de datos: " . $e->getMessage();
                 }
                 ?>
-                logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+
                 <?php
             }
 
@@ -161,7 +158,7 @@
                     $logMessage = "Error al acceder a la base de datos: " . $e->getMessage();
                 }
                 ?>
-                logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+
                 <?php
             }
 
@@ -169,10 +166,17 @@
                 $new_password = $_POST['new_password'];
                 $confirm_password = $_POST['confirm_password'];
                 $token = $_POST['token'];
+                echo $token;
 
                 if ($new_password === $confirm_password) {
                     try {
                         $new_password_hashed = hash('sha256', $new_password);
+
+                        $hostname = "localhost";
+                        $dbname = "ieti_tinder";
+                        $dbUsername = "ietitinder";
+                        $pw = "tinder123";
+                        $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
 
                         // Obtener el correo electrónico correspondiente al token
                         $query = $pdo->prepare("SELECT email FROM password_resets WHERE token = ?");
@@ -185,12 +189,17 @@
                             $updatePassword = $pdo->prepare("UPDATE users SET password_user = ? WHERE email_user = ?");
                             $updatePassword->execute([$new_password_hashed, $email]);
 
-                            // Eliminar el token de restablecimiento
-                            //$deleteToken = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
-                            //$deleteToken->execute([$token]);
-        
-                            $status = 0;
-                            $logMessage = "¡Contraseña actualizada correctamente! Ahora puede iniciar sesión.";
+                            if ($updatePassword->rowCount() > 0) {
+                                $status = 0;
+                                $logMessage = "¡Contraseña actualizada correctamente! Ahora puede iniciar sesión.";
+                                header('Location: login.php?success=1');
+                            } else {
+                                $status = 3;
+                                $logMessage = "No se pudo actualizar la contraseña. Por favor, inténtelo de nuevo.";
+                            }
+
+                            $deleteToken = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
+                            $deleteToken->execute([$token]);
                         } else {
                             $status = 1;
                             $logMessage = "Enlace de restablecimiento inválido o expirado.";
@@ -203,52 +212,53 @@
                     $status = 2;
                     $logMessage = "Las contraseñas no coinciden.";
                 }
+
                 ?>
-                logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+
                 <?php
             }
         }
         ?>
     </script>
-
-    <div class="forgotPassword-container">
-        <h1>Affinity</h1>
-        <h2>Introduce el correo electrónico con el que quiere restablecer tu contraseña</h2>
-
-        <div class="error-group">
-            <?php if ($status > 0) { ?>
-                <p id="error-message"><?php echo $logMessage; ?></p>
-            <?php } ?>
-        </div>
-
-        <form id="sendLinkForm" action="forgot_password.php" method="post" class="login-form">
+    <?php if (!isset($_GET['token'])): ?>
+        <form id="sendLinkForm" action="forgot_password.php" method="post" class="reset-form">
+            <h1>Affinity</h1>
+            <h2>Ingrese su correo electrónico para restablecer su contraseña</h2>
             <div class="input-group">
                 <label for="mail">Email</label>
                 <input type="email" id="mail" name="mail" placeholder="" <?php if ($status == 1)
-                    echo 'class="inputError"'; ?> required>
+                    echo 'class="inputError"'; ?>
+                    required>
             </div>
             <div class="submit-btn">
                 <button type="submit">Enviar</button>
             </div>
         </form>
+    <?php endif; ?>
 
-        <form id="resetPasswordForm" action="forgot_password.php" method="post" class="login-form"
-            style="display:none;">
+    <?php if (isset($_GET['token'])): ?>
+        <form id="resetPasswordForm" action="forgot_password.php" method="post" class="reset-form">
+            <h1>Affinity</h1>
+            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>">
             <div class="input-group">
                 <label for="new_password">Nueva Contraseña</label>
-                <input type="password" id="new_password" name="new_password" placeholder="" required>
+                <input type="password" id="new_password" name="new_password" placeholder="" minlength="8"
+                    pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                    title="La contraseña debe tener al menos 8 caracteres, una mayúscula y un número" required>
             </div>
             <div class="input-group">
                 <label for="confirm_password">Confirmar Contraseña</label>
-                <input type="password" id="confirm_password" name="confirm_password" placeholder="" required>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="" minlength="8"
+                    pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+                    title="La contraseña debe tener al menos 8 caracteres, una mayúscula y un número" required>
             </div>
-            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>"
-                required>
+            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>" required>
             <div class="submit-btn">
                 <button type="submit">Restablecer Contraseña</button>
             </div>
         </form>
-    </div>
+    <?php endif; ?>
+
 </body>
 
 </html>

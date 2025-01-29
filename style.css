@@ -1393,7 +1393,7 @@ MARK: error403.php y error404.php
 MARK: forgot_password.php
 */
 
-.forgotPassword-container {
+.reset-form {
     background-color: #F4F4F4;
     padding: 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -1403,29 +1403,29 @@ MARK: forgot_password.php
     text-align: center;
 }
 
-.forgotPassword-container h1 {
+.reset-form h1 {
     margin-top: 18rem !important;
     color: #7B1FA2;
     text-align: center;
     margin: 0 0 0.5rem;
 }
 
-.forgotPassword-container h2 {
+.reset-form h2 {
     color: #666;
     text-align: center;
     font-size: 1.1rem;
     margin: 0 0 2rem;
 }
 
-.forgotPassword-container label {
+.reset-form label {
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
 }
 
-.forgotPassword-container input[type="email"],
-.forgotPassword-containerinput[type="password"],
-.forgotPassword-container input[type="text"] {
+.reset-form input[type="email"],
+.reset-form input[type="password"],
+.reset-form input[type="text"] {
     width: 100%;
     padding: 10px;
     border: none;
@@ -1434,27 +1434,27 @@ MARK: forgot_password.php
     background-color: #e1e1e1;
 }
 
-.login-container input[type="text"]:focus,
-.login-container input[type="password"]:focus,
-.login-container input[type="email"]:focus {
+.reset-form input[type="text"]:focus,
+.reset-form input[type="password"]:focus,
+.reset-form input[type="email"]:focus {
     outline: none;
 }
 
-.forgotPassword-container .inputError {
+.reset-form .inputError {
     border: 2px solid red !important;
 }
 
-.forgotPassword-container input {
+.reset-form input {
     box-sizing: border-box;
 }
 
-.forgotPassword-container #error-message {
+.reset-form #error-message {
     background-color: lightgray;
     border: 1px solid red;
     color: red;
 }
 
-.forgotPassword-container button {
+.reset-form button {
     width: 100%;
     padding: 12px;
     background: #7B1FA2;
@@ -1465,22 +1465,22 @@ MARK: forgot_password.php
     cursor: pointer;
 }
 
-.forgotPassword-container button:hover {
+.reset-form button:hover {
     background-color: #52146c;
 }
 
-.forgotPassword-container a:link,
-.forgotPassword-container a:visited {
+.reset-form a:link,
+.reset-form a:visited {
     color: #7B1FA2;
     text-decoration: none;
 }
 
-.forgotPassword-container a:hover,
-.forgotPassword-container a:active {
+.reset-form a:hover,
+.reset-form a:active {
     text-decoration: underline;
 }
 
-.forgotPassword-container form .input-group {
+.reset-form form .input-group {
     margin-bottom: 0px;
     text-align: left;
 }
