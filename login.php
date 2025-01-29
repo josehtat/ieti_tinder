@@ -42,7 +42,6 @@
             console.log("logResult: ");
             console.log(logRes);
         }
-
     </script>
 
     <script>
@@ -95,9 +94,12 @@
             }
         }
 
-        if (isset($_COOKIE['loggedUser'])) { ?>
-            window.location.href = "/discober.php";
-            <?php
+        if (isset($_COOKIE['loggedUser'])) {
+            if (isset($_COOKIE['userRole']) && $_COOKIE['userRole'] == 'admin') { ?>
+                window.location.href = "/admin/index.php";
+            <?php } else { ?>
+                window.location.href = "/discober.php";
+                <?php }
         } else {
             if (isset($_POST['mail']) && isset($_POST['password'])) {
                 $mail = $_POST['mail'];
@@ -129,7 +131,7 @@
                 if ($queryUser->rowCount() !== 1) {
                     $status = 1;
                     $logMessage = "Usuario no encontrado o datos incorrectos.";
-                    ?>
+                ?>
                     logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
                     <?php
 
@@ -139,13 +141,13 @@
                     if ($user['account_status'] === 'to verify') {
                         $status = 3;
                         $logMessage = "Cuenta pendiente de verificación. Por favor, verifica tu correo.";
-                        ?>
+                    ?>
                         logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
-                        <?php
+                    <?php
                     } elseif ($user['account_status'] === 'inactive') {
                         $status = 4;
                         $logMessage = "Cuenta inactiva. Contacta al soporte.";
-                        ?>
+                    ?>
                         logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
                         <?php
                     } elseif ($user['account_status'] === 'active') {
@@ -153,20 +155,28 @@
                         if ($user['password_user'] === $hashedPassword) {
                             setcookie("userRole", $user['role'], time() + 1000 * 60 * 60 * 24 * 7); // Guardar el rol del usuario
                             setcookie("loggedUser", $user['email_user'], time() + 1000 * 60 * 60 * 24 * 7);
+                            $status = 0;
+                            $logMessage = "Usuario " . $user['email_user'] . " logueado correctamente.";
+                        ?>
+                            logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                            <?php
 
                             if ($user['role'] === 'admin') { ?>
-                                window.location.href = "/admin/index.php";
+                                setTimeout(function() {
+                                    window.location.href = "/admin/index.php";
+                                }, 100);
+
                             <?php } else { ?>
-                                window.location.href = "/discober.php";
+                                setTimeout(function() {
+                                    window.location.href = "/discober.php";
+                                }, 100);
                             <?php }
-                            $status = 0;
-                            $logMessage = "Usuario logueado correctamente.";
                         } else {
                             $status = 2;
                             $logMessage = "Contraseña incorrecta.";
                             ?>
                             logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
-                            <?php
+        <?php
                         }
                     }
                 }
@@ -200,7 +210,7 @@
             </div>
 
             <div class="forgot-password">
-                <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
+                <p><a href="/forgot_password.php">¿Olvidaste la contraseña?</a></p>
             </div>
 
             <div class="register-link">

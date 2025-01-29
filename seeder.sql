@@ -41,8 +41,16 @@ CREATE TABLE messages (
     id_receptor VARCHAR(255),
     message_user TEXT,
     date DATETIME,
+    like_message TINYINT(1) DEFAULT 0,
     FOREIGN KEY (id_user) REFERENCES users(email_user) ON DELETE CASCADE,
     FOREIGN KEY (id_receptor) REFERENCES users(email_user) ON DELETE CASCADE
+);
+
+CREATE TABLE `password_resets` (
+  `id` int NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 /*Insert 40 users to users table*/
@@ -168,7 +176,7 @@ INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, l
 ('msanchez@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Matias', 'Sanchez Rivera', 'msanchez', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active');
 
 INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, location, sex, sex_orientation, account_status, role) VALUES
-('admin@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Matias', 'Sanchez Rivera', 'msanchez', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active', 'admin');
+('admin@ieti.site', 'b251f16692c49c63e2e6668044b82f299a76d94e476b1131bbe05444b0ede6b1', 'Jose', 'Administrador', 'admin', '1996-01-11', '19.07609 72.877426', 'M', 'heterosexual', 'active', 'admin');
 
 
 /*Insert 80 pictures to pictures table*/
@@ -412,6 +420,3 @@ INSERT INTO pictures (email_user, path) VALUES
 
 INSERT INTO pictures (email_user, path) VALUES
 ('msanchez@ieti.site', '/profilePictures/msanchez2.jpg');
-
-INSERT INTO messages (id_user, id_receptor, message_user, date) VALUES
-('jgarcia@ieti.site', 'mmartinez@ieti.site', 'Hi, I am Joan Garcia! How are you?', '2023-05-14 10:00:00');
