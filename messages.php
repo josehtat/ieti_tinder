@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
+    <script src="/js/script.js"></script>
     <title>Mensajes</title>
 </head>
 
@@ -23,6 +24,7 @@
     <main id="mainMessages">
         <div id="matchMessages">
             <h3>Mis matches</h3>
+            <div id="messages-container"></div>
             <div id="matchBox">
                 <?php
                 try {
