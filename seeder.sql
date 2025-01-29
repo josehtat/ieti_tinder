@@ -46,6 +46,13 @@ CREATE TABLE messages (
     FOREIGN KEY (id_receptor) REFERENCES users(email_user) ON DELETE CASCADE
 );
 
+CREATE TABLE `password_resets` (
+  `id` int NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 /*Insert 40 users to users table*/
 
 INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, location, sex, sex_orientation, account_status) VALUES
