@@ -50,27 +50,44 @@
         $status = 0;
         $logMessage = "";
 
+        // Función para desencriptar el correo electrónico
+        function decryptEmail($encrypted_token) {
+            $encryption_key = 'kappachungus';  // La misma clave secreta
+            list($encrypted_email, $iv) = explode('::', base64_decode($encrypted_token), 2);  // Separar el correo y el IV
+            
+            // Desencriptar el correo electrónico
+            return openssl_decrypt($encrypted_email, 'aes-256-cbc', $encryption_key, 0, $iv);
+        }
+
         // Handle verification
         if (isset($_GET['validate'])) {
-            $email = $_GET['validate'];
+            $encrypted_token = $_GET['validate'];
             
             try {
-                $hostname = "localhost";
-                $dbname = "ieti_tinder";
-                $dbUsername = "ietitinder";
-                $pw = "tinder123";
-                $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+                // Desencriptar el correo electrónico desde el token
+                $email = decryptEmail($encrypted_token);
                 
-                // Update user status to active
-                $updateStmt = $pdo->prepare("UPDATE users SET account_status = 'active' WHERE email_user = ? AND account_status = 'to verify'");
-                $updateStmt->execute([$email]);
-                
-                if ($updateStmt->rowCount() > 0) {
-                    $status = 0;
-                    $logMessage = "Account successfully verified! You can now login.";
+                if ($email === false) {
+                    $status = 3;
+                    $logMessage = "Token inválido.";
                 } else {
-                    $status = 2;
-                    $logMessage = "Invalid verification link or account already verified.";
+                    $hostname = "localhost";
+                    $dbname = "ieti_tinder";
+                    $dbUsername = "ietitinder";
+                    $pw = "tinder123";
+                    $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+
+                    // Update user status to active
+                    $updateStmt = $pdo->prepare("UPDATE users SET account_status = 'active' WHERE email_user = ? AND account_status = 'to verify'");
+                    $updateStmt->execute([$email]);
+
+                    if ($updateStmt->rowCount() > 0) {
+                        $status = 3;
+                        $logMessage = "Cuenta verificada.";
+                    } else {
+                        $status = 3;
+                        $logMessage = "Link de verificación inválido o cuenta ya verificada.";
+                    }
                 }
             } catch (PDOException $e) {
                 $status = 4;

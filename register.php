@@ -10,6 +10,12 @@
 </head>
 <body class="register-body">
     <?php
+    require 'vendor/autoload.php';
+
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
     $status = 0;
     $logMessage = "";
 
@@ -40,42 +46,78 @@
                 foreach ($checkEmail as $row) {
                     if ($row['account_status'] == 'active') {
                         $status = 2;
-                        $logMessage = "Account already verified";
+                        $logMessage = "Cuenta ya existente. Por favor, inicia sesión";
                         break;
                     } else if ($row['account_status'] == 'inactive') {
                         $query = "UPDATE users SET password_user = ?, name = ?, surnames = ?, alias = ?, birthday = ?, location = ?, sex = ?, sex_orientation = ?, account_status = 'to verify' WHERE email_user = ?";
+                        $stmt = $pdo->prepare($query);
+                        $stmt->execute([$password, $name, $surnames, $alias, $birthday, $location, $sex, $sexOrientation, $email]);
+                        $status = 0;
+                        $logMessage = "Cuenta acutualizada. Porfavor verifica tu correo.";
                         break;
                     } else if ($row['account_status'] == 'to verify') {
                         $status = 2;
-                        $logMessage = "Account to be verified";
+                        $logMessage = "Cuenta pendiente de verificación. Por favor, verifica tu correo.";
                         break;
                     }
                 }
 
             } else {
-                // Create verification link with email
-                $verificationLink = "http://tinder1.ieti.site/login.php?validate=" . urlencode($email);
-                $to = $email;
-                $subject = "Verify your Affinity account";
-                $message = "Welcome to Affinity!\n\nPlease click the following link to verify your account:\n" . $verificationLink;
-                $headers = "From: administration@tinder1.ieti.site" . "\r\n" .
-                          "Reply-To: administration@tinder1.ieti.site" . "\r\n" .
-                          "X-Mailer: PHP/" . phpversion();
 
-                // Try to send email first
-                if(mail($to, $subject, $message, $headers)) {
+                //Create an instance; passing `true` enables exceptions
+                $mail = new PHPMailer(true);
+
+                try {
+                    //Server settings
+                    $mail->SMTPDebug = 0;
+                    $mail->isSMTP();                                            //Send using SMTP
+                    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+                    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                    $mail->Username   = 'unaimunoz2024@gmail.com';                     //SMTP username
+                    $mail->Password   = 'fdrh okqg yzpe wwen';                               //SMTP password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+                    //Recipients
+                    $mail->setFrom('administration@tinder1.ieti.site', 'Affinity');
+                    $mail->addAddress($email); // Usamos la variable $email como destinatario
+
+                    // Función para encriptar el correo electrónico
+                    function encryptEmail($email) {
+                        $encryption_key = 'kappachungus';  // Clave secreta (debe ser mantenida segura)
+                        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));  // IV aleatorio para mayor seguridad
+                        
+                        // Encriptar el correo electrónico usando AES-256-CBC
+                        $encrypted_email = openssl_encrypt($email, 'aes-256-cbc', $encryption_key, 0, $iv);
+                        
+                        // Codificar el IV y el correo encriptado en Base64 para que puedan ser fácilmente pasados en la URL
+                        return base64_encode($encrypted_email . '::' . $iv);
+                    }
+
+                    $verificationLink = "http://tinder1.ieti.site/login.php?validate=" . urlencode(encryptEmail($email));
+
+                    //Content
+                    $mail->isHTML(true);                                  //Set email format to HTML
+                    $mail->Subject = 'Verificar Cuenta';
+                    $mail->Body = 'Haz clic en el siguiente enlace para verificar tu cuenta: 
+                        <br><br>
+                        <a href="' . $verificationLink . '" style="background-color:rgb(158, 132, 230); color: black; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                            Verifica tu cuenta
+                        </a>';
+
+                    $mail->send();
+
                     // Only insert user if email was sent successfully
                     $query = "INSERT INTO users (email_user, password_user, name, surnames, alias, birthday, location, sex, sex_orientation, account_status) 
-                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'to verify')";
-
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'to verify')";
                     $stmt = $pdo->prepare($query);
                     $stmt->execute([$email, $password, $name, $surnames, $alias, $birthday, $location, $sex, $sexOrientation]);
+
+                    header('Location: login.php');
                     
-                    $status = 0;
-                    $logMessage = "Registration successful! Please check your email to verify your account.";
-                } else {
+                } catch (Exception $e) {
                     $status = 3;
-                    $logMessage = "Registration failed: Could not send verification email. Please try again later.";
+                    $logMessage = "Registro fallido no se pudo enviar el correo";
                 }
             }
         } catch (PDOException $e) {

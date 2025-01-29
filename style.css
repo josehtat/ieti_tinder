@@ -299,8 +299,6 @@ MARK:login.php
 }
 
 .login-container #error-message {
-    background-color: lightgray;
-    border: 1px solid red;
     color: red;
 }
 
@@ -1060,7 +1058,7 @@ MARK:Control de errores
 #messages-container {
     position: absolute;
     top: 106px;
-    right: 590px;
+    right: 820px;
     z-index: 9999;
     width: 200px;
     display: flex;
