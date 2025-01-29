@@ -38,85 +38,131 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
 
 
             <?php
-            function get_logs()
+
+            function get_users()
             {
-                // Connexió a la base de dades o accés al sistema de fitxers
-                $logs = glob('../logs/*.txt');
-
-                $formatted_logs = array();
-
-                foreach ($logs as $log) {
-                    $log_info = pathinfo($log);
-                    $formatted_logs[] = array(
-                        'id' => $log_info['filename'] . '.' . $log_info['extension'],
-                        'name' => $log_info['filename'] . '.' . $log_info['extension'],
-                        'size' => round(filesize($log) / 1024, 2), // Convertir a KB
-                        'date' => date('d/m/Y', filemtime($log))
-                    );
+                try {
+                    $hostname = "localhost";
+                    $dbname = "ieti_tinder";
+                    $dbUsername = "ietitinder";
+                    $pw = "tinder123";
+                    $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+                } catch (PDOException $e) {
+                    echo "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
+                    exit;
                 }
 
-                return $formatted_logs;
+                //preparem i executem la consulta
+                $queryText = "SELECT * FROM users " .
+                    "WHERE NOT role = 'admin'";
+
+                try {
+                    //preparem i executem la consulta
+                    $queryUser = $pdo->prepare($queryText);
+                    $queryUser->execute();
+                } catch (PDOException $e) {
+                    echo "Error de SQL 1<br>\n";
+                    //comprovo errors:
+                    $e = $queryUser->errorInfo();
+                    if ($e[0] != '00000') {
+                        echo "\nPDO::errorInfo():\n";
+                        die("Error accedint a dades: " . $e[2]);
+                    }
+                }
+
+                return $queryUser->fetchAll();
             }
 
-            function get_log_by_id($id)
+            function get_user_by_id($id)
             {
-                // Connexió a la base de dades o accés al sistema de fitxers
-                $log = file_get_contents('../logs/' . $id);
-                return $log;
+                try {
+                    $hostname = "localhost";
+                    $dbname = "ieti_tinder";
+                    $dbUsername = "ietitinder";
+                    $pw = "tinder123";
+                    $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+                } catch (PDOException $e) {
+                    echo "Error al accedir a la base de dades - " . $e->getMessage() . "\n";
+                    exit;
+                }
+
+                //preparem i executem la consulta
+                $queryText = "SELECT * FROM users;";
+
+                //    $unhashedId = hash('sha256', $id);
+                try {
+                    //preparem i executem la consulta
+                    $queryUser = $pdo->prepare($queryText);
+                    $queryUser->execute();
+                } catch (PDOException $e) {
+                    echo "Error de SQL 2<br>\n";
+                    //comprovo errors:
+                    $e = $queryUser->errorInfo();
+                    if ($e[0] != '00000') {
+                        echo "\nPDO::errorInfo():\n";
+                        die("Error accedint a dades: " . $e[2]);
+                    }
+                }
+
+                foreach ($queryUser as $row) {
+                    if ($row['email_user'] == $id) {
+                        return $row;
+                    }
+                }
             }
 
             if (isset($_GET['id'])) {
-                $log_id = $_GET['id'];
-                $log = get_log_by_id($log_id); // Funció per obtenir el log específic
+                $user_id = $_GET['id'];
+                $user = get_user_by_id($user_id); // Funció per obtenir el usuario específico
             
-                if ($log) {
-                    $lines = explode("\n", $log);
-                    echo "<h2>Logs del {$log_id}</h2>";
-                    echo "<div id='logContainer'>";
-                    foreach ($lines as $line) {
-                        echo "<p>{$line}</p>";
-                    }
+                if ($user) {
+                    echo "<h2>Usuario {$user['name']}</h2>";
+                    echo "<div id='userContainer'>";
+                    echo "<p>Nombre: {$user['name']}</p>";
+                    echo "<p>Apellidos: {$user['surnames']}</p>";
+                    echo "<p>Email: {$user['email_user']}</p>";
+                    echo "<p>Fecha de nacimiento: {$user['birthday']}</p>";
                     echo "</div>";
                 } else {
-                    echo "<p>Error: No se ha encontrado el log especificado.</p>";
+                    echo "<p>Error: No se ha encontrado el usuario especificado.</p>";
                 }
             } else {
                 // Connexió a la base de dades o accés al sistema de fitxers
-                $logs = get_logs(); // Funció per obtenir els logs disponibles
+                $users = get_users(); // Funció per obtenir els logs disponibles
                 $per_page = 25; // Màxim de resultats per pàgina
                 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
                 // Càlcul de l'inici i final per paginar
                 $start = ($page - 1) * $per_page;
-                $total_logs = count($logs);
-                $paged_logs = array_slice($logs, $start, $per_page);
+                $total_users = count($users);
+                $paged_users = array_slice($users, $start, $per_page);
 
                 // Renderització
                 echo "<table>";
                 echo "<tr>";
+                echo "<th>Email</th>";
                 echo "<th>Nombre</th>";
-                echo "<th>Tamaño</th>";
-                echo "<th>Fecha</th>";
+                echo "<th>Apellidos</th>";
                 echo "<th>Acciones</th>";
                 echo "</tr>";
-                if (empty($paged_logs)) {
-                    echo "<tr><td colspan='4'>No hay logs disponibles.</td></tr>";
+                if (empty($paged_users)) {
+                    echo "<tr><td colspan='4'>No hay usuarios disponibles.</td></tr>";
                 } else {
-                    foreach ($paged_logs as $log) {
+                    foreach ($paged_users as $user) {
                         echo "<tr>";
-                        echo "<td>{$log['name']}</td>";
-                        echo "<td>{$log['size']} KB</td>";
-                        echo "<td>{$log['date']}</td>";
-                        echo "<td><a class='viewLog'>Ver log</a></td>";
+                        echo "<td>{$user['email_user']}</td>";
+                        echo "<td>{$user['name']}</td>";
+                        echo "<td>{$user['surnames']}</td>";
+                        echo "<td><a class='viewUser'>Ver usuario</a></td>";
                         echo "</tr>";
                     }
                 }
                 echo "</table>";
 
                 // Paginador
-                $total_pages = ceil($total_logs / $per_page);
+                $total_pages = ceil($total_users / $per_page);
                 if ($total_pages > 1) {
-                    echo "<div id='logPagination'>";
+                    echo "<div id='userPagination'>";
                     echo "<a>&lt;&lt;</a>";
                     echo "<a>&lt;</a>";
                     for ($i = 1; $i <= $total_pages; $i++) {
@@ -137,7 +183,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             $("#backButton").click(function () {
                 console.log("Esto se ha ejecutado mientras la función se esta ejecutando");
                 <?php if (isset($_GET['id'])) { ?>
-                    window.location.href = "/admin/logs.php";
+                    window.location.href = "/admin/users.php";
                 <?php } else { ?>
                     window.location.href = "/admin";
                 <?php } ?>
@@ -154,7 +200,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
             var totalPages = <?php echo isset($total_pages) ? $total_pages : 1; ?>; // Total de paginas
 
-            $("#logPagination").on("click", "a", function () {
+            $("#userPagination").on("click", "a", function () {
                 var page = $(this).text();
                 if (page == "<<") {
                     page = 1;
@@ -173,13 +219,13 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 }
 
                 if (page == 1) {
-                    window.location.href = "/admin/logs.php";
+                    window.location.href = "/admin/users.php";
                 } else {
-                    window.location.href = "/admin/logs.php?page=" + page;
+                    window.location.href = "/admin/users.php?page=" + page;
                 }
             });
 
-            $("#logPagination a").each(function () {
+            $("#userPagination a").each(function () {
                 var element = $(this);
                 if (element.text() == "<<" && currentPage == 1) {
                     element.addClass("disabled");
@@ -199,9 +245,9 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
 
             })
 
-            $(".viewLog").click(function () {
-                var logId = $(this).closest("tr").find("td").eq(0).text();
-                window.location.href = "/admin/logs.php?id=" + logId;
+            $(".viewUser").click(function () {
+                var userId = $(this).closest("tr").find("td").eq(0).text();
+                window.location.href = "/admin/users.php?id=" + userId;
             });
         })
     </script>
