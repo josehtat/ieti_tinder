@@ -193,7 +193,7 @@
             </div>
 
             <div class="forgot-password">
-                <p><a href="/forgot.php">¿Olvidaste la contraseña?</a></p>
+                <p><a href="/forgot-password.php">¿Olvidaste la contraseña?</a></p>
             </div>
 
             <div class="register-link">
