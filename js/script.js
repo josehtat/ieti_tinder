@@ -45,7 +45,7 @@ function showMessage(type, message) {
     // Agregar el mensaje al contenedor
     container.appendChild(messageContainer);
 
-    // Eliminar el mensaje después de 2 segundos
+    // Eliminar el mensaje después de 1,5 segundos
     setTimeout(function() {
         messageContainer.style.opacity = 0;
         setTimeout(function() {
@@ -53,7 +53,7 @@ function showMessage(type, message) {
                 container.removeChild(messageContainer);
             }
         }, 500);
-    }, 2000);
+    }, 1500);
 }
 
 
