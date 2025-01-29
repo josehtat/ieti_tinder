@@ -15,7 +15,12 @@ function sendRequest(logText) {
 
 // Funcion control de errores
 function showMessage(type, message) {
-    // Crear el contenedor del mensaje
+    var container = document.getElementById('messages-container');
+
+    // Elimina cualquier mensaje existente antes de agregar uno nuevo
+    container.innerHTML = '';
+
+    // Crear el nuevo mensaje
     var messageContainer = document.createElement('div');
     messageContainer.classList.add('message');
 
@@ -37,18 +42,20 @@ function showMessage(type, message) {
     // Establecer el texto del mensaje
     messageContainer.textContent = message;
 
-    // Añadir el mensaje al contenedor de mensajes
-    var container = document.getElementById('messages-container');
+    // Agregar el mensaje al contenedor
     container.appendChild(messageContainer);
 
-    // Eliminar el mensaje después de 5 segundos
+    // Eliminar el mensaje después de 2 segundos
     setTimeout(function() {
         messageContainer.style.opacity = 0;
         setTimeout(function() {
-            container.removeChild(messageContainer);
+            if (container.contains(messageContainer)) {
+                container.removeChild(messageContainer);
+            }
         }, 500);
-    }, 5000);
+    }, 2000);
 }
+
 
 // Cambiar imagen al hacer clic
 function toggleImage(type) {
@@ -64,3 +71,18 @@ function toggleImage(type) {
             : 'img/corazonV2.png';
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    let message = "Bienvenido a la página";
+
+    if (window.location.pathname.includes("messages.php")) {
+        message = "Bienvenido a tu bandeja de mensajes";
+    } else if (window.location.pathname.includes("profile.php")) {
+        message = "Aquí puedes ver tu perfil";
+    } else if (window.location.pathname.includes("discober.php")) {
+        message = "Descubre nuevos matches";
+    } else if (window.location.pathname.includes("conversation.php")) {
+        message = "Bienvenido a tu conversación";
+    }
+    showMessage('info', message);
+});

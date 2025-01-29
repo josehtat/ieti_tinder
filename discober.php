@@ -47,6 +47,8 @@
     </header>
 
     <main id="mainDiscober">
+        <div id="messages-container"></div>
+        
         <div id="overlay"></div>
         <div id="popup">
             <p id="popup-message"></p>
@@ -69,12 +71,12 @@
             <div id="optionsMatch">
                 <ul>
                     <li>
-                        <button id="dislikeButton" onclick="toggleImage('dislike')">
+                        <button id="dislikeButton" onclick="toggleImage('dislike'); showMessage('info', 'Dislike')">
                             <img id="dislikeImg" src="img/cruzV2.png" alt="Dislike">
                         </button>
                     </li>
                     <li>
-                        <button id="likeButton" onclick="toggleImage('like')">
+                        <button id="likeButton" onclick="toggleImage('like'); showMessage('info', 'Like')">
                             <img id="likeImg" src="img/corazonV2.png" alt="Like">
                         </button>
                     </li>

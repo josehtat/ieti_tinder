@@ -35,6 +35,11 @@ nav {
 /*
 MARK:discober.php
 */
+
+#bodyDiscober {
+    overflow: hidden;
+}
+
 #headerDiscober {
     position: fixed;
     top: 0;
@@ -386,8 +391,6 @@ MARK:login.php
 }
 
 .login-container #error-message {
-    background-color: lightgray;
-    border: 1px solid red;
     color: red;
 }
 
@@ -497,6 +500,7 @@ MARK: profile.php
     z-index: 1;
     position: absolute;
     left: 132px;
+    margin-left: 35px;
 }
 
 .tablink {
@@ -1190,56 +1194,40 @@ MARK:Control de errores
 */
 /* Contenedor para los mensajes */
 #messages-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+    position: absolute;
+    top: 106px;
+    right: 820px;
     z-index: 9999;
+    width: 200px;
+    display: flex;
+    flex-direction: column-reverse; /* Invierte el orden de los mensajes */
+    align-items: center;
+    gap: 5px; /* Espacio entre mensajes */
 }
 
-/* Estilos comunes para todos los mensajes */
 .message {
-    padding: 15px;
-    margin: 10px 0;
+    padding: 10px;
     border-radius: 5px;
     font-size: 14px;
-    width: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    animation: fadeIn 5s forwards;
+    width: 100%;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
 }
 
 .matchMail {
     display: hidden;
 }
 
-/* Animación para mostrar los mensajes */
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 1;
-    }
-
-    90% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
 /* Mensaje de tipo "información" */
 .message-info {
-    background-color: #4caf50;
+    background-color: #519c53;
     color: #ffffff;
 }
 
 /* Mensaje de tipo "error" */
 .message-error {
-    background-color: #dc3545;
+    background-color: #cf2839;
     color: #ffffff;
 }
 
@@ -1406,6 +1394,10 @@ MARK: resgister.php
 .register-container .input-group {
     box-sizing: border-box;
     margin: 0;
+}
+
+.register-container .input-group option:first-child {
+    display: none;
 }
 
 .register-container .input-row {

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
     <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="/js/script.js"></script>
     <title>Conversación</title>
 </head>
 
@@ -61,6 +62,7 @@
         </div>
     </header>
     <main id="mainConversation">
+        <div id="messages-container"></div>
         <div id="userConversation">
             <div class="conversation" id="messagesContainer"></div>
             <div id="sendMessage">
