@@ -1575,7 +1575,7 @@ MARK: admin
 */
 body.admin-body {
     height: 100%;
-    margin: 10px;
+    margin: 0;
     background-color: white;
     color: #1A1A1A;
     box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5);
@@ -1604,7 +1604,8 @@ body.admin-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+    border-bottom: 4px solid black;
+
     /* Fixed height */
     z-index: 1000;
     /* Ensures it stays above other content */
@@ -1633,6 +1634,8 @@ body.admin-body {
     justify-content: space-evenly;
     gap: 15px;
     flex-grow: 1;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 /* Style header buttons */
@@ -1643,10 +1646,11 @@ body.admin-body {
     border: none;
     background-color: #7b1fa2;
     color: white;
-    font-size: 14px;
+    font-size: 1.5em;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    box-sizing: border-box;
 }
 
 .header-buttons button:hover {
@@ -1661,6 +1665,23 @@ body.admin-body {
     padding: 20px;
     background: white;
     /* Ensures it does not go under header */
+}
+
+.admin-container main button {
+    height: 50px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #7b1fa2;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+}
+
+.admin-container main  button:hover {
+    background-color: #1a1a1a;
 }
 
 .admin-container h2 {
@@ -1715,7 +1736,8 @@ body.admin-body {
     /* Color en passar el ratolí per damunt */
 }
 
-a.viewLog, a.viewUser {
+a.viewLog,
+a.viewUser {
     color: #7b1fa2;
     /* Blau per als enllaços */
     text-decoration: none;
@@ -1724,12 +1746,14 @@ a.viewLog, a.viewUser {
     cursor: pointer;
 }
 
-a.viewLog:hover, a.viewUser:hover {
+a.viewLog:hover,
+a.viewUser:hover {
     text-decoration: underline;
     /* Subratllat en passar el ratolí */
 }
 
-#logPagination, #userPagination {
+#logPagination,
+#userPagination {
     display: flex;
     /* Disposición flexible para alinear elementos */
     justify-content: center;
@@ -1742,7 +1766,8 @@ a.viewLog:hover, a.viewUser:hover {
     /* Espacio entre los enlaces */
 }
 
-#logPagination a, #userPagination a {
+#logPagination a,
+#userPagination a {
     display: inline-block;
     /* Asegura que los enlaces tengan tamaño ajustado */
     padding: 10px 15px;
@@ -1765,14 +1790,16 @@ a.viewLog:hover, a.viewUser:hover {
     /* Icono de clic para el enlace */
 }
 
-#logPagination a:hover, #userPagination a:hover {
+#logPagination a:hover,
+#userPagination a:hover {
     background-color: #7b1fa2;
     /* Fondo azul al pasar el ratón */
     color: #fff;
     /* Texto blanco al pasar el ratón */
 }
 
-#logPagination a.active, #userPagination a.active {
+#logPagination a.active,
+#userPagination a.active {
     background-color: #7b1fa2;
     /* Fondo azul para el enlace activo */
     color: #fff;
@@ -1783,7 +1810,8 @@ a.viewLog:hover, a.viewUser:hover {
     /* Desactiva interacción */
 }
 
-#logPagination a.disabled, #userPagination a.disabled {
+#logPagination a.disabled,
+#userPagination a.disabled {
     background-color: #e0e0e0;
     /* Fondo gris claro */
     color: #b0b0b0;
@@ -1848,4 +1876,35 @@ a.viewLog:hover, a.viewUser:hover {
     /* Fondo azul claro al pasar el ratón */
     border-left-color: #1a1a1a;
     /* Cambiar el color de la barra lateral al hacer hover */
+}
+
+#userContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+#userInfo {
+    width: 20%;
+}
+
+#userInfo p {
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 8px 0;
+    color: #444;
+}
+
+#userInfo p b {
+    color: #222;
+}
+
+#userContainer #map {
+    width: 50%;
+    height: 400px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #ddd;
 }

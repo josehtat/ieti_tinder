@@ -18,6 +18,8 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
     <link rel="stylesheet" href="/style.css?t=<?php echo time(); ?>">
     <script src="/js/jquery-3.7.1.min.js"></script>
     <script src="/js/script.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <title>Panel Administrativo</title>
 </head>
 
@@ -30,8 +32,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             </div>
             <div class="header-buttons">
                 <button id="backButton">Volver</button>
-                <button id="usersButton">Ver usuarios</button>
-                <button id="logsButton">Ver logs</button>
+                <button id="exitButton">Cerrar sesión de administrador</button>
             </div>
         </header>
         <main>
@@ -53,8 +54,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 }
 
                 //preparem i executem la consulta
-                $queryText = "SELECT * FROM users " .
-                    "WHERE NOT role = 'admin'";
+                $queryText = "SELECT * FROM users;";
 
                 try {
                     //preparem i executem la consulta
@@ -114,14 +114,75 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             if (isset($_GET['id'])) {
                 $user_id = $_GET['id'];
                 $user = get_user_by_id($user_id); // Funció per obtenir el usuario específico
-            
+
                 if ($user) {
-                    echo "<h2>Usuario {$user['name']}</h2>";
+
+
+                    $originalDate = $user['birthday'];
+                    // Unix time = 1685491200
+                    $unixTime = strtotime($originalDate);
+                    // Pass the new date format as a string and the original date in Unix time
+                    $newDate = date("d/m/Y", $unixTime);
+
+                    $location = $user['location'];
+                    list($latitude, $longitude) = explode(" ", $location);
+
+                    $account_status = "";
+                    if ($user['account_status'] == 'active') {
+                        $account_status = "Activada";
+                    } else if ($user['account_status'] == 'to verify') {
+                        $account_status = "Falta verificar";
+                    } else {
+                        $account_status = "Desactivada";
+                    }
+
+                    $role = "";
+                    if ($user['role'] == 'user') {
+                        $role = "Usuario regular";
+                    } else {
+                        $role = "Usuario administrador";
+                    }
+
+                    $orientation = "";
+                    if ($user['sex_orientation'] == 'heterosexual') {
+                        $orientation = "Heterosexual";
+                    } else if ($user['sex_orientation'] == 'homosexual') {
+                        $orientation = "Homosexual";
+                    } else {
+                        $orientation = "Bisexual";
+                    }
+                    $gender = "";
+
+
+                    echo "<h2>";
+                    if ($user['sex'] == 'M') {
+                        $gender = "Masculino";
+                        echo "Usuario";
+                    } else if ($user['sex'] == 'F') {
+                        $gender = "Femenino";
+                        echo "Usuaria";
+                    } else {
+                        $gender = "No Binario";
+                        echo "Usuari@";
+                    }
+                    echo " {$user['name']}";
+                    echo "</h2>";
                     echo "<div id='userContainer'>";
-                    echo "<p>Nombre: {$user['name']}</p>";
-                    echo "<p>Apellidos: {$user['surnames']}</p>";
-                    echo "<p>Email: {$user['email_user']}</p>";
-                    echo "<p>Fecha de nacimiento: {$user['birthday']}</p>";
+                    echo "<div id=userInfo>";
+                    echo "<p><b>Email:</b> {$user['email_user']}</p>";
+                    echo "<p><b>Estado de la cuenta:</b> {$account_status}</p>";
+                    echo "<p><b>Tipo de cuenta:</b> {$role}</p>";
+                    echo "<p><b>Nombre:</b> {$user['name']}</p>";
+                    echo "<p><b>Apellidos:</b> {$user['surnames']}</p>";
+                    echo "<p><b>Alias:</b> {$user['alias']}</p>";
+                    echo "<p><b>Fecha de nacimiento:</b> {$newDate}</p>";
+                    echo "<p><b>Género:</b> {$gender}</p>";
+                    echo "<p><b>Orientación sexual:</b> {$gender}</p>";
+                    echo "<p><b>Latitud:</b> <span id='latitude'>{$latitude}</span></p>";
+                    echo "<p><b>Longitud:</b> <span id='longitude'>{$longitude}</span></p>";
+                    echo "</div>";
+                    echo "<div id='map'></div>";
+
                     echo "</div>";
                 } else {
                     echo "<p>Error: No se ha encontrado el usuario especificado.</p>";
@@ -143,16 +204,18 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 echo "<th>Email</th>";
                 echo "<th>Nombre</th>";
                 echo "<th>Apellidos</th>";
+                echo "<th>Tipo de usuario</th>";
                 echo "<th>Acciones</th>";
                 echo "</tr>";
                 if (empty($paged_users)) {
-                    echo "<tr><td colspan='4'>No hay usuarios disponibles.</td></tr>";
+                    echo "<tr><td colspan='5'>No hay usuarios disponibles.</td></tr>";
                 } else {
                     foreach ($paged_users as $user) {
                         echo "<tr>";
                         echo "<td>{$user['email_user']}</td>";
                         echo "<td>{$user['name']}</td>";
                         echo "<td>{$user['surnames']}</td>";
+                        echo "<td>" . ($user['role'] == 'user' ? "Usuario regular" : "Usuario administrador") . "</td>";
                         echo "<td><a class='viewUser'>Ver usuario</a></td>";
                         echo "</tr>";
                     }
@@ -178,9 +241,9 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
     </div>
     <script>
         // Resto de tu JavaScript
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Resto de tu JavaScript
-            $("#backButton").click(function () {
+            $("#backButton").click(function() {
                 console.log("Esto se ha ejecutado mientras la función se esta ejecutando");
                 <?php if (isset($_GET['id'])) { ?>
                     window.location.href = "/admin/users.php";
@@ -189,18 +252,25 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 <?php } ?>
             });
 
-            $("#logsButton").click(function () {
+            $("#exitButton").click(function() {
+                $.post("/clear-cookies.php", function() {
+                    // Redirect after cookies are cleared
+                    window.location.href = "/";
+                });
+            });
+
+            $("#logsButton").click(function() {
                 window.location.href = "/admin/logs.php";
             });
 
-            $("#usersButton").click(function () {
+            $("#usersButton").click(function() {
                 window.location.href = "/admin/users.php";
             });
 
             var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
             var totalPages = <?php echo isset($total_pages) ? $total_pages : 1; ?>; // Total de paginas
 
-            $("#userPagination").on("click", "a", function () {
+            $("#userPagination").on("click", "a", function() {
                 var page = $(this).text();
                 if (page == "<<") {
                     page = 1;
@@ -225,7 +295,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 }
             });
 
-            $("#userPagination a").each(function () {
+            $("#userPagination a").each(function() {
                 var element = $(this);
                 if (element.text() == "<<" && currentPage == 1) {
                     element.addClass("disabled");
@@ -245,10 +315,36 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
 
             })
 
-            $(".viewUser").click(function () {
+            $(".viewUser").click(function() {
                 var userId = $(this).closest("tr").find("td").eq(0).text();
                 window.location.href = "/admin/users.php?id=" + userId;
             });
+
+            var mapElement = $("#mao");
+
+            if (mapElement) {
+                const customIcon = L.icon({
+                    iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', // URL de la imagen del ícono
+                    iconSize: [30, 30], // Tamaño del ícono [ancho, alto]
+                    iconAnchor: [15, 30], // Punto de anclaje [x, y]
+                    popupAnchor: [0, -30] // Punto donde aparece el popup [x, y]
+                });
+
+                const userLat = $("#latitude").text();
+                const userLng = $("#longitude").text();
+
+                const map = L.map('map').setView([userLat, userLng], 13); // Vista inicial del mapa
+
+                // Crear un marcador inicial en la ubicación del usuario (se puede eliminar si no se necesita)
+                let marker = L.marker([userLat, userLng], {
+                    icon: customIcon
+                }).addTo(map);
+
+                // Agregar un mapa base (OpenStreetMap)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                }).addTo(map);
+            }
         })
     </script>
 </body>

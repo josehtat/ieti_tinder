@@ -30,8 +30,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             </div>
             <div class="header-buttons">
                 <button id="backButton">Volver</button>
-                <button id="usersButton">Ver usuarios</button>
-                <button id="logsButton">Ver logs</button>
+                <button id="exitButton">Cerrar sesión de administrador</button>
             </div>
         </header>
         <main>
@@ -68,7 +67,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
             if (isset($_GET['id'])) {
                 $log_id = $_GET['id'];
                 $log = get_log_by_id($log_id); // Funció per obtenir el log específic
-            
+
                 if ($log) {
                     $lines = explode("\n", $log);
                     echo "<h2>Logs del {$log_id}</h2>";
@@ -132,9 +131,9 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
     </div>
     <script>
         // Resto de tu JavaScript
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Resto de tu JavaScript
-            $("#backButton").click(function () {
+            $("#backButton").click(function() {
                 console.log("Esto se ha ejecutado mientras la función se esta ejecutando");
                 <?php if (isset($_GET['id'])) { ?>
                     window.location.href = "/admin/logs.php";
@@ -143,18 +142,25 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 <?php } ?>
             });
 
-            $("#logsButton").click(function () {
+            $("#exitButton").click(function() {
+                $.post("/clear-cookies.php", function() {
+                    // Redirect after cookies are cleared
+                    window.location.href = "/";
+                });
+            });
+
+            $("#logsButton").click(function() {
                 window.location.href = "/admin/logs.php";
             });
 
-            $("#usersButton").click(function () {
+            $("#usersButton").click(function() {
                 window.location.href = "/admin/users.php";
             });
 
             var currentPage = <?php echo isset($_GET['page']) ? $_GET['page'] : 1; ?>;
             var totalPages = <?php echo isset($total_pages) ? $total_pages : 1; ?>; // Total de paginas
 
-            $("#logPagination").on("click", "a", function () {
+            $("#logPagination").on("click", "a", function() {
                 var page = $(this).text();
                 if (page == "<<") {
                     page = 1;
@@ -179,7 +185,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 }
             });
 
-            $("#logPagination a").each(function () {
+            $("#logPagination a").each(function() {
                 var element = $(this);
                 if (element.text() == "<<" && currentPage == 1) {
                     element.addClass("disabled");
@@ -199,7 +205,7 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
 
             })
 
-            $(".viewLog").click(function () {
+            $(".viewLog").click(function() {
                 var logId = $(this).closest("tr").find("td").eq(0).text();
                 window.location.href = "/admin/logs.php?id=" + logId;
             });

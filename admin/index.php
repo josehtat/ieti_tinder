@@ -29,32 +29,32 @@ if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['
                 <p>Esta sección es solo para usuarios con rol de administrador.</p>
             </div>
             <div class="header-buttons">
-                <button id="backButton">Cerrar sesión de administrador</button>
-                <button id="usersButton">Ver usuarios</button>
-                <button id="logsButton">Ver logs</button>
+                <button id="exitButton">Cerrar sesión de administrador</button>
             </div>
         </header>
         <main>
             <p>Esta es la pantalla de inicio de la sección de administración.</p>
+            <button id="usersButton">Ver usuarios</button>
+            <button id="logsButton">Ver logs</button>
         </main>
     </div>
 
     <script>
         // Resto de tu JavaScript
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Resto de tu JavaScript
-            $("#backButton").click(function () {
-                $.post("/clear-cookies.php", function () {
+            $("#exitButton").click(function() {
+                $.post("/clear-cookies.php", function() {
                     // Redirect after cookies are cleared
                     window.location.href = "/";
                 });
             });
 
-            $("#logsButton").click(function () {
+            $("#logsButton").click(function() {
                 window.location.href = "/admin/logs.php";
             });
 
-            $("#usersButton").click(function () {
+            $("#usersButton").click(function() {
                 window.location.href = "/admin/users.php";
             });
         })
