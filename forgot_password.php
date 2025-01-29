@@ -55,7 +55,7 @@
 
         if (isset($_COOKIE['loggedUser'])) { ?>
             window.location.href = "/discober.php";
-        <?php
+            <?php
         } else {
             if (isset($_POST['mail'])) {
                 $mail = $_POST['mail'];
@@ -86,37 +86,36 @@
                         // Incluir el autoload de Composer
                         require 'vendor/autoload.php';
 
-                        use PHPMailer\PHPMailer\PHPMailer;
-                        use PHPMailer\PHPMailer\SMTP;
-                        use PHPMailer\PHPMailer\Exception;
-
+                        //use PHPMailer\PHPMailer\PHPMailer;
+                        //use PHPMailer\PHPMailer\SMTP;
+                        //use PHPMailer\PHPMailer\Exception;
+        
                         $mail = new PHPMailer(true);
 
                         try {
                             // Configuración del servidor
                             $mail->SMTPDebug = SMTP::DEBUG_SERVER;
                             $mail->isSMTP();
-                            $mail->Host       = 'smtp.gmail.com';
-                            $mail->SMTPAuth   = true;
-                            $mail->Username   = 'unaimunoz2024@gmail.com';
-                            $mail->Password   = 'fdrh okqg yzpe wwen';
+                            $mail->Host = 'smtp.gmail.com';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = 'unaimunoz2024@gmail.com';
+                            $mail->Password = 'fdrh okqg yzpe wwen';
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                            $mail->Port       = 465;
+                            $mail->Port = 465;
 
                             // Destinatarios
                             $mail->setFrom('unaimunoz2024@gmail.com', 'Unai');
                             $mail->addAddress($mail); // El correo del usuario
-
+        
                             // Contenido del correo
                             $mail->isHTML(true);
                             $mail->Subject = 'Restablecer contraseña';
-                            $mail->Body    = "Hola,<br><br>Haga clic en el siguiente enlace para restablecer su contraseña: <a href='http://tu_dominio.com/reset_password.php?token=$token'>Restablecer Contraseña</a><br><br>Si no solicitó este cambio, ignore este correo.";
+                            $mail->Body = "Hola,<br><br>Haga clic en el siguiente enlace para restablecer su contraseña: <a href='http://tu_dominio.com/reset_password.php?token=$token'>Restablecer Contraseña</a><br><br>Si no solicitó este cambio, ignore este correo.";
                             $mail->AltBody = "Hola,\n\nHaga clic en el siguiente enlace para restablecer su contraseña: http://tu_dominio.com/reset_password.php?token=$token\n\nSi no solicitó este cambio, ignore este correo.";
 
                             $mail->send();
                             $status = 0;
                             $logMessage = "Correo de restablecimiento de contraseña enviado. Por favor, revise su bandeja de entrada.";
-                            echo "<script>showResetForm();</script>"; // Mostrar el formulario de restablecimiento
                         } catch (Exception $e) {
                             $status = 4;
                             $logMessage = "El mensaje no se pudo enviar. Error de Mailer: {$mail->ErrorInfo}";
@@ -134,8 +133,39 @@
                 <?php
             }
 
+
             // Manejar restablecimiento de contraseña
-            if (isset($_POST['new_password']) && isset($_POST['token'])) {
+            if (isset($_GET['token'])) {
+                $token = $_GET['token'];
+
+                // Verificar la validez del token
+                try {
+                    $hostname = "localhost";
+                    $dbname = "ieti_tinder";
+                    $dbUsername = "ietitinder";
+                    $pw = "tinder123";
+                    $pdo = new PDO("mysql:host=$hostname;dbname=$dbname", "$dbUsername", "$pw");
+
+                    $query = $pdo->prepare("SELECT email FROM password_resets WHERE token = ?");
+                    $query->execute([$token]);
+
+                    if ($query->rowCount() === 1) {
+                        // Mostrar el formulario de restablecimiento de contraseña
+                        echo "<script>showResetForm();</script>";
+                    } else {
+                        $status = 1;
+                        $logMessage = "Enlace de restablecimiento inválido o expirado.";
+                    }
+                } catch (PDOException $e) {
+                    $status = 4;
+                    $logMessage = "Error al acceder a la base de datos: " . $e->getMessage();
+                }
+                ?>
+                logMessage(<?php echo $status ?>, '<?php echo $logMessage ?>');
+                <?php
+            }
+
+            if (isset($_POST['new_password']) && isset($_POST['confirm_password']) && isset($_POST['token'])) {
                 $new_password = $_POST['new_password'];
                 $confirm_password = $_POST['confirm_password'];
                 $token = $_POST['token'];
@@ -156,9 +186,9 @@
                             $updatePassword->execute([$new_password_hashed, $email]);
 
                             // Eliminar el token de restablecimiento
-                            $deleteToken = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
-                            $deleteToken->execute([$token]);
-
+                            //$deleteToken = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
+                            //$deleteToken->execute([$token]);
+        
                             $status = 0;
                             $logMessage = "¡Contraseña actualizada correctamente! Ahora puede iniciar sesión.";
                         } else {
@@ -187,21 +217,23 @@
 
         <div class="error-group">
             <?php if ($status > 0) { ?>
-                <p id="error-message"><?php echo $logMessage;?></p>
+                <p id="error-message"><?php echo $logMessage; ?></p>
             <?php } ?>
         </div>
 
         <form id="sendLinkForm" action="forgot_password.php" method="post" class="login-form">
             <div class="input-group">
                 <label for="mail">Email</label>
-                <input type="email" id="mail" name="mail" placeholder="" <?php if ($status == 1) echo 'class="inputError"'; ?> required>
+                <input type="email" id="mail" name="mail" placeholder="" <?php if ($status == 1)
+                    echo 'class="inputError"'; ?> required>
             </div>
             <div class="submit-btn">
                 <button type="submit">Enviar</button>
             </div>
         </form>
 
-        <form id="resetPasswordForm" action="forgot_password.php" method="post" class="login-form" style="display:none;">
+        <form id="resetPasswordForm" action="forgot_password.php" method="post" class="login-form"
+            style="display:none;">
             <div class="input-group">
                 <label for="new_password">Nueva Contraseña</label>
                 <input type="password" id="new_password" name="new_password" placeholder="" required>
@@ -210,7 +242,8 @@
                 <label for="confirm_password">Confirmar Contraseña</label>
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="" required>
             </div>
-            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>" required>
+            <input type="hidden" name="token" value="<?php echo isset($_GET['token']) ? $_GET['token'] : ''; ?>"
+                required>
             <div class="submit-btn">
                 <button type="submit">Restablecer Contraseña</button>
             </div>
