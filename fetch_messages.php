@@ -11,115 +11,149 @@ try {
     exit;
 }
 
-// Manejar solicitudes POST para actualizar "likes"
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $messageId = $_POST['message_id'];
-    $userEmail = $_POST['user_email'];
+    // Manejar solicitudes POST para actualizar "likes"
+    if (isset($_POST['message_id']) && isset($_POST['user_email'])) {
+        $messageId = $_POST['message_id'];
+        $userEmail = $_POST['user_email'];
 
-    try {
-        // Obtener el estado actual de like_message
-        $query = "SELECT like_message FROM messages WHERE id = :id_message";
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':id_message', $messageId);
-        $stmt->execute();
-        $message = $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            // Obtener el estado actual de like_message
+            $query = "SELECT like_message FROM messages WHERE id = :id_message";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':id_message', $messageId);
+            $stmt->execute();
+            $message = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Invertir el valor de like_message
-        $newStatus = !$message['like_message'];
+            if ($message !== false) {
+                // Invertir el valor de like_message
+                $newStatus = !$message['like_message'];
 
-        // Actualizar el valor de like_message en la base de datos
-        $updateQuery = "UPDATE messages SET like_message = :new_status WHERE id = :id_message";
-        $updateStmt = $pdo->prepare($updateQuery);
-        $updateStmt->bindParam(':new_status', $newStatus, PDO::PARAM_BOOL);
-        $updateStmt->bindParam(':id_message', $messageId);
-        $updateStmt->execute();
+                // Actualizar el valor de like_message en la base de datos
+                $updateQuery = "UPDATE messages SET like_message = :new_status WHERE id = :id_message";
+                $updateStmt = $pdo->prepare($updateQuery);
+                $updateStmt->bindParam(':new_status', $newStatus, PDO::PARAM_BOOL);
+                $updateStmt->bindParam(':id_message', $messageId);
+                $updateStmt->execute();
 
-        echo json_encode([
-            "success" => true,
-            "newStatus" => $newStatus
-        ]);
-    } catch (PDOException $e) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Error al cambiar el estado del corazón: " . $e->getMessage()
-        ]);
+                echo json_encode([
+                    "success" => true,
+                    "newStatus" => $newStatus
+                ]);
+            } else {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "El mensaje no fue encontrado."
+                ]);
+            }
+        } catch (PDOException $e) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Error al cambiar el estado del corazón: " . $e->getMessage()
+            ]);
+        }
+    }
+
+    // Manejar solicitudes POST para enviar mensajes
+    if (isset($_POST['message']) && isset($_POST['receiver_email'])) {
+        try {
+            // Obtener el mensaje y el email del usuario logueado
+            $message = $_POST['message'];
+            $user_email = $_COOKIE['loggedUser'];
+            $receiver_email = $_POST['receiver_email'];
+            $date = date('Y-m-d H:i:s');
+
+            // Insertar el mensaje en la base de datos
+            $query = "INSERT INTO messages (id_user, id_receptor, message_user, date) 
+                      VALUES (:user_email, :receiver_email, :message, :date)";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':user_email', $user_email);
+            $stmt->bindParam(':receiver_email', $receiver_email);
+            $stmt->bindParam(':message', $message);
+            $stmt->bindParam(':date', $date);
+
+            if ($stmt->execute()) {
+                echo json_encode(["success" => true, "message" => "Mensaje enviado con éxito."]);
+            } else {
+                echo json_encode(["success" => false, "message" => "Hubo un problema al enviar el mensaje."]);
+            }
+        } catch (PDOException $e) {
+            echo json_encode(["success" => false, "message" => "Error al acceder a la base de datos: " . $e->getMessage()]);
+        }
     }
     exit;
 }
 
 // Obtener el mail del receptor desde la solicitud GET
-$mail_receptor = $_GET['mail'];
+if (isset($_GET['mail'])) {
+    $mail_receptor = $_GET['mail'];
 
-// Obtener el mail del usuario logueado desde las cookies
-$user_email = $_COOKIE['loggedUser'];
+    // Obtener el mail del usuario logueado desde las cookies
+    if (isset($_COOKIE['loggedUser'])) {
+        $user_email = $_COOKIE['loggedUser'];
 
-// Obtener la imagen del receptor
-$query = "SELECT p.path FROM pictures p JOIN users u ON p.email_user = u.email_user WHERE u.email_user = :mail_receptor";
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(':mail_receptor', $mail_receptor);
-$stmt->execute();
-$row = $stmt->fetch();
-$image_path = $row['path'];
+        // Obtener la imagen del receptor
+        $query = "SELECT p.path FROM pictures p JOIN users u ON p.email_user = u.email_user WHERE u.email_user = :mail_receptor";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':mail_receptor', $mail_receptor);
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $image_path = $row['path'];
 
-// Obtener los mensajes entre el usuario logueado y el receptor
-$query = "
-    SELECT id, id_user, message_user, like_message, date 
-    FROM messages
-    WHERE (id_user = :user_email AND id_receptor = :receiver_email)
-    OR (id_user = :receiver_email AND id_receptor = :user_email)
-    ORDER BY date ASC
-";
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(':user_email', $user_email);
-$stmt->bindParam(':receiver_email', $mail_receptor);
-$stmt->execute();
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Obtener los mensajes entre el usuario logueado y el receptor
+        $query = "
+            SELECT id, id_user, message_user, like_message, date 
+            FROM messages
+            WHERE (id_user = :user_email AND id_receptor = :receiver_email)
+            OR (id_user = :receiver_email AND id_receptor = :user_email)
+            ORDER BY date ASC
+        ";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':user_email', $user_email);
+        $stmt->bindParam(':receiver_email', $mail_receptor);
+        $stmt->execute();
+        $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Mostrar los mensajes
-$last_time = null;
-foreach ($messages as $message):
-    $sender = ($message['id_user'] == $user_email) ? 'sent' : 'received';
-    $message_time = strtotime($message['date']);
-    $current_time = time();
-    $time_diff = $current_time - $message_time;
+        // Mostrar los mensajes
+        $last_time = null;
+        foreach ($messages as $message):
+            $sender = ($message['id_user'] == $user_email) ? 'sent' : 'received';
+            $message_time = strtotime($message['date']);
 
-    // Mostrar la fecha solo si ha pasado más de 5 minutos desde el último mensaje
-    $show_date = false;
+            // Mostrar la fecha solo si ha pasado más de 5 minutos desde el último mensaje o es el primer mensaje
+            if (!$last_time || ($message_time - $last_time) > 300) {
+                $formatted_date = date("d M Y, H:i", $message_time);
+                echo "<div class='date'>$formatted_date</div>";
+                $last_time = $message_time; // Actualizar el tiempo del último mensaje mostrado con fecha
+            }
 
-    // Si es el primer mensaje o han pasado más de 5 minutos desde el último mensaje, mostramos la fecha
-    if (!$last_time || $time_diff > 300) {
-        $show_date = true;
-    }
+            $heart_image = $message['like_message'] ? 'img/corazonV1.png' : 'img/corazonV2.png';
 
-    // Mostrar la fecha solo si se debe mostrar
-    if ($show_date) {
-        $formatted_date = date("d M Y, H:i", $message_time);
-        echo "<div class='date'>$formatted_date</div>";
-    }
-
-    $heart_image = $message['like_message'] ? 'img/corazonV1.png' : 'img/corazonV2.png';
-
-    if ($sender == 'received') {
-        echo "<div class='messageWithImage'>
-                <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
-                <div class='messageConversation $sender'>
-                    " . htmlspecialchars($message['message_user']) . "
-                </div>
-                                <button class='heartButton' data-message-id='" . $message['id'] . "'>
-                    <img src='" . $heart_image . "' alt='Heart' class='heartImageRight' id='heartImage_" . $message['id'] . "'>
-                </button>
-              </div>";
+            if ($sender == 'received') {
+                echo "<div class='messageWithImage'>
+                        <img src='$image_path' alt='Foto de perfil' class='profileImageConversation'>
+                        <div class='messageConversation $sender'>
+                            " . htmlspecialchars($message['message_user']) . "
+                        </div>
+                        <button class='heartButton' data-message-id='" . $message['id'] . "'>
+                            <img src='" . $heart_image . "' alt='Heart' class='heartImageRight' id='heartImage_" . $message['id'] . "'>
+                        </button>
+                      </div>";
+            } else {
+                echo "<div class='messageWithImage'>";
+                if ($message['like_message']) {
+                    echo "<img src='$heart_image' alt='Heart' class='heartImageLeft' id='heartImage_" . $message['id'] . "'>";
+                }
+                echo "<div class='messageConversation $sender'>
+                        " . htmlspecialchars($message['message_user']) . "
+                      </div>
+                     </div>";
+            }
+        endforeach;
     } else {
-        echo "<div class='messageWithImage'>";
-        if ($message['like_message']) {
-            echo "<img src='$heart_image' alt='Heart' class='heartImageLeft' id='heartImage_" . $message['id'] . "'>";
-        }
-        echo "<div class='messageConversation $sender'>
-                " . htmlspecialchars($message['message_user']) . "
-              </div>
-             </div>";
+        echo "No se encontró la cookie del usuario logueado.";
     }
-
-    $last_time = $message_time;
-endforeach;
+} else {
+    echo "No se especificó el mail del receptor.";
+}
 ?>

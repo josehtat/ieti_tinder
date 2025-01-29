@@ -64,15 +64,15 @@
         <div id="userConversation">
             <div class="conversation" id="messagesContainer"></div>
             <div id="sendMessage">
-                <form method="POST" action="conversation.php?mail=<?php echo $mail_receptor; ?>">
-                    <textarea name="message" placeholder="Mensaje" required></textarea>
+                <form id="sendMessageForm" method="POST">
+                    <textarea id="messageTextArea" name="message" placeholder="Mensaje" required></textarea>
                     <input type="hidden" name="receiver_email" value="<?php echo $mail_receptor; ?>">
                     <button type="submit" name="send_message">Enviar</button>
                 </form>
             </div>
         </div>
 
-        <div id="editProfileConversation" style="display: none;">
+        <div id="editProfileSection" style="display: none;">
             <div id="userProfile">
                 <div id="carouselContainer">
                     <img src="<?php echo $images[0]; ?>" alt="Imagen de perfil" class="profileImage">
@@ -91,37 +91,6 @@
                 </div>
             </div>
         </div>
-
-        <?php
-        if (isset($_POST['send_message'])) {
-            try {
-                // Obtener el mensaje y el email del usuario logueado
-                $message = $_POST['message'];
-                $user_email = $_COOKIE['loggedUser'];
-                $receiver_email = $_POST['receiver_email'];
-                $date = date('Y-m-d H:i:s');
-
-                // Insertar el mensaje en la base de datos
-                $query = "INSERT INTO messages (id_user, id_receptor, message_user, date) 
-                          VALUES (:user_email, :receiver_email, :message, :date)";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(':user_email', $user_email);
-                $stmt->bindParam(':receiver_email', $receiver_email);
-                $stmt->bindParam(':message', $message);
-                $stmt->bindParam(':date', $date);
-
-                if ($stmt->execute()) {
-                    // Recargar la página para mostrar el nuevo mensaje
-                    echo "<script>window.location.href='conversation.php?mail=$receiver_email';</script>";
-                    exit;
-                } else {
-                    echo "Hubo un problema al enviar el mensaje.";
-                }
-            } catch (PDOException $e) {
-                echo "Error al acceder a la base de datos: " . $e->getMessage();
-            }
-        }
-        ?>
     </main>
 
     <nav id="nav">
@@ -141,11 +110,8 @@
 
 </html>
 
-
-
 <script>
     $(document).ready(function () {
-
         $(document).on('click', '.heartButton', function () {
             var messageId = $(this).data('message-id');
             $.ajax({
@@ -170,6 +136,50 @@
         fetchMessages();
 
         // Tabs functionality
+        $('#viewTab').click(function () {
+            $('#userConversation').show();
+            $('#editProfileSection').hide();
+            $('#viewTab').addClass('active');
+            $('#editTab').removeClass('active');
+        });
+
+        $('#editTab').click(function () {
+            $('#userConversation').hide();
+            $('#editProfileSection').show();
+            $('#editTab').addClass('active');
+            $('#viewTab').removeClass('active');
+        });
+
+        $('#viewTab').click(); // Set default tab
+
+        // Enviar mensaje con AJAX
+        $('#sendMessageForm').submit(function (event) {
+            event.preventDefault(); // Evitar recarga de la página
+
+            var formData = $(this).serialize();
+            $.ajax({
+                url: 'fetch_messages.php',
+                type: 'POST',
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        fetchMessages(); // Refrescar mensajes después de enviar
+                        $('#messageTextArea').val(''); // Limpiar el textarea
+                        $('#sendMessageForm').trigger("reset"); // Otra manera de limpiar el textarea
+                    } else {
+                        console.log(response.message); // Mostrar mensaje de error en la consola
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error al enviar mensaje: ' + error);
+                }
+            });
+        });
+
+        // Fetch messages every 1 second
+        setInterval(fetchMessages, 1000);
+
+        // Carrusel de imágenes
         var images = <?php echo json_encode($images); ?>;
         var cont = 0;
         var $carousel = $('#carouselContainer .profileImage');
@@ -187,46 +197,6 @@
             $('.carouselDot').removeClass('active');
             $('.carouselDot').eq(cont).addClass('active');
         });
-        $('#viewTab').click(function () {
-            $('#userConversation').show();
-            $('#editProfileConversation').hide();
-            $('#viewTab').addClass('active');
-            $('#editTab').removeClass('active');
-        });
-
-        $('#editTab').click(function () {
-            $('#userConversation').hide();
-            $('#editProfileConversation').show();
-            $('#editTab').addClass('active');
-            $('#viewTab').removeClass('active');
-        });
-
-        $('#viewTab').click(); // Set default tab
-
-        // Fetch messages every 1 seconds
-        setInterval(fetchMessages, 1000);
-
-        // Carrusel de imágenes
-        var images = <?php echo json_encode($images); ?>;
-        var cont = 0;
-        var $carousel = $('#carouselContainer .profileImage');
-
-        function changeImage() {
-            $carousel.fadeOut('fast', function () {
-                $carousel.attr('src', images[cont]);
-                $carousel.fadeIn('fast');
-            });
-        }
-
-        $('#prevImage').click(function () {
-            cont = (cont > 0) ? cont - 1 : images.length - 1;
-            changeImage();
-        });
-
-        $('#nextImage').click(function () {
-            cont = (cont < images.length - 1) ? cont + 1 : 0;
-            changeImage();
-        });
     });
 
     function fetchMessages() {
@@ -241,11 +211,6 @@
                 console.log('Error al obtener mensajes: ' + error);
             }
         });
+
     }
 </script>
-
-
-
-</body>
-
-</html>

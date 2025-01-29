@@ -660,7 +660,7 @@ MARK: profile.php
 #editProfileSection {
     display: none;
     width: 90%;
-    height: 78%;
+    height: 100%;
     margin: 20px auto 10px;
     padding: 20px;
     background-color: #ffffff;
@@ -834,6 +834,9 @@ MARK:message.php
     display: flex;
     flex-direction: column;
     gap: 15px;
+    overflow-y: scroll;
+    height: 100%;
+    max-height: 400px;
 }
 
 #messageBox>p {
@@ -1501,7 +1504,6 @@ MARK: error403.php y error404.php
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }
 
 .bodyForbidden a {
@@ -1558,16 +1560,96 @@ MARK: error403.php y error404.php
 MARK: forgot_password.php
 */
 
-.forgotPassword-body {
-    background-color: transparent;
-    color: white;
-    margin: 0 auto;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+.reset-form {
+    background-color: #F4F4F4;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 430px;
+    height: 94%;
+    text-align: center;
+}
+
+.reset-form h1 {
+    margin-top: 18rem !important;
+    color: #7B1FA2;
+    text-align: center;
+    margin: 0 0 0.5rem;
+}
+
+.reset-form h2 {
+    color: #666;
+    text-align: center;
+    font-size: 1.1rem;
+    margin: 0 0 2rem;
+}
+
+.reset-form label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.reset-form input[type="email"],
+.reset-form input[type="password"],
+.reset-form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #e1e1e1;
+}
+
+.reset-form input[type="text"]:focus,
+.reset-form input[type="password"]:focus,
+.reset-form input[type="email"]:focus {
+    outline: none;
+}
+
+.reset-form .inputError {
+    border: 2px solid red !important;
+}
+
+.reset-form input {
+    box-sizing: border-box;
+}
+
+.reset-form #error-message {
+    background-color: lightgray;
+    border: 1px solid red;
+    color: red;
+}
+
+.reset-form button {
+    width: 100%;
+    padding: 12px;
+    background: #7B1FA2;
+    color: #F4F4F4;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.reset-form button:hover {
+    background-color: #52146c;
+}
+
+.reset-form a:link,
+.reset-form a:visited {
+    color: #7B1FA2;
+    text-decoration: none;
+}
+
+.reset-form a:hover,
+.reset-form a:active {
+    text-decoration: underline;
+}
+
+.reset-form form .input-group {
+    margin-bottom: 0px;
+    text-align: left;
 }
 
 /*-------------------------------
