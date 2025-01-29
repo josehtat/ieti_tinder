@@ -3,8 +3,8 @@
 if (!isset($_COOKIE['loggedUser']) || !isset($_COOKIE['userRole']) || $_COOKIE['userRole'] !== 'admin') {
     // Redirigir al login si no está autenticado como administrador
     http_response_code(403);
-    header("Location: ../error/403.php");
-    die("Error 403: Prohibido");
+    include("../errors/403.php");
+    die();
 }
 
 // Puedes añadir un mensaje o lógica adicional aquí, si lo necesitas
