@@ -453,7 +453,7 @@ MARK: profile.php
 #bodyProfile {
     width: 100%;
     max-width: 460px;
-    height: 98%;
+    height: 91%;
     margin: 10px auto;
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
@@ -587,8 +587,8 @@ MARK: profile.php
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    height: 100%;
+    margin-top: 7.5vh;
+    height: calc(100vh - 16vh);
 }
 
 #userProfile {
